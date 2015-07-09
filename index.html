@@ -5,30 +5,136 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type="text/css">
-
+html {height: 100%}
 body {font-family: Roboto, Corbel, Avenir, 'Lucida Grande', 'Lucida Sans', sans-serif;
-    font-size: 14.4px;font-smoothing: antialiased;background-color: white;max-width: 800px;
-    margin: 0 auto;padding: 16px;}
+    font-size: 14.4px;background-color: white;height: 100%;max-width: 800px;
+    margin: 0 auto;padding: 0;}
 a {color: #6A0E0E;text-decoration: none;border-bottom: 1px dotted #798780;}
 a:hover{background: #F1FFF7;}
 a:hover{color: #BA2121;}
-h1, h2, h3, h4, h5, h6 {font-weight: normal;}
+h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: normal; }
 hr {border: none;height: 1px;background-color: #CFE3DC;margin-top: 24px;}
 pre {margin: 0px;padding: 20px;border: 1px solid #EAEAEA;
     border-radius: 4px;background-color: rgb(248, 248, 248);font-size: 15px;}
 code, pre {font-family: Inconsolata, Consolas, Menlo, Monaco, "Courier New", monospace;
     color: #0C4B33;font-size: 1.07em;}
+
+h1 {
+	font-size: 2.6em;
+	font-weight: bold;
+	padding: 0.6em;
+	/*background: -webkit-gradient(radial,50 50,50,50 1,0,from(black),to(white));*/
+}
+
+.mainbody {
+	height: 100%;
+	border: solid 1px #ccc;
+	border-width: 0 0.1em;
+}
+
+nav {
+	background: -webkit-gradient(linear, 0% 25%, 50% 100%, from(#eee), to(#ddd));
+	border: solid 1px #ccc;
+	border-width: 1px 0;
+	padding: 0;
+	margin: 0;
+	-webkit-user-select: none;
+}
+
+nav li {
+	display: inline-block;
+	padding: 0;
+	margin: 0;
+}
+
+.nav-button {
+	border: solid 0 #ccc;
+	border-left-width: 1px;
+	padding: 0.3em 0.6em;
+	cursor: pointer;
+}
+
+.nav-button:hover {
+	background-color: #eee;
+}
+
+.nav-button:active {
+	background-color: #ccc;
+}
+
+.nav-button.selected {
+	background-color: white;
+}
+
+.nav-button:last-child {
+	border-right-width: 1px;
+}
+
+.nav-button:first-child {
+	border-left-width: 0;
+}
+
+article {
+	padding: 1em;
+}
+
+/*end of css*/
     </style>
 </head>
 <body>
+<script type="text/javascript">
 
-<h1 id="jarvis-niu">Jarvis Niu</h1>
-<p>Hi, I am Jarvis Niu. This is my personal website. I am a program developer.</p>
-<p>You can find me here:</p>
-<ul>
-<li>Github: <a href="https://github.com/jarvisniu">https://github.com/jarvisniu</a></li>
-<li>Email: <a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#106;&#97;&#114;&#118;&#105;&#115;&#110;&#105;&#117;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;">&#106;&#97;&#114;&#118;&#105;&#115;&#110;&#105;&#117;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;</a></li>
-<li>LinkedIn: <a href="https://www.linkedin.com/in/jarvisniu">https://www.linkedin.com/in/jarvisniu</a></li>
+	var header;
 
+	function init() {
+		header = document.getElementsByTagName("h1")[0];
+		setTimeout(step, 1000);
+	}
+	
+	var frame = 0;
+	function step() {
+		frame += 1;
+
+		if (frame <= 100) {
+			var v = Math.round(255 - 255 * frame  / 100);
+			// header.style.backgroundColor = "rgb(" + v + "," + v + "," + v + ")";
+			// header.style.background = "-webkit-gradient(linear,0% 0%, 0% 100%, from(rgb(" + v + "," + v + "," + v + ")),to(white))";
+			header.style.background = "rgb(" + v + "," + v + "," + v + ")";
+		} else if (frame <= 120) {
+
+		} else if (frame <= 130) {
+			var v = Math.round(255 * (frame - 120)  / 10);
+			header.style.background = "-webkit-gradient(radial,50 50,50,50 1,0,from(black),to(rgb(" + v + "," + v + "," + v + ")))";
+		}
+
+		if (frame < 130) setTimeout(step, 25);
+	}
+
+	document.addEventListener("DOMContentLoaded", init);
+
+</script>
+<div class="mainbody">
+
+	<h1 id="jarvis-niu">
+	Niu
+	</h1>
+
+	<nav>
+		<li class="nav-button selected">Home</li>
+		<li class="nav-button">Blog</li>
+		<li class="nav-button">Works</li>
+		<li class="nav-button">About</li>
+	</nav>
+
+	<article>
+		<p>Hi, I am Jarvis Niu. This is my personal website. I am a program developer.</p>
+		<p>You can find me here:</p>
+		<ul>
+		<li>Github: <a href="https://github.com/jarvisniu">https://github.com/jarvisniu</a></li>
+		<li>Email: <a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#106;&#97;&#114;&#118;&#105;&#115;&#110;&#105;&#117;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;">&#106;&#97;&#114;&#118;&#105;&#115;&#110;&#105;&#117;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;</a></li>
+		<li>LinkedIn: <a href="https://www.linkedin.com/in/jarvisniu">https://www.linkedin.com/in/jarvisniu</a></li>
+	</article>
+
+<div>
 </body>
 </html>
