@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Jarvis Niu</title>
+    <title>Jarvis Niu - Home</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type="text/css">
@@ -33,24 +33,32 @@ h1 {
 }
 
 nav {
-	background: -webkit-gradient(linear, 0% 25%, 50% 100%, from(#eee), to(#ddd));
+	background: #ddd;
 	border: solid 1px #ccc;
-	border-width: 1px 0;
+	border-width: 1px 0 0 0;
 	padding: 0;
 	margin: 0;
 	-webkit-user-select: none;
+}
+
+nav ul {
+	margin: 0;
+	padding: 0;
+	height: 2em;
 }
 
 nav li {
 	display: inline-block;
 	padding: 0;
 	margin: 0;
+	float: left;
 }
 
 .nav-button {
 	border: solid 0 #ccc;
 	border-left-width: 1px;
-	padding: 0.3em 0.6em;
+	border-bottom-width: 1px;
+	padding: 0.4em 0.8em;
 	cursor: pointer;
 }
 
@@ -64,19 +72,53 @@ nav li {
 
 .nav-button.selected {
 	background-color: white;
+	border-bottom-width: 0;
+	font-weight: bold;
 }
 
-.nav-button:last-child {
+.nav-button.last {
 	border-right-width: 1px;
+}
+
+.nav-button.social {
+	float: right;
+	padding: 0.25em;
+	border-width: 0;
+	cursor: default;
+}
+
+.nav-button.social:hover {
+	background-color: transparent;
+}
+
+.nav-button.social img:active {
+	background-color: #bbb;
 }
 
 .nav-button:first-child {
 	border-left-width: 0;
 }
 
+.icon {
+	width: 20px;
+	height: 20px;
+}
+
+.social a {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border: solid 1px #ddd;
+}
+
+.social a:hover {
+	border-color: gray;
+}
+
 article {
 	padding: 1em;
 }
+
 
 /*end of css*/
     </style>
@@ -118,10 +160,32 @@ article {
 	</h1>
 
 	<nav>
-		<li class="nav-button selected">Home</li>
-		<li class="nav-button">Blog</li>
-		<li class="nav-button">Works</li>
-		<li class="nav-button">About</li>
+		<ul>
+			<li class="nav-button selected">Home</li>
+			<li class="nav-button">Blog</li>
+			<li class="nav-button">Works</li>
+			<li class="nav-button last">About</li>
+			<li class="nav-button social">
+				<a href="http://www.github.com">
+					<img class="icon" src="img/icons/github-32.png">
+				</a>
+				<a href="http://www.linkedin.com">
+					<img class="icon" src="img/icons/linkedin-32.png">
+				</a>
+				<a href="http://www.weibo.com">
+					<img class="icon" src="img/icons/weibo-32.png">
+				</a>
+				<a href="http://www.youtube.com">
+					<img class="icon" src="img/icons/youtube-32.png">
+				</a>
+				<a href="http://www.facebook.com">
+					<img class="icon" src="img/icons/facebook-32.png">
+				</a>
+				<a href="http://www.twitter.com">
+					<img class="icon" src="img/icons/twitter-32.png">
+				</a>
+			</li>
+		</ul>
 	</nav>
 
 	<article>
