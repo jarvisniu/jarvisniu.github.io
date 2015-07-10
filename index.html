@@ -88,26 +88,24 @@ article {
 
 	function init() {
 		header = document.getElementsByTagName("h1")[0];
-		setTimeout(step, 1000);
+		setTimeout(step, 5000);
 	}
 	
 	var frame = 0;
 	function step() {
 		frame += 1;
 
-		if (frame <= 100) {
-			var v = Math.round(255 - 255 * frame  / 100);
-			// header.style.backgroundColor = "rgb(" + v + "," + v + "," + v + ")";
-			// header.style.background = "-webkit-gradient(linear,0% 0%, 0% 100%, from(rgb(" + v + "," + v + "," + v + ")),to(white))";
-			header.style.background = "rgb(" + v + "," + v + "," + v + ")";
-		} else if (frame <= 120) {
+		var v = 100 - frame;
+		var l = (frame - 50)  * 5 + 50;
+		if (frame <= 50) l = v;
+		if (frame > 60) v += Math.round((frame - 60) / 2);
 
-		} else if (frame <= 130) {
-			var v = Math.round(255 * (frame - 120)  / 10);
-			header.style.background = "-webkit-gradient(radial,50 50,50,50 1,0,from(black),to(rgb(" + v + "," + v + "," + v + ")))";
-		}
+		if (l < 0) l = 0;
+		if (l > 100) l = 100;
 
-		if (frame < 130) setTimeout(step, 25);
+		header.style.background = "-webkit-gradient(radial,50 50,50,50 5,0,from(hsl(0,0%," + v + "%)),to(hsl(0,0%," + l + "%)))";
+		// console.log(v);
+		if (frame < 100) setTimeout(step, 25);
 	}
 
 	document.addEventListener("DOMContentLoaded", init);
