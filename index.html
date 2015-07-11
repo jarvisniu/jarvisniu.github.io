@@ -35,7 +35,7 @@ h1 {
 nav {
 	background: #ddd;
 	border: solid 1px #ccc;
-	border-width: 1px 0 0 0;
+	border-width: 1px 0 1px 0;
 	padding: 0;
 	margin: 0;
 	-webkit-user-select: none;
@@ -60,6 +60,7 @@ nav li {
 	border-bottom-width: 1px;
 	padding: 0.4em 0.8em;
 	cursor: pointer;
+	position: relative;
 }
 
 .nav-button:hover {
@@ -72,8 +73,8 @@ nav li {
 
 .nav-button.selected {
 	background-color: white;
-	border-bottom-width: 0;
-	font-weight: bold;
+	border-width: 1px 0 0 1px;
+	/*font-weight: bold;*/
 }
 
 .nav-button.last {
@@ -117,6 +118,11 @@ nav li {
 
 article {
 	padding: 1em;
+	display: none;
+}
+
+article.show {
+	display: block;
 }
 
 
@@ -127,9 +133,13 @@ article {
 <script type="text/javascript">
 
 	var header;
+	var nav_sel = "home", nav_home, nav_blog, nav_works, nav_about;
+	var body_home, body_blog, body_works, body_about;
 
 	function init() {
 		header = document.getElementsByTagName("h1")[0];
+		initNav();
+
 		setTimeout(step, 5000);
 	}
 	
@@ -152,6 +162,58 @@ article {
 
 	document.addEventListener("DOMContentLoaded", init);
 
+	function initNav() {
+		nav_home = document.getElementById("nav_home");
+		nav_blog = document.getElementById("nav_blog");
+		nav_works = document.getElementById("nav_works");
+		nav_about = document.getElementById("nav_about");
+
+		body_home = document.getElementById("body_home");
+		body_blog = document.getElementById("body_blog");
+		body_works = document.getElementById("body_works");
+		body_about = document.getElementById("body_about");
+
+
+		function onClickNav() {
+			if (nav_sel == "home") {
+				nav_home.classList.remove("selected");
+				body_home.classList.remove("show");
+			} else if (nav_sel == "blog") {
+				nav_blog.classList.remove("selected");
+				body_blog.classList.remove("show");
+			} else if (nav_sel == "works") {
+				nav_works.classList.remove("selected");
+				body_works.classList.remove("show");
+			} else if (nav_sel == "about") {
+				nav_about.classList.remove("selected");
+				body_about.classList.remove("show");
+			}
+
+			if (this.id == "nav_home") {
+				nav_home.classList.add("selected");
+				body_home.classList.add("show");
+				nav_sel = "home";
+			} else if (this.id == "nav_blog") {
+				nav_blog.classList.add("selected");
+				body_blog.classList.add("show");
+				nav_sel = "blog";
+			} else if (this.id == "nav_works") {
+				nav_works.classList.add("selected");
+				body_works.classList.add("show");
+				nav_sel = "works";
+			} else if (this.id == "nav_about") {
+				nav_about.classList.add("selected");
+				body_about.classList.add("show");
+				nav_sel = "about";
+			}
+		}
+
+		nav_home.addEventListener("click", onClickNav);
+		nav_blog.addEventListener("click", onClickNav);
+		nav_works.addEventListener("click", onClickNav);
+		nav_about.addEventListener("click", onClickNav);
+	}
+
 </script>
 <div class="mainbody">
 
@@ -161,10 +223,10 @@ article {
 
 	<nav>
 		<ul>
-			<li class="nav-button selected">Home</li>
-			<li class="nav-button">Blog</li>
-			<li class="nav-button">Works</li>
-			<li class="nav-button last">About</li>
+			<li id="nav_home" class="nav-button selected">Home</li>
+			<li id="nav_blog" class="nav-button">Blog</li>
+			<li id="nav_works" class="nav-button">Works</li>
+			<li id="nav_about" class="nav-button last">About</li>
 			<li class="nav-button social">
 				<a href="http://github.com/jarvisniu">
 					<img class="icon" src="img/icons/github-32.png">
@@ -191,7 +253,19 @@ article {
 		</ul>
 	</nav>
 
-	<article>
+	<article id="body_home" class="show">
+		home placeholder
+	</article>
+
+	<article id="body_blog">
+		blog placeholder
+	</article>
+
+	<article id="body_works">
+		<a href="works/webgis/index.html">WebGIS</a>
+	</article>
+
+	<article id="body_about">
 		<p>Hi, I am Jarvis Niu. This is my personal website. I am a program developer.</p>
 		<p>You can find me here:</p>
 		<ul>

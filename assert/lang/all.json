@@ -1,0 +1,26 @@
+{
+	"title-title": {
+		"en": "Jarvis Niu - Home",
+		"zh-CN": "牛俊为 - 首页"
+	},
+	"header-title": {
+		"en": "Niu",
+		"zh-CN": "牛"
+	},
+	"nav-home": {
+		"en": "Home",
+		"zh-CN": "首页"
+	},
+	"nav-blog": {
+		"en": "Blog",
+		"zh-CN": "博客"
+	},
+	"nav-works": {
+		"en": "Works",
+		"zh-CN": "作品"
+	},
+	"nav-about": {
+		"en": "About",
+		"zh-CN": "关于"
+	},
+}

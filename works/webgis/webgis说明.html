@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <style>
+        pre, code {
+            background-color: #DDD;
+            font-family: consolas, monospace;
+            font-size: 12px;
+        }
+    </style>
+    <script type="text/javascript">
+    </script>
+</head>
+<body>
+	<h1>WebGL三维地形显示技术</h1>
+
+    <h2>文件</h2>
+
+    <h3>JS库文件</h3>
+
+    <h4>BjCameraController.js</h4>
+
+    <p>响应鼠标操作，控制相机（pMatrix与mvMatrix的变换）。</p>
+
+    <h4>BjFile.js</h4>
+
+    <p>从后台加载文件的接口函数，以及文件名、文件路径处理函数。</p>
+
+    <h4>BjWebGL.js</h4>
+
+    <p>对着色器、缓存、材质的封装。</p>
+
+    <h4>Geography.js</h4>
+
+    <p>地理坐标、图块索引、局部坐标之间的相互转换。</p>
+
+    <h4>svgCompass.js</h4>
+
+    <p>指北针控件。</p>
+
+    <h4>TaskScheduler.js</h4>
+
+    <p>任务调度器。目的是为了把集中的任务分解、延迟执行，来提升页面刷新频率，也就是流畅度。</p>
+
+    <h3>basic.html文件</h3>
+
+    <p>该文件中包含了两个未保存到js文件中的两个类：</p>
+
+    <h4>TileNode</h4>
+
+    <p>保存一个地图块所涉及的所有信息。
+    其中包括：纹理、顶点位置Buffer、异步加载高程纹理的一些函数。</p>
+
+    <h4>TileBuffer</h4>
+
+    <p>TileNode管理器。它的职能有：</p>
+
+    <ol>
+    <li>向<code>DrawScene()</code>函数提供<code>TileNode</code>。</li>
+    <li>当第一次索取某个TileNode时，拿出该TileNode的父TileNode的四分之一临时顶替。然后去后台加载需要的块，完成后再马上通知DrawScene()再次刷新。</li>
+    <li>缓存所有已经加载的TileNode。缓存的优势在于：当用户由1级放大到2级，再回到1级的时候，不需要再从后台读取。这种操作往往是很常见的，因此很有必要这样做。</li>
+    </ol>
+</body>
+</html>

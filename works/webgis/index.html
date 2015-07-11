@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>模型浏览</title>
+<style>
+    body {
+        margin: 0;
+        font-size: 13px;
+    }
+
+    #controlPanel {
+        position: absolute;
+        left: 0;
+        margin: 0;
+        padding: 2px 0 4px 0;
+        width: 100%;
+        background-color: rgba(128, 128, 128, 0.5);
+        text-align: right;
+        color: white;
+    }
+
+    #canvas {
+        border: 0;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+
+    .chkControl {
+        margin: 4px 0 4px 0;
+    }
+</style>
+
+<script src="./js/glMatrix-0.9.5.min.js"></script>
+<script src="./js/BjWebGL-1.4.min.js"></script>
+<script src="./js/BjFile-1.1.min.js"></script>
+<script src="./js/BjCameraController-1.4.1.min.js"></script>
+<script src="./js/Geography-1.2.min.js"></script>
+<script src="./js/svgCompass-1.1.0.min.js"></script>
+<script src="./js/TaskScheduler-1.3.0.min.js"></script>
+<script src="./js/stats.min.js"></script>
+
+<script type="text/javascript">
+
+// 全局变量
+var needRender = true;              // indicator for WebGL redraw
+var canvas;                         // Canvas DOM
+var gl;                             // WebGL context
+var spTexture;                      // Texture shader program
+var taskScheduler;                  // routine manager
+var stats = new Stats();
+stats.setMode(1);
+
+// set the tile bounds of each level
+var tileBounds = [];
+tileBounds[13] = {x1: 6753, x2: 6755, y1: 3364, y2: 3366};
+tileBounds[14] = {x1: 13506, x2: 13511, y1: 6728, y2: 6733};
+tileBounds[15] = {x1: 27012, x2: 27023, y1: 13456, y2: 13467};
+tileBounds[16] = {x1: 54024, x2: 54047, y1: 26912, y2: 26935};
+
+var initTileIndex = { x: 6754, y: 3365, z: 13 };    // 初始图块索引
+
+// 全局常量
+var LEVEL_MAX = 16;                 // 最大缩放等级
+var LEVEL_MIN = 13;                 // 最小缩放等级
+var TILE_NUM_X = 9;                 // Displaying tile count in x direction
+var TILE_NUM_Y = 9;                 // ...
+var TILE_NUM_HALF_X = Math.floor(TILE_NUM_X / 2);
+var TILE_NUM_HALF_Y = Math.floor(TILE_NUM_Y / 2);
+var BLOCK_SPLIT_NUM = 16;           // 每个块在边长上的分段数
+
+var TEXTURE_OUT_OF_BOUNDS;          // 超界黑色块纹理
+
+// Buffers
+var uGridVertexCoordBuffer;         // 材质坐标缓冲器
+var uTileVertexIndexBuffer;         // 顶点索引缓冲器
+
+// Settings
+var SCALE_Z = 5;                    // 高程人为放大系数
+var MAP_SIZE_FACTOR = 0;            // Map size in screen factor
+var SMOOTH_ZOOM = true;             // Smooth zoom
+var ANCESTOR_GRID = true;           // Whether to draw ancestor grid
+
+// Camera
+var camera = {
+    groundEle: 0,                   // 相机所在位置地面高程
+    minGroundDistanceRatio: 0.1,    // 常量：摄像机高出地面的距离（pMatrixPanZ）
+    height: -1,                     // 相机高度
+    heightOffset: -1,               // 相机高度偏移
+    heightOffsetNow: -1,            // 相机高度偏移当前值
+    distanceX: -1,                  // 据视野中心水平面上X向距离
+    distanceY: -1,                  // 据视野中心水平面上Y向距离
+    distanceBevel: -1,              // 据视野中心水平面上斜向距离
+    deltaLon: -1,                   // 据视野中心的经向差值
+    deltaLat: -1,                   // 据事业重心的纬向差值
+    lon: -1,                        // 相机所在经度
+    lat: -1                         // 相机所在纬度
+};
+
+// Camera
+var pMatrixInfo = {                 // 投影矩阵变换信息
+    RotateX: -45,
+    RotateXNow: -45,
+    RotateY: 0,
+    RotateYNow: 0,
+    RotateZ: 0,
+    RotateZNow: 0,
+    PanZ: -10000,
+    PanZNow: -10000
+};
+
+// Environment
+
+var pivot = {                   // 与视野中心有关的数据
+    X: 0,                           // X方向局部坐标，单位：m
+    Y: 8,                           // Y方向局部坐标，单位：m
+    XNow: 0,                        // X方向局部坐标，单位：m
+    YNow: 8,                        // Y方向局部坐标，单位：m
+    Elevation: 0,                   // 视野中心的海拔，用来调整视野跟随该值一起上下浮动，理想值
+    ElevationNow: 0,                // 视野中心的海拔，用来调整视野跟随该值一起上下浮动，现实值（趋近于理想值，用于生成动画）
+    lon: -1,                        // 视野中心的经度
+    lat: -1,                        // 视野中心的纬度
+    GX: -1,                         // X方向图块索引，小数
+    GXI: -1,                        // X方向图块索引，整数
+    GY: -1,                         // Y方向图块索引，小数
+    GYI: -1,                        // Y方向图块索引，整数
+    GZ: -1,                         // 当前显示的缩放级别，小数
+    GZI: -1,                        // 当前显示的缩放级别，整数
+    UpdatedGX: -1,                  // X方向已更新的中心块图块索引
+    UpdatedGY: -1,                  // X方向已更新的中心块图块索引
+    UpdatedGZ: -1,                  // Z方向已更新的中心块图块索引
+    GridIndexX: -1,                 // X方向距16x16网格中最近的点的索引
+    GridIndexY: -1                  // Y方向距16x16网格中最近的点的索引
+};
+
+
+/**
+ * Save all information of a tile.
+ *
+ * @param {int} x - Tile index x in google maps.
+ * @param {int} y - Tile index y in google maps.
+ * @param {int} z - Tile zoom level in google maps.
+ * @param {object} buffer - TileBuffer object that contains this tile.
+ * @constructor
+ */
+function TileNode(x, y, z, buffer) {
+    this.Texture = null;                // 纹理对象
+    this.vertexPositionBuffer = null;   // 定点坐标
+    this.isReady = false;               // 纹理、高程是否都加载完成
+    this.inIndexBound = true;           // 是否在边界内
+    this.hasEleData = false;            // 是否拥有高程数据，是否不是平的
+    this.x = x;                         // Tile index x
+    this.y = y;                         // Tile index y
+    this.z = z;                         // Tile index z
+
+    var self = this;                    // 该图块节点对象本身
+    var _tileBuffer = buffer;           // 图块缓存对象
+    var elevations = null;              // 一维高程数组，长度为289
+    var textureImage = new Image();     // 纹理图像
+    var isTextureLoaded = false;        // 纹理是否加载完成
+    var isVerticesLoaded = false;       // 高程是否加载完成
+
+    /**
+     * Get the parent tile.
+     *
+     * @returns {TileNode}
+     */
+    this.getParent = function () {
+        var pX = Math.floor(this.x / 2);
+        var pY = Math.floor(this.y / 2);
+        var pZ = this.z - 1;
+        return _tileBuffer.getTile(pX, pY, pZ)
+    };
+
+    /**
+     * Get the ready ancestor tile.
+     *
+     * @returns {TileNode}
+     */
+    this.getDrawableAncestor = function () {
+        for (var i = 1; i <= 4; i++) {
+            var pX = Math.floor(this.x / Math.pow(2, i));
+            var pY = Math.floor(this.y / Math.pow(2, i));
+            var pZ = this.z - i;
+            var tile = _tileBuffer.getTile(pX, pY, pZ);
+            if (tile && tile.isReady && tile.inIndexBound) return tile;
+        }
+        return null;
+    };
+
+    /**
+     * Get the this tile's index in its parent, selected from 0~3.
+     *
+     * @returns {number}
+     */
+    this.getIndexInParent = function () {
+        var xOffset = (this.x / 2 - Math.floor(this.x / 2)) * 2;
+        var yOffset = (this.y / 2 - Math.floor(this.y / 2)) * 2;
+        return yOffset * 2 + xOffset;
+    };
+
+    /**
+     * Set the vertex position buffer of this tile, provided for callback function of the async load process.
+     *
+     * @param { Object } buffer - Vertex position buffer to set to.
+     */
+    this.setVertexPositionBuffer = function (buffer) {
+        this.vertexPositionBuffer = buffer;
+        isVerticesLoaded = true;
+        if (isTextureLoaded) {
+            self.isReady = true;
+            needRender = true;
+        }
+    };
+
+    /**
+     * Get the elevation in this tile.
+     *
+     * @param {int} gridIndexX - The X coordinate of the grid.
+     * @param {int} gridIndexY - The Y coordinate of the grid.
+     * @returns {int}
+     */
+    this.getElevation = function (gridIndexX, gridIndexY) {
+        if (gridIndexX < 0 || gridIndexY < 0 || gridIndexX > BLOCK_SPLIT_NUM || gridIndexY > BLOCK_SPLIT_NUM)
+            console.log("TileNode.getElevation(), Not 0~BLOCK_SPLIT_NUM: ", gridIndexX, gridIndexY);
+        if (elevations == null) {
+            return -1;
+        } else {
+            var index = gridIndexY * 17 + gridIndexX;
+            return elevations[index];
+        }
+    };
+
+    function isTileIndexInBound(x, y, z) {
+        if (tileBounds[z] != undefined) {
+            if (tileBounds[z].x1 <= x && tileBounds[z].x2 >= x && tileBounds[z].y1 <= y && tileBounds[z].y2 >= y) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function createTerrain(text, x, y, z) {
+        if (text.length < 10) return;
+        self.hasEleData = true;
+        var t = loadBlockGridPosBufferWithText(z, x, y, text);
+        _tileBuffer.getTile(x, y, z).setVertexPositionBuffer(t);
+    }
+
+    function loadBlockGridPosBufferWithText(level, gx, gy, text) {
+        var isPlane = false;
+        if (text && text.length > 10)
+            elevations = text.split(",");
+        else
+            isPlane = true;
+
+        var vertices = [];
+        for (var j = 0; j < BLOCK_SPLIT_NUM + 1; j++) {
+            for (var i = 0; i < BLOCK_SPLIT_NUM + 1; i++) {
+                var xx3 = (j * (BLOCK_SPLIT_NUM + 1) + i) * 3;
+                var gxThis = gx + i / BLOCK_SPLIT_NUM;
+                var gyThis = gy + (j) / BLOCK_SPLIT_NUM;
+                vertices[xx3] = lng2mx(x2lng(gxThis, level)); // X坐标
+                vertices[xx3 + 1] = lat2my(y2lat(gyThis, level)); // Y坐标
+                vertices[xx3 + 2] = (isPlane ? 0 : elevations[xx3 / 3] * SCALE_Z); // Z坐标（高程）
+            }
+        }
+        return createVertexPositionBuffer(vertices);
+    }
+
+    function getTileImageFileName(x, y, z) {
+        return "./assert/tiles/" + z + "," + x + "," + y + ".jpg";
+    }
+
+    function ready() {
+        self.isReady = true;
+        needRender = true;
+    }
+
+    function init() {
+        self.Texture = loadBlankTexture();
+
+        self.vertexPositionBuffer = loadBlockGridPosBufferWithText(z, x, y);
+
+        if (isTileIndexInBound(x, y, z)) {
+            textureImage.onload = function () {
+                self.Texture = createTexture(textureImage);
+                isTextureLoaded = true;
+                if (isVerticesLoaded) ready();
+            };
+//            textureImage["src"] = getTileImageFileName(x, y, z);
+            taskScheduler.addTask(textureImage, "src", getTileImageFileName(x, y, z)); // 这个超级管用啊，替换成上面的会卡的很厉害
+
+            var url = "./assert/altitudes/16x" + z + "," + x + "," + y + ".txt";
+            taskScheduler.addTask(loadUrlAsync, [url, createTerrain, [x, y, z]]);
+        } else {
+            self.inIndexBound = false;
+            self.Texture = TEXTURE_OUT_OF_BOUNDS;
+            self.isReady = isTextureLoaded = isVerticesLoaded = true;
+        }
+        updateCamera();
+    }
+
+    init();
+}
+
+/**
+ * The tile buffer is used to temporarily store the tiles.
+ *
+ * @constructor
+ */
+function TileBuffer() {
+    var tileNodes = [];                 // 缓存的图块数组（tileNodes[z][x][y]）
+    var countTile = 0;                  // 总共缓存的块数
+    this.maxLevel = Number.MIN_VALUE;   // 缓存块中最大等级
+    this.minLevel = Number.MAX_VALUE;   // 缓存块中最小等级
+
+    var childBuffers = [];              // children tile vertex index buffers
+    var countBuffers = 0;               //
+
+    this.getTileWithCreate = function (x, y, z) {
+        if (!!tileNodes[z] && !!tileNodes[z][x] && !!tileNodes[z][x][y])
+            return tileNodes[z][x][y];
+
+        var newNode = new TileNode(x, y, z, this);
+        if (!tileNodes[z]) tileNodes[z] = [];
+        if (!tileNodes[z][x]) tileNodes[z][x] = [];
+        tileNodes[z][x][y] = newNode;
+        countTile++;
+
+        this.minLevel = Math.min(this.minLevel, z);
+        this.maxLevel = Math.max(this.maxLevel, z);
+
+        return newNode;
+    };
+
+    this.getTile = function (x, y, z) {
+        if (!!tileNodes[z] && !!tileNodes[z][x] && !!tileNodes[z][x][y])
+            return tileNodes[z][x][y];
+        return false;
+    };
+
+    this.getTileWithEleData = function (x, y, z) {
+        if (!!tileNodes[z] && !!tileNodes[z][x] && !!tileNodes[z][x][y] && tileNodes[z][x][y].hasEleData)
+            return tileNodes[z][x][y];
+        return null;
+    };
+
+    /**
+     *
+     * @param childrenTile TileNode .
+     * @param parentTile TileNode .
+     */
+    this.getChildrenTileVertexIndexBuffer = function (childrenTile, parentTile) {
+        var deltaZ = childrenTile.z - parentTile.z;
+        var splitCount = Math.pow(2, deltaZ);
+        var indexY = childrenTile.x - parentTile.x * splitCount;
+        var indexX = childrenTile.y - parentTile.y * splitCount;
+        for (var i = 0; i < countBuffers; i++) {
+            if (childBuffers[i].x == indexX && childBuffers[i].y == indexY && childBuffers[i].z == deltaZ) {
+                return childBuffers[i];
+            }
+        }
+
+        var indexes = [];
+        var indexCount = 0;
+        var maxIndexX = BLOCK_SPLIT_NUM / splitCount * (indexX + 1);
+        var maxIndexY = BLOCK_SPLIT_NUM / splitCount * (indexY + 1);
+        for (i = BLOCK_SPLIT_NUM / splitCount * indexX; i < maxIndexX; i++) { // <=?
+            for (var j = BLOCK_SPLIT_NUM / splitCount * indexY; j < maxIndexY; j++) {
+                indexes[indexCount + 0] = (i + 0) * (BLOCK_SPLIT_NUM + 1) + j;
+                indexes[indexCount + 1] = (i + 1) * (BLOCK_SPLIT_NUM + 1) + j;
+                indexes[indexCount + 2] = indexes[indexCount] + 1;
+                indexes[indexCount + 3] = indexes[indexCount + 2];
+                indexes[indexCount + 4] = indexes[indexCount + 1];
+                indexes[indexCount + 5] = (i + 1) * (BLOCK_SPLIT_NUM + 1) + j + 1;
+                indexCount += 6;
+            }
+        }
+        var newBuffer = createVertexIndexBuffer(indexes);
+        newBuffer.x = indexX;
+        newBuffer.y = indexY;
+        newBuffer.z = deltaZ;
+        childBuffers[countBuffers] = newBuffer;
+        countBuffers++;
+        return newBuffer;
+    };
+
+    /**
+     * Get the most accurate elevation from the tiles.
+     *
+     * @param lon float Longitude of destination point.
+     * @param lat float Latitude of destination point.
+     */
+    this.getElevation = function (lon, lat) {
+        for (var i = this.maxLevel; i >= this.minLevel; i--) {
+            var tileIndex = getTileIndexFromLonLat({lon: lon, lat: lat}, i);
+            var tile = this.getTileWithEleData(tileIndex.x, tileIndex.y, i);
+            if (tile) {
+                var innerIndexX = Math.floor(tileIndex.fracX * BLOCK_SPLIT_NUM);
+                var innerIndexY = Math.floor(tileIndex.fracY * BLOCK_SPLIT_NUM);
+                return tile.getElevation(innerIndexX, innerIndexY);
+            }
+        }
+        return 0;
+    };
+
+    this.listTile = function () {
+        console.log(tileNodes);
+    };
+
+    this.listBuffer = function () {
+        console.log(childBuffers);
+    };
+}
+
+var tileBuffer;                 // 块缓存
+var currentTileNodes = [];      // 当前屏幕上显示的块
+for (var i = 0; i < TILE_NUM_X; i++) currentTileNodes[i] = [];  // 建立2维数组
+
+function init() {
+    // 初始化组件
+    canvas = document.getElementsByTagName("canvas")[0];
+    gl = initGL("canvas");
+    taskScheduler = new TaskScheduler();
+    tileBuffer = new TileBuffer();
+    spTexture = loadShaderProgram("./js/glsl/texture.json");    // 加载着色器程序
+    TEXTURE_OUT_OF_BOUNDS = loadTexture("./assert/textures/grid1.png");   // 加载超界块纹理
+    document.body.appendChild( stats.domElement );
+
+    initBuffers();          // 初始化缓冲器（顶点纹理坐标、顶点索引）
+    navigateTo(initTileIndex.x, initTileIndex.y, initTileIndex.z);           // 计算视野中心的各种坐标
+    addEvents();            // 添加键盘鼠标处理事件
+    tick();                 // 绘制场景内的几何形状
+    window.addEventListener('resize', onWindowResize, false);
+    onWindowResize();
+}
+document.addEventListener("DOMContentLoaded", init);
+
+
+// WebGL functions
+function initBuffers() {
+    //模型块纹理坐标缓冲器
+    var textureCoords = [];
+    for (var i = 0; i < BLOCK_SPLIT_NUM + 1; i++) {
+        for (var j = 0; j < BLOCK_SPLIT_NUM + 1; j++) {
+            var xx = (i * (BLOCK_SPLIT_NUM + 1) + j) * 2;
+            textureCoords[xx] = j / BLOCK_SPLIT_NUM;
+            textureCoords[xx + 1] = 1 - i / BLOCK_SPLIT_NUM;
+        }
+    }
+    uGridVertexCoordBuffer = createVertexTextureCoordBuffer(textureCoords);
+
+    //顶点索引缓冲器
+    var indexes = [];
+    for (i = 0; i < BLOCK_SPLIT_NUM; i++) {
+        for (j = 0; j < BLOCK_SPLIT_NUM; j++) {
+            xx = (i * BLOCK_SPLIT_NUM + j) * 2 * 3;
+            indexes[xx + 0] = (i + 0) * (BLOCK_SPLIT_NUM + 1) + j;
+            indexes[xx + 1] = (i + 1) * (BLOCK_SPLIT_NUM + 1) + j;
+            indexes[xx + 2] = indexes[xx + 0] + 1;
+            indexes[xx + 3] = indexes[xx + 2];
+            indexes[xx + 4] = indexes[xx + 1];
+            indexes[xx + 5] = (i + 1) * (BLOCK_SPLIT_NUM + 1) + j + 1;
+        }
+    }
+    uTileVertexIndexBuffer = createVertexIndexBuffer(indexes);
+}
+/**
+ * 加载到某一块的正中心
+ * @param gx
+ * @param gy
+ * @param gz
+ */
+function navigateTo(gx, gy, gz) {
+    pivot.GXI = gx;
+    pivot.GYI = gy;
+    pivot.GZI = gz;
+    pivot.GX = pivot.GXI;
+    pivot.GY = pivot.GYI;
+    pivot.GZ = pivot.GZI;
+    pivot.lon = x2lng(pivot.GX + 0.5, pivot.GZI);
+    pivot.lat = y2lat(pivot.GY + 0.5, pivot.GZI);
+    pivot.X = pivot.XNow = lng2mx(pivot.lon);
+    pivot.Y = pivot.YNow = lat2my(pivot.lat);
+
+    arrangeTiles();
+    pivot.UpdatedGZ = pivot.GZI;
+}
+function onLevelChanged() {
+    if (pivot.GZ > pivot.UpdatedGZ) {
+        pivot.GXI = pivot.GXI * 2 + 1;
+        pivot.GYI = pivot.GYI * 2 + 1;
+    } else {
+        pivot.GXI = parseInt(pivot.GXI / 2);
+        pivot.GYI = parseInt(pivot.GYI / 2);
+    }
+    pivot.UpdatedGZ = pivot.GZI;
+    updateOriginPos();
+    arrangeTiles();
+}
+function arrangeTiles() {
+    if (pivot.GXI != pivot.UpdatedGX || pivot.GYI != pivot.UpdatedGY) {
+        var gx = pivot.GXI;
+        var gy = pivot.GYI;
+        var level = pivot.GZI;
+        for (var i = 0; i < TILE_NUM_X; i++) {
+            for (var j = 0; j < TILE_NUM_Y; j++) {
+                currentTileNodes[i][j] = tileBuffer.getTileWithCreate(gx - i + TILE_NUM_HALF_X, gy - j + TILE_NUM_HALF_Y, level);
+            }
+        }
+        pivot.UpdatedGX = pivot.GXI;
+        pivot.UpdatedGY = pivot.GYI;
+    }
+}
+function updateOriginPos() {
+    pivot.lon = mx2lng(pivot.X);
+    pivot.lat = my2lat(pivot.Y);
+    pivot.GX = lng2x(pivot.lon, pivot.UpdatedGZ);
+    pivot.GY = lat2y(pivot.lat, pivot.UpdatedGZ);
+    pivot.GXI = parseInt(pivot.GX);
+    pivot.GYI = parseInt(pivot.GY);
+    pivot.GridIndexX = Math.round(getDecimal(pivot.GX) * 16);
+    pivot.GridIndexY = Math.round(getDecimal(pivot.GY) * 16);
+}
+function onZoomArrange() {
+    pivot.GZ = 26 - MAP_SIZE_FACTOR - Math.round(Math.log(-pMatrixInfo.PanZ) / Math.log(2));
+    pivot.GZI = Math.round(pivot.GZ);
+    if (pivot.GZI > LEVEL_MAX) pivot.GZI = LEVEL_MAX;
+    if (pivot.GZI < LEVEL_MIN) pivot.GZI = LEVEL_MIN;
+    if (pivot.UpdatedGZ != pivot.GZ && pivot.GZ <= LEVEL_MAX && pivot.GZ >= LEVEL_MIN) {
+        onLevelChanged();
+    }
+}
+function updateElevation() {
+    pivot.Elevation = tileBuffer.getElevation(pivot.lon, pivot.lat) * SCALE_Z;
+
+    // update camera height delta
+    camera.groundEle = tileBuffer.getElevation(camera.lon, camera.lat) * SCALE_Z;
+    if (camera.height < camera.groundEle - pMatrixInfo.PanZNow * camera.minGroundDistanceRatio) {
+        camera.heightOffset = camera.groundEle - pMatrixInfo.PanZNow * camera.minGroundDistanceRatio - camera.height;
+    }
+}
+
+function updateCamera() {
+    camera.height = -pMatrixInfo.PanZNow * Math.cos(degToRad(pMatrixInfo.RotateX));
+    camera.distanceBevel = pMatrixInfo.PanZNow * Math.sin(degToRad(pMatrixInfo.RotateX));
+    camera.distanceY = -camera.distanceBevel * Math.cos(degToRad(pMatrixInfo.RotateZ));
+    camera.distanceX = -camera.distanceBevel * Math.sin(degToRad(pMatrixInfo.RotateZ));
+    camera.deltaLon = mx2lng(camera.distanceX);
+    camera.deltaLat = mx2lng(camera.distanceY);
+    camera.lat = pivot.lat + camera.deltaLat;
+    camera.lon = pivot.lon + camera.deltaLon;
+}
+
+function getNodeFromCurrent(x, y, z) {
+    for (var i = 0; i < TILE_NUM_X; i++) {
+        for (var j = 0; j < TILE_NUM_Y; j++) {
+            if (currentTileNodes[i][j].x == x && currentTileNodes[i][j].y == y && currentTileNodes[i][j].z == z) {
+                return currentTileNodes[i][j];
+            }
+        }
+    }
+    return null;
+}
+
+function animate() {
+    easeValue(pivot, "XNow", "X");
+    easeValue(pivot, "YNow", "Y");
+    easeValue(pMatrixInfo, "RotateXNow", "RotateX");
+    easeValue(pMatrixInfo, "RotateZNow", "RotateZ");
+    easeValue(pMatrixInfo, "PanZNow", "PanZ", 0.1);
+
+    pivot.ElevationNow = pivot.Elevation;
+    camera.heightOffsetNow = camera.heightOffset;
+}
+
+function easeValue(obj, srcVal, desVal, factor) {
+    var easeFactor = (SMOOTH_ZOOM ? (factor || 0.2) : 1);
+
+    var easVal = (obj[desVal] - obj[srcVal]) * easeFactor;
+    obj[srcVal] += easVal;
+    if (Math.abs(easVal) >= 0.01) needRender = true;
+}
+
+//绘制场景中的形状
+function drawScene() {
+
+    stats.update();
+
+    if (!needRender) return; // 如果该indicator没有变为true，则跳过重绘
+
+
+    clearGL(); // 清除颜色
+
+    // 根据角度、宽高比、近视距、远视距计算出相应的投影矩阵。
+    mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 1, 1e100, pMatrix);
+    mat4.translate(pMatrix, [0, 0, pMatrixInfo.PanZNow]);
+    mat4.rotateX(pMatrix, degToRad(pMatrixInfo.RotateXNow));
+    mat4.rotateZ(pMatrix, degToRad(pMatrixInfo.RotateZNow));
+
+    // 移动整个地形到要查看的部位
+    mat4.identity(mvMatrix);
+    mat4.translate(mvMatrix, [-pivot.XNow, -pivot.YNow, 0]);
+
+    // 把这两个矩阵推送给GPU
+    setMatrixUniforms(spTexture);
+
+    // bind uv buffer
+    gl.bindBuffer(gl.ARRAY_BUFFER, uGridVertexCoordBuffer);
+    gl.vertexAttribPointer(spTexture.aTextureCoord, uGridVertexCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+    for (var i = 0; i < TILE_NUM_X; i++) {
+        for (var j = 0; j < TILE_NUM_Y; j++) {
+            drawTileNode( currentTileNodes[i][j] );
+        }
+    }
+
+    needRender = false; // 重绘完成，复位该indicator
+}
+
+function drawTileNode( node ) {
+    if (node.isReady) {
+        // draw itself
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, uTileVertexIndexBuffer);
+        gl.bindBuffer(gl.ARRAY_BUFFER, node.vertexPositionBuffer);
+        gl.vertexAttribPointer(spTexture.aVertexPosition, node.vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);  //指定顶点属性
+        gl.bindTexture(gl.TEXTURE_2D, node.Texture);
+        gl.drawElements(gl.TRIANGLES, uTileVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);  //根据储存的点绘制三角形带，即矩形
+    } else {
+        // draw it by its Ancestor
+        var nodeAncestor = node.getDrawableAncestor();
+        if (nodeAncestor) {
+            //根据储存的点绘制三角形带，即矩形
+            var childBuffer = tileBuffer.getChildrenTileVertexIndexBuffer(node, nodeAncestor);
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, childBuffer);
+            gl.bindBuffer(gl.ARRAY_BUFFER, nodeAncestor.vertexPositionBuffer);
+            gl.vertexAttribPointer(spTexture.aVertexPosition, node.vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);  //指定顶点属性
+            gl.bindTexture(gl.TEXTURE_2D, nodeAncestor.Texture);
+            gl.drawElements(gl.TRIANGLES, childBuffer.numItems, gl.UNSIGNED_SHORT, 0);  //根据储存的点绘制三角形带，即矩形
+
+            // 对于由祖先帮忙绘制的块，画上网格
+            if (ANCESTOR_GRID) {
+                setAlpha(true);
+                gl.drawElements(gl.LINES, childBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+                setAlpha(false);
+            }
+        }
+    }
+}
+
+function onWindowResize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    updateViewport();
+    needRender = true;
+}
+
+</script>
+</head>
+<body>
+<canvas id="canvas" oncontextmenu="return false;"></canvas>
+<div id="controlPanel">
+    <button onclick="onZoomScale(2);">Zoom In</button>
+    <button onclick="onZoomScale(0.5);">Zoom Out</button>
+    <label>
+        <input type="checkbox" class="chkControl" onchange="SMOOTH_ZOOM=this.checked; needRender = true;" checked/>
+        Smooth Zoom
+    </label>
+    <label>
+        <input type="checkbox" class="chkControl" onchange="ANCESTOR_GRID=this.checked; needRender = true;" checked/>
+        Ancestor Grid
+    </label>
+</div>
+</body>
+</html>

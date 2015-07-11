@@ -1,0 +1,16 @@
+{
+    "vertex": "texture",
+    "fragment": "texture",
+    "attributes": [{
+        "name": "aVertexPosition"
+    }, {
+        "name": "aTextureCoord"
+    }],
+    "uniforms": [{
+        "name": "uPMatrix"
+    }, {
+        "name": "uMVMatrix"
+    }, {
+        "name": "uSampler"
+    }]
+}
