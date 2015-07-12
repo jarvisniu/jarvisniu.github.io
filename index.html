@@ -1,23 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Jarvis Niu - Home</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="./favicon.png">
     <style type="text/css">
-html {height: 100%}
-body {font-family: Roboto, Corbel, Avenir, 'Lucida Grande', 'Lucida Sans', sans-serif;
-    font-size: 14.4px;background-color: white;height: 100%;max-width: 800px;
-    margin: 0 auto;padding: 0;}
-a {color: #6A0E0E;text-decoration: none;border-bottom: 1px dotted #798780;}
-a:hover{background: #F1FFF7;}
-a:hover{color: #BA2121;}
-h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: normal; }
-hr {border: none;height: 1px;background-color: #CFE3DC;margin-top: 24px;}
-pre {margin: 0px;padding: 20px;border: 1px solid #EAEAEA;
-    border-radius: 4px;background-color: rgb(248, 248, 248);font-size: 15px;}
-code, pre {font-family: Inconsolata, Consolas, Menlo, Monaco, "Courier New", monospace;
-    color: #0C4B33;font-size: 1.07em;}
+
+/*start of css*/
+
+html {
+	height: 100%
+}
+
+body {
+	font-family: Roboto, Corbel, Avenir, 'Lucida Grande', 'Lucida Sans', sans-serif;
+    font-size: 14.4px;background-color: white;
+    height: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+a {
+	color: #6A0E0E;
+	text-decoration: none;
+	border-bottom: 1px dotted #798780;
+}
+
+a:hover{
+	background: #F1FFF7;
+}
+
+a:hover{
+	color: #BA2121;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+	font-weight: normal;
+}
+
+hr {
+	border: none;
+	height: 1px;
+	background-color: #CFE3DC;
+	margin-top: 24px;
+}
+
+pre {
+	margin: 0px;
+	padding: 20px;
+	border: 1px solid #EAEAEA;
+    border-radius: 4px;
+    background-color: rgb(248, 248, 248);
+    font-size: 15px;
+}
+
+code, pre {
+	font-family: Inconsolata, Consolas, Menlo, Monaco, "Courier New", monospace;
+    color: #0C4B33;
+    font-size: 1.07em;
+}
 
 h1 {
 	font-size: 2.6em;
@@ -125,9 +169,10 @@ article.show {
 	display: block;
 }
 
-
 /*end of css*/
+
     </style>
+
 </head>
 <body>
 <script type="text/javascript">
@@ -173,6 +218,27 @@ article.show {
 		body_works = document.getElementById("body_works");
 		body_about = document.getElementById("body_about");
 
+		if (nav_sel == "home" || nav_sel == "") {
+			nav_sel = "home";
+			nav_home.classList.add("selected");
+			body_home.classList.add("show");
+		} else if (nav_sel == "blog") {
+			nav_sel = "blog";
+			nav_blog.classList.add("selected");
+			body_blog.classList.add("show");
+		} else if (nav_sel == "works") {
+			nav_sel = "works";
+			nav_works.classList.add("selected");
+			body_works.classList.add("show");
+		} else if (nav_sel == "about") {
+			nav_sel = "about";
+			nav_about.classList.add("selected");
+			body_about.classList.add("show");
+		} else {
+			alert("不存在此nav页面: " + nav_sel);
+		}
+		setHashUrl(nav_sel);
+
 
 		function onClickNav() {
 			if (nav_sel == "home") {
@@ -206,12 +272,22 @@ article.show {
 				body_about.classList.add("show");
 				nav_sel = "about";
 			}
+			setHashUrl(nav_sel);
 		}
 
 		nav_home.addEventListener("click", onClickNav);
 		nav_blog.addEventListener("click", onClickNav);
 		nav_works.addEventListener("click", onClickNav);
 		nav_about.addEventListener("click", onClickNav);
+	}
+
+	function setHashUrl(url) {
+		if (url === undefined || url == "") {
+			location.hash = "";
+		} else {
+			if (url.indexOf("/") != 0) url = "/" + url;
+			location.hash = "#!" + url;
+		}
 	}
 
 </script>
@@ -223,32 +299,20 @@ article.show {
 
 	<nav>
 		<ul>
-			<li id="nav_home" class="nav-button selected">Home</li>
+			<li id="nav_home" class="nav-button">Home</li>
 			<li id="nav_blog" class="nav-button">Blog</li>
 			<li id="nav_works" class="nav-button">Works</li>
 			<li id="nav_about" class="nav-button last">About</li>
 			<li class="nav-button social">
-				<a href="http://github.com/jarvisniu">
+				<a target="blank" href="http://github.com/jarvisniu">
 					<img class="icon" src="img/icons/github-32.png">
 				</a>
-				<a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#106;&#97;&#114;&#118;&#105;&#115;&#110;&#105;&#117;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;">
+				<a target="blank" href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#106;&#97;&#114;&#118;&#105;&#115;&#110;&#105;&#117;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;">
 					<img class="icon" src="img/icons/gmail-32.png">
 				</a>
-				<a href="http://cn.linkedin.com/in/jarvisniu">
+				<a target="blank" href="https://www.linkedin.com/in/jarvisniu">
 					<img class="icon" src="img/icons/linkedin-32.png">
 				</a>
-				<!-- <a href="http://www.weibo.com">
-					<img class="icon" src="img/icons/weibo-32.png">
-				</a>
-				<a href="http://www.youtube.com">
-					<img class="icon" src="img/icons/youtube-32.png">
-				</a>
-				<a href="http://www.facebook.com">
-					<img class="icon" src="img/icons/facebook-32.png">
-				</a>
-				<a href="http://www.twitter.com">
-					<img class="icon" src="img/icons/twitter-32.png">
-				</a> -->
 			</li>
 		</ul>
 	</nav>
