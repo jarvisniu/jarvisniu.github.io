@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>d</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="css/aui.css">
+
+<script type="text/javascript">
+
+	var ready = false;
+	var mdit;
+	var LOADING = "Loading...";
+	var ERROR404 = "<h1>Error 404</h1>Sorry, this article: <strong>{title}</strong> does not exist, or has been deleted!";
+	var lastHeight = 0;
+
+	function onLoadMarkdownIt() {
+		mdit = new markdownit();
+		showHtml(LOADING);
+		loopMonitorHeight();
+		ready = true;
+	}
+
+	function loopMonitorHeight() {
+		var thisHeight = document.body.scrollHeight;
+		if (lastHeight != thisHeight) notifyParentHeight();
+		setTimeout(loopMonitorHeight, 1000);
+	}
+
+
+	function loadArticle(title) {
+		if (title && title.length > 0) {
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState == 4 && xhr.status == 200) {
+					showMd(xhr.responseText);
+				} else if (xhr.status == 404) {
+					showHtml(ERROR404.replace("{title}", title));
+				}
+			};
+			var url = "blog/" + title + ".md";
+			xhr.open("GET", url);
+			xhr.send();
+		} else {
+			showHtml(LOADING);
+		}
+	}
+
+	function showMd(md) {
+		document.body.innerHTML = "";
+		window.parent.setHeight(0);
+		document.body.innerHTML = mdit.render(md);
+		notifyParentHeight();
+	}
+
+	function showHtml(html) {
+		document.body.innerHTML = "";
+		window.parent.setHeight(0);
+		document.body.innerHTML = html;
+		notifyParentHeight();
+	}
+
+	function notifyParentHeight() {
+		window.parent.setHeight(document.body.scrollHeight);
+	}
+
+</script>
+<script src="js/lib/markdown-it.js" async onload="onLoadMarkdownIt();"></script>
+</head>
+<body>
+	
+</body>
+</html>

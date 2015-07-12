@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="./favicon.png">
+
     <style type="text/css">
 
 /*start of css*/
@@ -17,7 +18,7 @@ body {
 	font-family: Roboto, Corbel, Avenir, 'Lucida Grande', 'Lucida Sans', sans-serif;
     font-size: 14.4px;background-color: white;
     height: 100%;
-    max-width: 1000px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 0;
 }
@@ -71,10 +72,12 @@ h1 {
 }
 
 .mainbody {
-	height: 100%;
+	min-height: 100%;
 	border: solid 1px #ccc;
 	border-width: 0 0.1em;
 }
+
+/* nav */
 
 nav {
 	background: #ddd;
@@ -82,29 +85,18 @@ nav {
 	border-width: 1px 0 1px 0;
 	padding: 0;
 	margin: 0;
+	height: 26px;
 	-webkit-user-select: none;
 }
 
-nav ul {
-	margin: 0;
-	padding: 0;
-	height: 2em;
-}
-
-nav li {
-	display: inline-block;
-	padding: 0;
-	margin: 0;
-	float: left;
-}
-
 .nav-button {
+	display: inline-block;
 	border: solid 0 #ccc;
 	border-left-width: 1px;
 	border-bottom-width: 1px;
-	padding: 0.4em 0.8em;
-	cursor: pointer;
 	position: relative;
+	padding: 4px 8px;
+	float: left;
 }
 
 .nav-button:hover {
@@ -127,7 +119,7 @@ nav li {
 
 .nav-button.social {
 	float: right;
-	padding: 0.25em;
+	padding: 0.15em;
 	border-width: 0;
 	cursor: default;
 }
@@ -149,16 +141,18 @@ nav li {
 	height: 20px;
 }
 
-.social a {
+a.social {
 	display: inline-block;
 	width: 20px;
 	height: 20px;
 	border: solid 1px #ddd;
 }
 
-.social a:hover {
+a.social:hover {
 	border-color: gray;
 }
+
+/* main body */
 
 article {
 	padding: 1em;
@@ -169,6 +163,20 @@ article.show {
 	display: block;
 }
 
+#body_blog a {
+	display: block;
+}
+
+#body_blog_text {
+	padding: 0;
+	/*height: calc(100% - 150px);*/
+}
+
+iframe {
+	border: none;
+	width: 100%;
+}
+
 /*end of css*/
 
     </style>
@@ -177,14 +185,24 @@ article.show {
 <body>
 <script type="text/javascript">
 
+	var hashPath;
 	var header;
-	var nav_sel = "home", nav_home, nav_blog, nav_works, nav_about;
-	var body_home, body_blog, body_works, body_about;
+	var reader;
+	var nav_home, nav_blog, nav_works, nav_about;
+	var body_home, body_blog, body_blog_text, body_works, body_about;
+
+	var pendingTitle;
+	var blogList = [
+		"AndularJS",
+		"Awesome Python",
+	];
 
 	function init() {
 		header = document.getElementsByTagName("h1")[0];
+		reader = document.getElementsByTagName("iframe")[0];
 		initNav();
-
+		initBlogList();
+		window.addEventListener("hashchange", onHashChanged);
 		setTimeout(step, 5000);
 	}
 	
@@ -215,70 +233,87 @@ article.show {
 
 		body_home = document.getElementById("body_home");
 		body_blog = document.getElementById("body_blog");
+		body_blog_text = document.getElementById("body_blog_text");
 		body_works = document.getElementById("body_works");
 		body_about = document.getElementById("body_about");
 
-		if (nav_sel == "home" || nav_sel == "") {
-			nav_sel = "home";
-			nav_home.classList.add("selected");
-			body_home.classList.add("show");
-		} else if (nav_sel == "blog") {
-			nav_sel = "blog";
-			nav_blog.classList.add("selected");
-			body_blog.classList.add("show");
-		} else if (nav_sel == "works") {
-			nav_sel = "works";
-			nav_works.classList.add("selected");
-			body_works.classList.add("show");
-		} else if (nav_sel == "about") {
-			nav_sel = "about";
-			nav_about.classList.add("selected");
-			body_about.classList.add("show");
-		} else {
-			alert("不存在此nav页面: " + nav_sel);
+		hashPath = getHashPath();
+
+		onHashChanged();
+	}
+
+	function initBlogList() {
+		for (var i in blogList) {
+			var a = document.createElement("a");
+			a.innerText = blogList[i];
+			a.href = "#!/blog/" + blogList[i];
+			body_blog.appendChild(a);
 		}
-		setHashUrl(nav_sel);
+		// <a href="#!/blog/AndularJS-Wikipedia">AndularJS Wikipedia</a>
+	}
 
-
-		function onClickNav() {
-			if (nav_sel == "home") {
+	function onHashChanged() {
+			if (hashPath == "home") {
 				nav_home.classList.remove("selected");
 				body_home.classList.remove("show");
-			} else if (nav_sel == "blog") {
+			} else if (hashPath == "blog") {
 				nav_blog.classList.remove("selected");
 				body_blog.classList.remove("show");
-			} else if (nav_sel == "works") {
+			} else if (hashPath == "works") {
 				nav_works.classList.remove("selected");
 				body_works.classList.remove("show");
-			} else if (nav_sel == "about") {
+			} else if (hashPath == "about") {
 				nav_about.classList.remove("selected");
 				body_about.classList.remove("show");
+			} else if (hashPath.indexOf("blog/") == 0 ) {
+				body_blog_text.classList.remove("show");
+				loadArticle("");
 			}
 
-			if (this.id == "nav_home") {
+			hashPath = getHashPath();
+
+			if (hashPath == "home") {
 				nav_home.classList.add("selected");
 				body_home.classList.add("show");
-				nav_sel = "home";
-			} else if (this.id == "nav_blog") {
+			} else if (hashPath == "blog") {
 				nav_blog.classList.add("selected");
 				body_blog.classList.add("show");
-				nav_sel = "blog";
-			} else if (this.id == "nav_works") {
+			} else if (hashPath == "works") {
 				nav_works.classList.add("selected");
 				body_works.classList.add("show");
-				nav_sel = "works";
-			} else if (this.id == "nav_about") {
+			} else if (hashPath == "about") {
 				nav_about.classList.add("selected");
 				body_about.classList.add("show");
-				nav_sel = "about";
+			} else if (hashPath.indexOf("blog/") == 0 ) {
+				var articleTitle = hashPath.substring(5);
+				loadArticle(articleTitle);
+				body_blog_text.classList.add("show");
+			} else {
+				alert("Error 404 \n 不存在此页面: " + hashPath);
 			}
-			setHashUrl(nav_sel);
-		}
+	}
 
-		nav_home.addEventListener("click", onClickNav);
-		nav_blog.addEventListener("click", onClickNav);
-		nav_works.addEventListener("click", onClickNav);
-		nav_about.addEventListener("click", onClickNav);
+
+	function getHashPath() {
+		var path = location.hash.replace("#!/", "");
+		if (path == "") path = "home";
+		return path;
+	}
+
+	function loadArticle(title) {
+		if (readerDom.window.ready)
+			readerDom.window.loadArticle(title);
+		else
+			pendingTitle = title;
+	}
+
+	function onLoadReader() {
+		if (pendingTitle) readerDom.window.loadArticle(pendingTitle);
+	}
+
+	function setHeight(h) {
+		// console.log("Height: " + h);
+		reader.style.height = h + "px";
 	}
 
 	function setHashUrl(url) {
@@ -298,31 +333,32 @@ article.show {
 	</h1>
 
 	<nav>
-		<ul>
-			<li id="nav_home" class="nav-button">Home</li>
-			<li id="nav_blog" class="nav-button">Blog</li>
-			<li id="nav_works" class="nav-button">Works</li>
-			<li id="nav_about" class="nav-button last">About</li>
-			<li class="nav-button social">
-				<a target="_blank" href="http://github.com/jarvisniu">
-					<img class="icon" src="img/icons/github-32.png">
-				</a>
-				<a target="_blank" href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#106;&#97;&#114;&#118;&#105;&#115;&#110;&#105;&#117;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;">
-					<img class="icon" src="img/icons/gmail-32.png">
-				</a>
-				<a target="_blank" href="https://www.linkedin.com/in/jarvisniu">
-					<img class="icon" src="img/icons/linkedin-32.png">
-				</a>
-			</li>
-		</ul>
+		<a class="nav-button" id="nav_home" href="#!/home">Home</a>
+		<a class="nav-button" id="nav_blog" href="#!/blog">Blog</a>
+		<a class="nav-button" id="nav_works" href="#!/works">Works</a>
+		<a class="nav-button last" id="nav_about" href="#!/about">About</a>
+		<span class="nav-button social">
+			<a class="social" target="_blank" href="http://github.com/jarvisniu">
+				<img class="icon" src="img/icons/github-32.png">
+			</a>
+			<a class="social" target="_blank" href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#106;&#97;&#114;&#118;&#105;&#115;&#110;&#105;&#117;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;">
+				<img class="icon" src="img/icons/gmail-32.png">
+			</a>
+			<a class="social" target="_blank" href="https://www.linkedin.com/in/jarvisniu">
+				<img class="icon" src="img/icons/linkedin-32.png">
+			</a>
+		</span>
 	</nav>
 
-	<article id="body_home" class="show">
+	<article id="body_home">
 		home placeholder
 	</article>
 
 	<article id="body_blog">
-		blog placeholder
+	</article>
+
+	<article id="body_blog_text">
+		<iframe name="readerDom" src="reader.html" onload="onLoadReader();"></iframe>
 	</article>
 
 	<article id="body_works">
@@ -333,9 +369,9 @@ article.show {
 		<p>Hi, I am Jarvis Niu. This is my personal website. I am a program developer.</p>
 		<p>You can find me here:</p>
 		<ul>
-		<li>Github: <a href="https://github.com/jarvisniu">https://github.com/jarvisniu</a></li>
-		<li>Email: <a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#106;&#97;&#114;&#118;&#105;&#115;&#110;&#105;&#117;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;">&#106;&#97;&#114;&#118;&#105;&#115;&#110;&#105;&#117;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;</a></li>
-		<li>LinkedIn: <a href="https://www.linkedin.com/in/jarvisniu">https://www.linkedin.com/in/jarvisniu</a></li>
+		<li>Github: <a target="_blank" href="https://github.com/jarvisniu">https://github.com/jarvisniu</a></li>
+		<li>Email: <a target="_blank" href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#106;&#97;&#114;&#118;&#105;&#115;&#110;&#105;&#117;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;">&#106;&#97;&#114;&#118;&#105;&#115;&#110;&#105;&#117;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;</a></li>
+		<li>LinkedIn: <a target="_blank" href="https://www.linkedin.com/in/jarvisniu">https://www.linkedin.com/in/jarvisniu</a></li>
 	</article>
 
 <div>
