@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>d</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -14,6 +13,7 @@
 	var LOADING = "Loading...";
 	var ERROR404 = "<h1>Error 404</h1>Sorry, this article: <strong>{title}</strong> does not exist, or has been deleted!";
 	var lastHeight = 0;
+	var hasParent = this.window.parent != this.window;
 
 	function onLoadMarkdownIt() {
 		mdit = new markdownit();
@@ -49,20 +49,24 @@
 
 	function showMd(md) {
 		document.body.innerHTML = "";
-		window.parent.setHeight(0);
+		setParentHeight(0);
 		document.body.innerHTML = mdit.render(md);
 		notifyParentHeight();
 	}
 
 	function showHtml(html) {
 		document.body.innerHTML = "";
-		window.parent.setHeight(0);
+		setParentHeight(0);
 		document.body.innerHTML = html;
 		notifyParentHeight();
 	}
 
 	function notifyParentHeight() {
-		window.parent.setHeight(document.body.scrollHeight);
+		setParentHeight(document.body.scrollHeight);
+	}
+
+	function setParentHeight(h) {
+		if(hasParent) window.parent.setHeight(h);
 	}
 
 </script>

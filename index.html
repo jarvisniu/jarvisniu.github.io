@@ -29,6 +29,15 @@ a {
 	border-bottom: 1px dotted #798780;
 }
 
+a.new-window::after {
+	content: "";
+	display: inline-block;
+	background: url("img/icons/new-window-32.png") no-repeat;
+	background-size: 16px 16px;
+	width: 20px;
+	height: 20px;
+}
+
 a:hover{
 	background: #F1FFF7;
 }
@@ -362,7 +371,7 @@ iframe {
 	</article>
 
 	<article id="body_works">
-		<a target="_blank" href="works/webgis/index.html">WebGIS</a>
+		<a target="_blank" class="new-window" href="works/webgis/index.html">WebGIS</a>
 	</article>
 
 	<article id="body_about">
