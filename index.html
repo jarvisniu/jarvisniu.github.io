@@ -127,6 +127,7 @@ nav {
 }
 
 .nav-button.social {
+	display: inline-flex;
 	float: right;
 	padding: 0.15em;
 	border-width: 0;
@@ -148,6 +149,10 @@ nav {
 .icon {
 	width: 20px;
 	height: 20px;
+}
+
+.social {
+	margin: 0 2px;
 }
 
 a.social {
@@ -189,16 +194,50 @@ iframe {
 /*end of css*/
 
     </style>
+    <script src="js/ji18n.js"></script>
 
 </head>
 <body>
 <script type="text/javascript">
 
 	var hashPath;
+
 	var header;
 	var reader;
 	var nav_home, nav_blog, nav_works, nav_about;
 	var body_home, body_blog, body_blog_text, body_works, body_about;
+
+	var langData = {
+		"__title__" : {
+			"zh": "Jarvis Niu - 首页",
+			"en": "Jarvis Niu - Home",
+		},
+		"niu" : {
+			"zh": "Niu",
+			"en": "Niu",
+		},
+		"home" : {
+			"zh": "首页",
+			"en": "Home",
+		},
+		"blog" : {
+			"zh": "博客",
+			"en": "Blog",
+		},
+		"works" : {
+			"zh": "作品",
+			"en": "Works",
+		},
+		"about" : {
+			"zh": "关于",
+			"en": "About",
+		},
+		"intro1" : {
+			"zh": "大家好，我叫牛俊为，我是一只程序猿。目前主要致力于前端开发。",
+			"en": "Hi, my name is Jarvis Niu. This is my personal website. I am a program developer.",
+		},
+	}
+	var ji18n = new Ji18n(langData);
 
 	var pendingTitle;
 	var blogList = [
@@ -211,6 +250,7 @@ iframe {
 		reader = document.getElementsByTagName("iframe")[0];
 		initNav();
 		initBlogList();
+		refreshBtnLang();
 		window.addEventListener("hashchange", onHashChanged);
 		setTimeout(step, 5000);
 	}
@@ -325,6 +365,18 @@ iframe {
 		reader.style.height = h + "px";
 	}
 
+	function switchLang() {
+		ji18n.switch();
+		refreshBtnLang()
+	}
+
+	function refreshBtnLang() {
+		if (ji18n.lang == "en")
+			document.getElementById("btnLang").innerText = "中文";
+		else
+			document.getElementById("btnLang").innerText = "En";
+	}
+
 	function setHashUrl(url) {
 		if (url === undefined || url == "") {
 			location.hash = "";
@@ -338,15 +390,16 @@ iframe {
 <div class="mainbody">
 
 	<h1 id="jarvis-niu">
-	Niu
+	{{ niu }}
 	</h1>
 
 	<nav>
-		<a class="nav-button" id="nav_home" href="#!/home">Home</a>
-		<a class="nav-button" id="nav_blog" href="#!/blog">Blog</a>
-		<a class="nav-button" id="nav_works" href="#!/works">Works</a>
-		<a class="nav-button last" id="nav_about" href="#!/about">About</a>
+		<a class="nav-button" id="nav_home" href="#!/home">{{ home }}</a>
+		<a class="nav-button" id="nav_blog" href="#!/blog">{{ blog }}</a>
+		<a class="nav-button" id="nav_works" href="#!/works">{{ works }}</a>
+		<a class="nav-button last" id="nav_about" href="#!/about">{{ about }}</a>
 		<span class="nav-button social">
+			<button id="btnLang" onclick="switchLang(this);">En</button>
 			<a class="social" target="_blank" href="http://github.com/jarvisniu">
 				<img class="icon" src="img/icons/github-32.png">
 			</a>
@@ -375,12 +428,7 @@ iframe {
 	</article>
 
 	<article id="body_about">
-		<p>Hi, I am Jarvis Niu. This is my personal website. I am a program developer.</p>
-		<p>You can find me here:</p>
-		<ul>
-		<li>Github: <a target="_blank" href="https://github.com/jarvisniu">https://github.com/jarvisniu</a></li>
-		<li>Email: <a target="_blank" href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#106;&#97;&#114;&#118;&#105;&#115;&#110;&#105;&#117;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;">&#106;&#97;&#114;&#118;&#105;&#115;&#110;&#105;&#117;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;</a></li>
-		<li>LinkedIn: <a target="_blank" href="https://www.linkedin.com/in/jarvisniu">https://www.linkedin.com/in/jarvisniu</a></li>
+		<p>{{ intro1 }}</p>
 	</article>
 
 <div>
