@@ -8,47 +8,33 @@
 
     <style type="text/css">
 
-/*start of css*/
+/* overall */
+* {
+    margin: 0;
+    padding: 0;
+}
 
 html {
-	height: 100%
+	height: 100%;
 }
 
 body {
 	font-family: Roboto, Corbel, Avenir, 'Lucida Grande', 'Lucida Sans', sans-serif;
-    font-size: 14.4px;background-color: white;
-    height: 100%;
+    font-size: 14.4px;
     max-width: 800px;
+    height: 100%;
     margin: 0 auto;
-    padding: 0;
 }
 
 a {
-	color: #6A0E0E;
-	text-decoration: none;
-	border-bottom: 1px dotted #798780;
-}
-
-a.new-window::after {
-	content: "";
-	display: inline-block;
-	background: url("img/icons/new-window-32.png") no-repeat;
-	background-size: 16px 16px;
-	width: 20px;
-	height: 20px;
+    color: black;
+    text-decoration: none;
 }
 
 a:hover{
-	background: #F1FFF7;
-}
-
-a:hover{
-	color: #BA2121;
-}
-
-h1, h2, h3, h4, h5, h6 {
-	margin: 0;
-	font-weight: normal;
+	/*background: #ccc;*/
+    text-decoration: underline;
+	/*border: solid 1px gray;*/
 }
 
 hr {
@@ -56,6 +42,13 @@ hr {
 	height: 1px;
 	background-color: #CFE3DC;
 	margin-top: 24px;
+}
+
+h1 {
+	font-size: 2.6em;
+	font-weight: bold;
+	padding: 0.6em;
+	/*background: -webkit-gradient(radial,50 50,50,50 1,0,from(black),to(white));*/
 }
 
 pre {
@@ -73,81 +66,78 @@ code, pre {
     font-size: 1.07em;
 }
 
-h1 {
-	font-size: 2.6em;
-	font-weight: bold;
-	padding: 0.6em;
-	/*background: -webkit-gradient(radial,50 50,50,50 1,0,from(black),to(white));*/
+/* new window icon */
+
+a.new-window::after {
+	content: "";
+	display: inline-block;
+    width: 16px;
+    height: 2ex;
+    background: url(img/icons/new-window-32.png) no-repeat center;
+	background-size: 16px 16px;
 }
 
 .mainbody {
 	min-height: 100%;
-	border: solid 1px #ccc;
+	border: solid #ccc;
 	border-width: 0 0.1em;
 }
 
 /* nav */
 
 nav {
-	background: #ddd;
+	height: 32px;
 	border: solid 1px #ccc;
-	border-width: 1px 0 1px 0;
-	padding: 0;
-	margin: 0;
-	height: 26px;
+	border-width: 1px 0;
+	background-color: #ddd;
 	-webkit-user-select: none;
 }
 
-.nav-button {
+nav>a {
 	display: inline-block;
-	border: solid 0 #ccc;
-	border-left-width: 1px;
-	border-bottom-width: 1px;
-	position: relative;
-	padding: 4px 8px;
 	float: left;
+    height: 20px;
+	border: solid 1px #ccc;
+    border-width: 0 1px 0 0;
+	padding: 6px 10px;
 }
 
-.nav-button:hover {
+nav>a:hover {
 	background-color: #eee;
+    text-decoration: none;
 }
 
-.nav-button:active {
+nav>a:active {
 	background-color: #ccc;
 }
 
-.nav-button.selected {
+nav>a.selected {
+    height: 21px;
 	background-color: white;
-	border-width: 1px 0 0 1px;
-	/*font-weight: bold;*/
+    color: #BA2121;
 }
 
-.nav-button.last {
-	border-right-width: 1px;
-}
 
-.nav-button.social {
+#socialPanel {
+	display: inline-flex;
 	float: right;
+    margin: 3px;
 	padding: 0.15em;
 	border-width: 0;
 	cursor: default;
 }
 
-.nav-button.social:hover {
-	background-color: transparent;
-}
-
-.nav-button.social img:active {
-	background-color: #bbb;
-}
-
-.nav-button:first-child {
-	border-left-width: 0;
+#btnLang {
+	width: 36px;
 }
 
 .icon {
 	width: 20px;
 	height: 20px;
+}
+
+.social {
+	margin: 0 2px;
 }
 
 a.social {
@@ -161,14 +151,14 @@ a.social:hover {
 	border-color: gray;
 }
 
-/* main body */
+/* page */
 
 article {
-	padding: 1em;
+	padding: 16px;
 	display: none;
 }
 
-article.show {
+.show {
 	display: block;
 }
 
@@ -178,7 +168,6 @@ article.show {
 
 #body_blog_text {
 	padding: 0;
-	/*height: calc(100% - 150px);*/
 }
 
 iframe {
@@ -189,16 +178,46 @@ iframe {
 /*end of css*/
 
     </style>
+    <script src="js/ji18n.js"></script>
 
 </head>
 <body>
 <script type="text/javascript">
 
 	var hashPath;
+
 	var header;
 	var reader;
-	var nav_home, nav_blog, nav_works, nav_about;
-	var body_home, body_blog, body_blog_text, body_works, body_about;
+	var nav_blog, nav_works, nav_about;
+	var body_blog, body_blog_text, body_works, body_about;
+
+	var langData = {
+		"__title__" : {
+			"zh": "Jarvis Niu - 首页",
+			"en": "Jarvis Niu - Home",
+		},
+		"niu" : {
+			"zh": "Niu",
+			"en": "Niu",
+		},
+		"blog" : {
+			"zh": "博客",
+			"en": "Blog",
+		},
+		"works" : {
+			"zh": "作品",
+			"en": "Works",
+		},
+		"about" : {
+			"zh": "关于",
+			"en": "About",
+		},
+		"intro1" : {
+			"zh": "我叫牛俊为，是一名前端程序员。",
+			"en": "Hi, I am Jarvis Niu. This is my personal website. I am a program developer.",
+		},
+	}
+	var ji18n = new Ji18n(langData);
 
 	var pendingTitle;
 	var blogList = [
@@ -211,6 +230,7 @@ iframe {
 		reader = document.getElementsByTagName("iframe")[0];
 		initNav();
 		initBlogList();
+		refreshBtnLang();
 		window.addEventListener("hashchange", onHashChanged);
 		setTimeout(step, 5000);
 	}
@@ -235,12 +255,10 @@ iframe {
 	document.addEventListener("DOMContentLoaded", init);
 
 	function initNav() {
-		nav_home = document.getElementById("nav_home");
 		nav_blog = document.getElementById("nav_blog");
 		nav_works = document.getElementById("nav_works");
 		nav_about = document.getElementById("nav_about");
 
-		body_home = document.getElementById("body_home");
 		body_blog = document.getElementById("body_blog");
 		body_blog_text = document.getElementById("body_blog_text");
 		body_works = document.getElementById("body_works");
@@ -258,14 +276,10 @@ iframe {
 			a.href = "#!/blog/" + blogList[i];
 			body_blog.appendChild(a);
 		}
-		// <a href="#!/blog/AndularJS-Wikipedia">AndularJS Wikipedia</a>
 	}
 
 	function onHashChanged() {
-			if (hashPath == "home") {
-				nav_home.classList.remove("selected");
-				body_home.classList.remove("show");
-			} else if (hashPath == "blog") {
+			if (hashPath == "blog") {
 				nav_blog.classList.remove("selected");
 				body_blog.classList.remove("show");
 			} else if (hashPath == "works") {
@@ -281,10 +295,7 @@ iframe {
 
 			hashPath = getHashPath();
 
-			if (hashPath == "home") {
-				nav_home.classList.add("selected");
-				body_home.classList.add("show");
-			} else if (hashPath == "blog") {
+			if (hashPath == "blog") {
 				nav_blog.classList.add("selected");
 				body_blog.classList.add("show");
 			} else if (hashPath == "works") {
@@ -305,7 +316,7 @@ iframe {
 
 	function getHashPath() {
 		var path = location.hash.replace("#!/", "");
-		if (path == "") path = "home";
+		if (path == "") path = "blog";
 		return path;
 	}
 
@@ -325,6 +336,18 @@ iframe {
 		reader.style.height = h + "px";
 	}
 
+	function switchLang() {
+		ji18n.switch();
+		refreshBtnLang()
+	}
+
+	function refreshBtnLang() {
+		if (ji18n.lang == "en")
+			document.getElementById("btnLang").innerText = "中文";
+		else
+			document.getElementById("btnLang").innerText = "En";
+	}
+
 	function setHashUrl(url) {
 		if (url === undefined || url == "") {
 			location.hash = "";
@@ -337,16 +360,16 @@ iframe {
 </script>
 <div class="mainbody">
 
-	<h1 id="jarvis-niu">
-	Niu
-	</h1>
+    <header>
+		<h1>{{ niu }}</h1>
+    </header>
 
 	<nav>
-		<a class="nav-button" id="nav_home" href="#!/home">Home</a>
-		<a class="nav-button" id="nav_blog" href="#!/blog">Blog</a>
-		<a class="nav-button" id="nav_works" href="#!/works">Works</a>
-		<a class="nav-button last" id="nav_about" href="#!/about">About</a>
-		<span class="nav-button social">
+		<a id="nav_blog" href="#!/blog">{{ blog }}</a>
+		<a id="nav_works" href="#!/works">{{ works }}</a>
+		<a id="nav_about" href="#!/about">{{ about }}</a>
+		<span id="socialPanel">
+			<button id="btnLang" onclick="switchLang(this);">En</button>
 			<a class="social" target="_blank" href="http://github.com/jarvisniu">
 				<img class="icon" src="img/icons/github-32.png">
 			</a>
@@ -358,10 +381,6 @@ iframe {
 			</a>
 		</span>
 	</nav>
-
-	<article id="body_home">
-		home placeholder
-	</article>
 
 	<article id="body_blog">
 	</article>
@@ -375,12 +394,7 @@ iframe {
 	</article>
 
 	<article id="body_about">
-		<p>Hi, I am Jarvis Niu. This is my personal website. I am a program developer.</p>
-		<p>You can find me here:</p>
-		<ul>
-		<li>Github: <a target="_blank" href="https://github.com/jarvisniu">https://github.com/jarvisniu</a></li>
-		<li>Email: <a target="_blank" href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#106;&#97;&#114;&#118;&#105;&#115;&#110;&#105;&#117;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;">&#106;&#97;&#114;&#118;&#105;&#115;&#110;&#105;&#117;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#x6d;</a></li>
-		<li>LinkedIn: <a target="_blank" href="https://www.linkedin.com/in/jarvisniu">https://www.linkedin.com/in/jarvisniu</a></li>
+		<p>{{ intro1 }}</p>
 	</article>
 
 <div>
