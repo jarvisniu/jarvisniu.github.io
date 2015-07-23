@@ -1,5 +1,6 @@
-/* a micro i18n framework used in www.jarvisniu.com
- * @author Jarvis Niu
+
+/* Jarvis's i18n: A micro i18n framework.
+ * @author Jarvis Niu - www.jarvisniu.com
  */
 function Ji18n(data) {
     var self = this;
