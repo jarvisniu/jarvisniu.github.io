@@ -212,40 +212,8 @@ iframe {
 			"en": "About",
 		},
 		"intro1" : {
-			"zh": "我叫牛俊为，是一名前端程序员。",
-			"en": "Hi, I am Jarvis Niu. This is my personal website. I am a program developer.",
-		},
-	}
-	var ji18n = new Ji18n(langData);
-
-	var langData = {
-		"__title__" : {
-			"zh": "Jarvis Niu - 首页",
-			"en": "Jarvis Niu - Home",
-		},
-		"niu" : {
-			"zh": "Niu",
-			"en": "Niu",
-		},
-		"home" : {
-			"zh": "首页",
-			"en": "Home",
-		},
-		"blog" : {
-			"zh": "博客",
-			"en": "Blog",
-		},
-		"works" : {
-			"zh": "作品",
-			"en": "Works",
-		},
-		"about" : {
-			"zh": "关于",
-			"en": "About",
-		},
-		"intro1" : {
-			"zh": "大家好，我叫牛俊为，我是一只程序猿。目前主要致力于前端开发。",
-			"en": "Hi, my name is Jarvis Niu. This is my personal website. I am a program developer.",
+			"zh": "我叫牛俊为，是一名软件工程师，目前位于帝都北京。我是一名狂热的计算机技术爱好者，从17岁左右开始自学编程至今。<br><br>我喜欢尝试各种不同的编程平台。从桌面平台的VB6和.NET，到移动平台的Java和Android，再到开源硬件的Arduino，最后到Web平台的JS和PHP。就这样，我在好奇心引领下，乐此不疲地学习了一项又一项的新技术。虽然看似学了不少东西，但真正深入研究了的其实并不多。<br><br>我目前的工作是Web开发，以后可能会转向游戏开发。<br><br>除此之外，我还喜欢玩游戏和打乒乓球。我最喜欢的游戏是我的世界。",
+			"en": "I am Jarvis Niu. I am a program developer in Beijing. ",
 		},
 	}
 	var ji18n = new Ji18n(langData);
@@ -261,7 +229,7 @@ iframe {
 		reader = document.getElementsByTagName("iframe")[0];
 		initNav();
 		initBlogList();
-		refreshBtnLang();
+		onSwitchLang();
 		window.addEventListener("hashchange", onHashChanged);
 		setTimeout(step, 5000);
 	}
@@ -369,14 +337,17 @@ iframe {
 
 	function switchLang() {
 		ji18n.switch();
-		refreshBtnLang()
+		onSwitchLang()
 	}
 
-	function refreshBtnLang() {
-		if (ji18n.lang == "en")
+	function onSwitchLang() {
+		if (ji18n.lang == "en") {
 			document.getElementById("btnLang").innerText = "中文";
-		else
+			document.documentElement.setAttribute("lang", "en");
+		} else {
 			document.getElementById("btnLang").innerText = "En";
+			document.documentElement.setAttribute("lang", "zh");
+		}
 	}
 
 	function setHashUrl(url) {

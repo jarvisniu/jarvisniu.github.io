@@ -124,7 +124,7 @@ function Ji18n(data) {
     function renderBody() {
         var items = document.querySelectorAll("[ji18n]");
         for (var i = 0; i < items.length; i++) {
-            items[i].innerText = _(items[i].getAttribute("ji18n"));
+            items[i].innerHTML = _(items[i].getAttribute("ji18n"));
         }
     }
 
