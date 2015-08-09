@@ -185,11 +185,13 @@ iframe {
 
 	var hashPath;
 
+	// dom
 	var header;
 	var reader;
 	var nav_blog, nav_works, nav_about;
 	var body_blog, body_blog_text, body_works, body_about;
 
+	// i18n
 	var langData = {
 		"__title__" : {
 			"zh": "Jarvis Niu - 首页",
@@ -212,28 +214,20 @@ iframe {
 			"en": "About",
 		},
 		"intro1" : {
-			"zh": "我叫牛俊为，是一名软件工程师，目前位于帝都北京。我是一名狂热的计算机技术爱好者，从17岁左右开始自学编程至今。<br><br>我喜欢尝试各种不同的编程平台。从桌面平台的VB6和.NET，到移动平台的Java和Android，再到开源硬件的Arduino，最后到Web平台的JS和PHP。就这样，我在好奇心引领下，乐此不疲地学习了一项又一项的新技术。虽然看似学了不少东西，但真正深入研究了的其实并不多。<br><br>我目前的工作是Web开发，以后可能会转向游戏开发。<br><br>除此之外，我还喜欢玩游戏和打乒乓球。我最喜欢的游戏是我的世界。",
+			"zh": "我叫牛俊为，是一名软件工程师，目前位于帝都北京。我是一名狂热的计算机技术爱好者，从17岁左右开始自学编程至今。<br><br>我喜欢尝试各种不同的编程平台。从桌面平台的VB6到.NET，到移动平台的Java和Android，再到开源硬件的Arduino，最后到Web平台的JS和PHP。就这样，我在好奇心引领下，乐此不疲地学习了一项又一项的新技术。虽然看似学了不少东西，但真正深入研究了的其实并不多。<br><br>我目前的工作是Web开发。<br><br>我的业余爱好是打乒乓球和玩游戏，最喜欢的游戏是我的世界。",
 			"en": "I am Jarvis Niu. I am a program developer in Beijing. ",
 		},
 	}
 	var ji18n = new Ji18n(langData);
 
-	var pendingTitle;
+	// blog
+	var pendingTitle;  // 挂起的博文标题
 	var blogList = [
 		"AndularJS",
 		"Awesome Python",
 	];
-
-	function init() {
-		header = document.getElementsByTagName("h1")[0];
-		reader = document.getElementsByTagName("iframe")[0];
-		initNav();
-		initBlogList();
-		onSwitchLang();
-		window.addEventListener("hashchange", onHashChanged);
-		setTimeout(step, 5000);
-	}
 	
+	// 动画逻辑
 	var frame = 0;
 	function step() {
 		frame += 1;
@@ -249,6 +243,17 @@ iframe {
 		header.style.background = "-webkit-gradient(radial,50 50,50,50 5,0,from(hsl(0,0%," + v + "%)),to(hsl(0,0%," + l + "%)))";
 		// console.log(v);
 		if (frame < 100) setTimeout(step, 25);
+	}
+
+	// 初始化页面
+	function init() {
+		header = document.getElementsByTagName("h1")[0];
+		reader = document.getElementsByTagName("iframe")[0];
+		initNav();
+		initBlogList();
+		onSwitchLang();
+		window.addEventListener("hashchange", onHashChanged);
+		setTimeout(step, 5000);
 	}
 
 	document.addEventListener("DOMContentLoaded", init);
@@ -277,6 +282,7 @@ iframe {
 		}
 	}
 
+	// 路由
 	function onHashChanged() {
 			if (hashPath == "blog") {
 				nav_blog.classList.remove("selected");
@@ -392,7 +398,11 @@ iframe {
 	</article>
 
 	<article id="body_works">
-		<a target="_blank" class="new-window" href="works/webgis/index.html">WebGIS</a>
+		<p><a target="_blank" class="new-window" href="works/webgis/index.html">WebGIS</a></p>
+		<p><a target="_blank" class="new-window" href="works/2d_map/index.html">二维地图（未使用API）</a></p>
+		<p><a target="_blank" class="new-window" href="works/line_chart/index.html">可缩放折线图</a></p>
+		<p><a target="_blank" class="new-window" href="works/calendar_picker/index.html">时间日期选择模块</a></p>
+		<p><a target="_blank" class="new-window" href="works/excel_input/index.html">Excel表格输入模块</a></p>
 	</article>
 
 	<article id="body_about">

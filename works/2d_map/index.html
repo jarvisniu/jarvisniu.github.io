@@ -1,0 +1,39 @@
+<html>
+<head>
+<meta charset="utf-8">
+    <title>二维地图组件</title>
+</head>
+<script src="./js/TileProvider-1.4.0.min.js"></script>
+<script src="./js/BjCvsMap-1.1.0.min.js"></script>
+<script src="./js/Geography-2.0.0.min.js"></script>
+<script type="text/javascript">
+
+    function onSmoothChanged() {
+        isZoomingSmooth = document.getElementById("chkSmoothZoom").checked;
+    }
+    
+    function navigateToLoc() {
+        var lat = parseFloat(document.getElementById("txtLat").value);
+        var lon = parseFloat(document.getElementById("txtLon").value);
+        navigateTo(lat, lon);
+    }
+</script>
+<body>
+    <canvas style="border:1px solid gray;" width="1000" height="600" oncontextmenu="return false;"></canvas>
+    <div>
+    	设置：
+        <input type="checkbox" id="chkSmoothZoom" checked onchange="onSmoothChanged();" />
+        <label for="chkSmoothZoom">平滑缩放</label>
+        <br>
+        自定义跳转：
+        经度：<input type="text" id="txtLon" value="116" style="width:70;" />
+        纬度：<input type="text" id="txtLat" value="45" style="width:70;" />
+        <input type="button" value="跳转" onclick="navigateToLoc();" />
+        <br>
+        跳转到：
+        <input type="button" value="清华大学" onclick="navigateTo(40.0023, 116.3195);" />
+        <input type="button" value="谷歌总部" onclick="navigateTo(37.422, -122.084);" />
+        <input type="button" value="微软总部" onclick="navigateTo(47.6396, -122.1273);" />
+    </div>
+</body>
+</html>

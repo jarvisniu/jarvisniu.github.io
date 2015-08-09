@@ -1,0 +1,38 @@
+/*  Style for table of buttons
+    using in php as:
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+      <link href="../Style/iTable.css" type="text/css" rel="stylesheet" />
+      <link href="../Style/iButton.css" type="text/css" rel="stylesheet" />
+
+    26/06/2012  by Y Duan */
+
+body, div {
+    margin: 0;
+    padding: 0;
+}
+
+.button {
+    border: 0px;
+}
+
+.button thead, .button tbody, .button tfoot, .button th, .button td {
+    border: 0px;
+}
+
+.button tbody {
+    background-color: #ffffff;
+}
+
+.button thead, .button tfoot {
+    background-color: #f0f0f0;
+}
+
+.btnbg {
+    background-color: #f0f0f0;
+}
+.read {
+    background-color: #faba7a;
+}
+.btnobg {
+    background-color: #ffffff;
+}
