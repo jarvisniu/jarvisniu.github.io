@@ -39,7 +39,7 @@ h1 {
 }
 
 #divOutput {
-	min-height: 200px;
+	min-height: 150px;
 	overflow-y: scroll;
 	font-size: 13px;
 }
@@ -65,7 +65,7 @@ h1 {
 </head>
 <body>
 	<h1>JS OTG</h1>
-	<textarea id="code" rows="15">
+	<textarea id="code" rows="12">
 console.log(1234);
 	</textarea>
 	<div class="toolbar">
@@ -92,7 +92,7 @@ codeBox.addEventListener("change", function() {
 
 btnRun.addEventListener("click", function() {
 	try {
-		eval(codeBox.value);
+		console.log("> " + eval(codeBox.value));
 	} catch (e) {
 		console.error("Error: " + e.message);
 	}
