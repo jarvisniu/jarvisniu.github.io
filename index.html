@@ -209,6 +209,10 @@ iframe {
 			"zh": "作品",
 			"en": "Works",
 		},
+		"tools" : {
+			"zh": "工具",
+			"en": "Tools",
+		},
 		"about" : {
 			"zh": "关于",
 			"en": "About",
@@ -290,6 +294,9 @@ iframe {
 			} else if (hashPath == "works") {
 				nav_works.classList.remove("selected");
 				body_works.classList.remove("show");
+			} else if (hashPath == "tools") {
+				nav_tools.classList.remove("selected");
+				body_tools.classList.remove("show");
 			} else if (hashPath == "about") {
 				nav_about.classList.remove("selected");
 				body_about.classList.remove("show");
@@ -306,6 +313,9 @@ iframe {
 			} else if (hashPath == "works") {
 				nav_works.classList.add("selected");
 				body_works.classList.add("show");
+			} else if (hashPath == "tools") {
+				nav_tools.classList.add("selected");
+				body_tools.classList.add("show");
 			} else if (hashPath == "about") {
 				nav_about.classList.add("selected");
 				body_about.classList.add("show");
@@ -375,6 +385,7 @@ iframe {
 	<nav>
 		<a id="nav_blog" href="#!/blog">{{ blog }}</a>
 		<a id="nav_works" href="#!/works">{{ works }}</a>
+		<a id="nav_tools" href="#!/tools">{{ tools }}</a>
 		<a id="nav_about" href="#!/about">{{ about }}</a>
 		<span id="socialPanel">
 			<button id="btnLang" onclick="switchLang(this);">En</button>
@@ -403,6 +414,10 @@ iframe {
 		<p><a target="_blank" class="new-window" href="works/line_chart/index.html">可缩放折线图</a></p>
 		<p><a target="_blank" class="new-window" href="works/calendar_picker/index.html">时间日期选择模块</a></p>
 		<p><a target="_blank" class="new-window" href="works/excel_input/index.html">Excel表格输入模块</a></p>
+	</article>
+
+	<article id="body_tools">
+		<p><a target="_blank" class="new-window" href="tools/js_otg/index.html">JS OTG</a></p>
 	</article>
 
 	<article id="body_about">

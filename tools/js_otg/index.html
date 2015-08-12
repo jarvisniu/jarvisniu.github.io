@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JS OTG</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style type="text/css">
+*{
+	margin: 0;
+	padding: 0;
+}
+
+h1 {
+	border-bottom: solid gray 1px;
+    background-color: black;
+    color: white;
+    font-size: 1.5em;
+    padding: 3px 6px;
+}
+
+.toolbar {
+	border-bottom: solid 1px gray;
+	border-top: solid 1px #ddd;
+	padding: 4px;
+}
+.toolbar button {
+	padding: 3px 6px;
+}
+
+#btnClearCode {
+	float: right;
+}
+
+#code {
+	border: none;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 6px;
+}
+
+#divOutput {
+	min-height: 200px;
+	overflow-y: scroll;
+	font-size: 13px;
+}
+
+#divOutput > p {
+	padding: 0 4px;
+	border-bottom: solid 1px #ddd;
+	/*word-wrap: break-word;*/
+}
+
+#divOutput > p.error {
+	color: #F22;
+	background-color: #FEE;
+}
+
+#divOutput > p.warn {
+	color: #000;
+	background-color: #FFE;
+}
+
+/* end of css */
+	</style>
+</head>
+<body>
+	<h1>JS OTG</h1>
+	<textarea id="code" rows="15">
+console.log(1234);
+	</textarea>
+	<div class="toolbar">
+		<button id="btnRun">Run</button>
+		<button id="btnClearCode">Clear</button>
+	</div>
+	<div id="divOutput">
+		
+	</div>
+	<div class="toolbar">
+		<button id="btnClearOutput">Clear</button>
+	</div>
+	<script type="text/javascript">
+var btnRun = document.getElementById("btnRun");
+var codeBox = document.getElementById("code");
+var divOutput = document.getElementById("divOutput");
+var btnClearCode = document.getElementById("btnClearCode");
+var btnClearOutput = document.getElementById("btnClearOutput");
+
+codeBox.addEventListener("change", function() {
+	if (typeof localStorage == "object")
+		localStorage.code = codeBox.value;
+});
+
+btnRun.addEventListener("click", function() {
+	try {
+		eval(codeBox.value);
+	} catch (e) {
+		console.error("Error: " + e.message);
+	}
+});
+
+btnClearCode.addEventListener("click", function() {
+	codeBox.value = "";
+});
+
+btnClearOutput.addEventListener("click", function() {
+	divOutput.innerHTML = "";
+});
+
+console.log = console.info = function() {
+	divOutput.innerHTML += "<p>" + Array.prototype.slice.call(arguments).join(", ") + "</p>";
+}
+
+console.error = function() {
+	divOutput.innerHTML += '<p class="error">' + Array.prototype.slice.call(arguments).join(", ") + "</p>";
+}
+
+console.warn = function() {
+	divOutput.innerHTML += '<p class="warn">' + Array.prototype.slice.call(arguments).join(", ") + "</p>";
+}
+
+if (typeof localStorage == "object" && localStorage.code !== undefined)
+	codeBox.value = localStorage.code;
+
+	</script>
+</body>
+</html>
