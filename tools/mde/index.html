@@ -1,0 +1,109 @@
+<html>
+<head>
+<title>Markdown Editor</title>
+<meta charset="utf-8">
+<script src="js/ace/ace.js"></script>
+<script src="js/markdown-it.js"></script>
+<style>
+
+body {
+    margin: 0;
+}
+
+#container {
+    /*display:*/
+    width: 100%;
+}
+
+#header {
+    height: 20px;
+    border: solid 1px #ccc;
+    border-width: 0 0 1px 0;
+    background-color: #444;
+    color: #eee;
+}
+
+#edit, #view {
+    /*border: solid 1px blue;*/
+    height: calc(100% - 22px);
+    width: calc(50% - 2px);
+}
+
+#edit {
+    float: left;
+    border: solid 1px #ccc;
+    border-width: 0 1px 0 0;
+}
+
+#view {
+    float: right;
+    overflow: scroll;
+}
+
+</style>
+<script>
+
+    var editor, mdit;
+
+    function init() {
+
+        mdit = new markdownit();
+
+        mdit.renderer.rules.paragraph_open = function (tokens, idx) {
+            var line;
+            if (tokens[idx].lines && tokens[idx].level === 0) {
+                line = tokens[idx].lines[0];
+                return '<p class="line" data-line="' + line + '">';
+            }
+            return '<p>';
+        };
+
+        initAce();
+    }
+    document.addEventListener("DOMContentLoaded", init);
+
+    function initAce() {
+
+        // create and initialize
+        editor = ace.edit("edit");
+//        editor.setTheme("ace/theme/monokai");
+        editor.getSession().setMode("ace/mode/markdown");
+        editor.getSession().setUseWrapMode(true);
+        editor.renderer.setPrintMarginColumn(false);
+
+        // bind event
+        editor.session.on("change", function() {
+            document.getElementById("view").innerHTML = mdit.render(editor.getSession().getValue());
+        });
+        editor.session.on("changeScrollTop", function() {
+            document.getElementById("view").scrollTop = 
+                ( document.getElementById("view").scrollHeight - document.getElementById("view").scrollTop )
+                * editor.renderer.scrollTop / 
+                ( document.getElementsByClassName("ace_scrollbar-inner")[0].scrollHeight - document.getElementById("edit").scrollHeight);
+        });
+
+        // load content
+        editor.session.setValue(localStorage.file || "");
+
+    }
+
+    function syncScroll() {
+        var textarea   = $('#edit'),
+                lineNo, posTo;
+
+        var posTo = lineNo = editor.renderer.getFirstFullyVisibleRow();
+        $('#view').scrollTop(posTo);
+    }
+
+</script>
+</head>
+<body>
+    <div id="header">Jarvis Niu's Markdown Editor</div>
+    <div id="container">
+        <div id="edit">
+        </div>
+        <div id="view">
+        </div>
+    </div>
+</body>
+</html>
