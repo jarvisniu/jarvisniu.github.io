@@ -239,9 +239,31 @@ iframe {
 	// blog
 	var pendingTitle;  // 挂起的博文标题
 	var blogList = [
-		"AndularJS",
-		"Awesome Python",
+		{
+			title: "d3.js中data(), enter() 和 exit()的作用",
+			name: "d3.js-data-enter-exit",
+			date: "2015-08-17",
+		}, {
+			title: "Awesome Python：非常棒的Python框架、库收集",
+			name: "Awesome-Python",
+			date: "2015-01-01",
+		}, {
+			title: "AndularJS维基百科",
+			name: "AndularJS",
+			date: "2015-01-01",
+		}, 
 	];
+
+	function initBlogList() {
+		var str = '';
+		for (var i in blogList) {
+			var article = blogList[i];
+			str += '<a href="' + '#!/blog/' + article.name + '">';
+			str += article.title + " - " + article.date;
+			str += '</a>';
+		}
+		body_blog.innerHTML = str;
+	}
 	
 	// 动画逻辑
 	var frame = 0;
@@ -287,15 +309,6 @@ iframe {
 		hashPath = getHashPath();
 
 		onHashChanged();
-	}
-
-	function initBlogList() {
-		for (var i in blogList) {
-			var a = document.createElement("a");
-			a.innerText = blogList[i];
-			a.href = "#!/blog/" + blogList[i];
-			body_blog.appendChild(a);
-		}
 	}
 
 	// 路由
