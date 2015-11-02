@@ -5,8 +5,8 @@
  */
 
 
- body {
-  max-width: 620px;
+body {
+  max-width: 650px;
   margin: auto;
   font-family: Helvetica, arial, sans-serif;
   font-size: 14px;
@@ -14,7 +14,7 @@
   padding-top: 10px;
   padding-bottom: 10px;
   background-color: white;
-  padding: 30px;
+  padding: 16px;
 }
 body > *:first-child {
   margin-top: 0 !important;
@@ -193,6 +193,8 @@ code, tt {
   border: 1px solid #ccc;
   background-color: #eee;
   border-radius: 2px;
+  word-break: break-word;
+  white-space: pre;
 }
 pre code {
   margin: 0;
