@@ -176,6 +176,31 @@ iframe {
 	width: 100%;
 }
 
+/* work */
+.work-frame {
+	display: inline-block;
+	width: 240px;
+	height: 180px;
+	border: solid 1px gray;
+	margin: 4px;
+}
+
+.work-frame img {
+	width: 100%;
+	height: calc(100% - 30px);
+}
+
+.work-frame p {
+	border: solid 1px gray;
+	border-width: 1px 0 0 0;
+	padding: 4px;
+	background-color: #ccc;
+}
+
+/* 适应小屏 */
+@media screen and (max-width: 400px) {
+
+}
 /*end of css*/
 
     </style>
@@ -436,10 +461,31 @@ iframe {
 		<iframe name="readerDom" src="reader.html" onload="onLoadReader();"></iframe>
 	</article>
 
-	<article id="body_works">
+	<article id="body_works2">
 		<p><a target="_blank" class="new-window" href="works/webgis/index.html">WebGIS</a></p>
 		<p><a target="_blank" class="new-window" href="works/2d_map/index.html">二维地图（未使用API）</a></p>
 		<p><a target="_blank" class="new-window" href="works/line_chart/index.html">可缩放折线图</a></p>
+	</article>
+
+	<article id="body_works">
+		<div class="work-frame">
+			<a href="works/webgis/index.html" target="_blank">
+				<img src="img/works/webgis.jpg">
+				<p>WebGIS</p>
+			</a>
+		</div>
+		<div class="work-frame">
+			<a href="works/2d_map/index.html" target="_blank">
+				<img src="img/works/2dmap.jpg">
+				<p>二维地图（未使用API）</p>
+			</a>
+		</div>
+		<div class="work-frame">
+			<a href="works/line_chart/index.html" target="_blank">
+				<img src="img/works/chart.png">
+				<p>可缩放折线图</p>
+			</a>
+		</div>
 	</article>
 
 	<article id="body_tools">
