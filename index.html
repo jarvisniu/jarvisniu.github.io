@@ -152,6 +152,18 @@ nav>a.selected {
 	border-color: gray;
 }
 
+/* blog */
+
+#blog_title {
+    text-align: center;
+    font-size: 24px;
+    margin-top: 20px;
+}
+
+#blog_date {
+    text-align: center;
+}
+
 /* page */
 
 article {
@@ -163,7 +175,7 @@ article {
 	display: block;
 }
 
-#body_blog a {
+#body_blog_list a {
 	display: block;
 }
 
@@ -216,7 +228,7 @@ iframe {
 	var header;
 	var reader;
 	var nav_blog, nav_works, nav_about;
-	var body_blog, body_blog_text, body_works, body_about;
+	var body_blog_list, body_blog_text, body_works, body_about;
 
 	// i18n
 	var langData = {
@@ -293,31 +305,30 @@ iframe {
 
 	// blog
 	var pendingTitle;  // 挂起的博文标题
-	var blogList = [
-		{
+	var blogList = {
+		"d3.js-data-enter-exit": {
 			title: "d3.js中data(), enter() 和 exit()的作用",
-			name: "d3.js-data-enter-exit",
-			date: "2015-08-17",
-		}, {
+			date: "2015-08-17" }, 
+		"Awesome-Python": {
 			title: "Awesome Python：非常棒的Python框架、库收集",
-			name: "Awesome-Python",
-			date: "2015-01-01",
-		}, {
+			date: "2015-01-01" }, 
+		"AndularJS": {
 			title: "AndularJS维基百科",
-			name: "AndularJS",
 			date: "2015-01-01",
 		}, 
-	];
+	};
 
 	function initBlogList() {
 		var str = '';
-		for (var i in blogList) {
-			var article = blogList[i];
-			str += '<a href="' + '#!/blog/' + article.name + '">';
+		for (var url in blogList) {
+			if (!blogList.hasOwnProperty(url)) continue;
+
+			var article = blogList[url];
+			str += '<a href="' + '#!/blog/' + url + '">';
 			str += article.title + " - " + article.date;
 			str += '</a>';
 		}
-		body_blog.innerHTML = str;
+		body_blog_list.innerHTML = str;
 	}
 	
 	// 动画逻辑
@@ -356,7 +367,7 @@ iframe {
 		nav_works = document.getElementById("nav_works");
 		nav_about = document.getElementById("nav_about");
 
-		body_blog = document.getElementById("body_blog");
+		body_blog_list = document.getElementById("body_blog_list");
 		body_blog_text = document.getElementById("body_blog_text");
 		body_works = document.getElementById("body_works");
 		body_about = document.getElementById("body_about");
@@ -370,7 +381,7 @@ iframe {
 	function onHashChanged() {
 			if (hashPath == "blog") {
 				nav_blog.classList.remove("selected");
-				body_blog.classList.remove("show");
+				body_blog_list.classList.remove("show");
 			} else if (hashPath == "works") {
 				nav_works.classList.remove("selected");
 				body_works.classList.remove("show");
@@ -389,7 +400,7 @@ iframe {
 
 			if (hashPath == "blog") {
 				nav_blog.classList.add("selected");
-				body_blog.classList.add("show");
+				body_blog_list.classList.add("show");
 			} else if (hashPath == "works") {
 				nav_works.classList.add("selected");
 				body_works.classList.add("show");
@@ -415,15 +426,25 @@ iframe {
 		return path;
 	}
 
-	function loadArticle(title) {
-		if (readerDom.window.ready)
-			readerDom.window.loadArticle(title);
+	function loadArticle(id) {
+		if (readerDom.window.ready) {
+			readerDom.window.loadArticle(id);
+			if (id !== "") setBlogTitle(id);
+		}
 		else
-			pendingTitle = title;
+			pendingTitle = id;
 	}
 
 	function onLoadReader() {
-		if (pendingTitle) readerDom.window.loadArticle(pendingTitle);
+		if (pendingTitle){
+			readerDom.window.loadArticle(pendingTitle);
+			setBlogTitle(pendingTitle);
+		}
+	}
+
+	function setBlogTitle(id) {
+		document.querySelector("#blog_title").innerHTML = blogList[id].title;
+		document.querySelector("#blog_date").innerHTML = blogList[id].date;
 	}
 
 	function setHeight(h) {
@@ -478,10 +499,12 @@ iframe {
 		</span>
 	</nav>
 
-	<article id="body_blog">
+	<article id="body_blog_list">
 	</article>
 
 	<article id="body_blog_text">
+		<h1 id="blog_title"></h1>
+		<div id="blog_date"></div>
 		<iframe name="readerDom" src="reader.html" onload="onLoadReader();"></iframe>
 	</article>
 
