@@ -78,9 +78,18 @@ a.new-window::after {
 }
 
 .mainbody {
-	min-height: 100%;
+	min-height: calc(100% - 40px);
 	border: solid #ccc;
 	border-width: 0 0.1em;
+}
+
+footer {
+	height: 40px;
+    line-height: 40px;
+    background-color: #222;
+    color: #bbb;
+    text-align: center;
+    vertical-align: middle;
 }
 
 /* nav */
@@ -306,16 +315,12 @@ iframe {
 	// blog
 	var pendingTitle;  // 挂起的博文标题
 	var blogList = {
+		"cmd-abort-in-advance": {
+			title: "解决CMD命令不能连续执行的问题",
+			date: "2016-01-24" }, 
 		"d3.js-data-enter-exit": {
 			title: "d3.js中data(), enter() 和 exit()的作用",
-			date: "2015-08-17" }, 
-		"Awesome-Python": {
-			title: "Awesome Python：非常棒的Python框架、库收集",
-			date: "2015-01-01" }, 
-		"AndularJS": {
-			title: "AndularJS维基百科",
-			date: "2015-01-01",
-		}, 
+			date: "2015-08-17" },
 	};
 
 	function initBlogList() {
@@ -552,6 +557,10 @@ iframe {
 	</article>
 
 </div>
+
+<footer>
+	© 2016 Jarvis Niu
+</footer>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
