@@ -46,7 +46,7 @@ hr {
 	margin-top: 24px;
 }
 
-h1 {
+.title {
 	font-size: 2.6em;
 	padding: 0.6em;
 	background-color: rgb(40, 125, 125);
@@ -170,7 +170,7 @@ nav>a.selected {
 #blog_title {
     text-align: center;
     font-size: 24px;
-    margin-top: 20px;
+    margin: 28px 0 16px 0;
 }
 
 #blog_date {
@@ -216,15 +216,22 @@ iframe {
 }
 
 .work-frame p {
+    position: relative;
+    top: -4px;
+    box-sizing: border-box;
 	border: solid 1px gray;
 	border-width: 1px 0 0 0;
-	padding: 4px;
-	background-color: #ccc;
+    line-height: 30px;
+	background-color: #ddd;
+    padding: 0 6px;
 }
 
 /* 适应小屏 */
 @media screen and (max-width: 400px) {
-
+    .work-frame {
+        width: calc(100% - 8px);
+        height: 100%;
+    }
 }
 /*end of css*/
 
@@ -470,7 +477,7 @@ iframe {
 <div class="mainbody">
 
     <header>
-		<h1>{{ niu }}</h1>
+		<h1 class="title">{{ niu }}</h1>
     </header>
 
 	<nav>
