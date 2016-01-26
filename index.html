@@ -238,7 +238,7 @@ iframe {
 /*end of css*/
 
     </style>
-    <script src="js/ji18n.js"></script>
+    <script src="js/Za-core.min.js"></script>
 
 </head>
 <body>
@@ -323,7 +323,7 @@ iframe {
 			"en": "I am Jarvis Niu. I am a program developer in Beijing. ",
 		},
 	}
-	var ji18n = new Ji18n(langData);
+	var i18n = new Za.i18n(langData);
 
 	// blog
 	var pendingTitle;  // 挂起的博文标题
@@ -452,12 +452,12 @@ iframe {
 	}
 
 	function switchLang() {
-		ji18n.switch();
+		i18n.switchLang();
 		onSwitchLang()
 	}
 
 	function onSwitchLang() {
-		if (ji18n.lang == "en") {
+		if (i18n.lang == "en") {
 			document.getElementById("imgLang").src = "img/flags/flag-cn.png";
 			document.documentElement.setAttribute("lang", "en");
 		} else {
