@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Vector.js",
+  "sourceRoot": "..\\..\\tools",
+  "sources": [
+    "..\\src\\math\\Vector.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAEM,EAAE,CAAC;EAEK,gBAAC,CAAD,EAAK,CAAL;IAAC,IAAC,CAAA,IAAD;IAAI,IAAC,CAAA,IAAD;EAAL;;mBAEb,GAAA,GAAK,SAAC,CAAD,EAAK,CAAL;IAAC,IAAC,CAAA,IAAD;IAAI,IAAC,CAAA,IAAD;EAAL"
+}

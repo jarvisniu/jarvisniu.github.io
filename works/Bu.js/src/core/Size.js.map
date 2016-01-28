@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Size.js",
+  "sourceRoot": "..\\..\\tools",
+  "sources": [
+    "..\\src\\core\\Size.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAEM,EAAE,CAAC;EACK,cAAC,MAAD,EAAS,OAAT;IAAC,IAAC,CAAA,QAAD;IAAQ,IAAC,CAAA,SAAD;IACrB,IAAC,CAAA,IAAD,GAAQ;EADI;;iBAGb,GAAA,GAAK,SAAC,KAAD,EAAQ,MAAR;IACJ,IAAC,CAAA,KAAD,GAAS;WACT,IAAC,CAAA,MAAD,GAAU;EAFN"
+}

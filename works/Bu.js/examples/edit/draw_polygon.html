@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Draw Polygon</title>
+    <script src="../../lib/za_geom2d.min.js"></script>
+    <script src="../../src/Bu.dev.js"></script>
+    <script type="text/javascript">
+      var renderer;
+      var drawPolygonReactor;
+      
+      $.ready(init);
+      
+      function init() {
+        // renderer
+        renderer = new Bu.Renderer({
+          container: "#container"
+        });
+        drawPolygonReactor = new Bu.DrawPolygonReactor(renderer);
+        drawPolygonReactor.enable();
+      
+        $("#btnAdd").on("click", function () {
+          var x = Math.rand(renderer.width);
+          var y = Math.rand(renderer.height);
+          var n = $("#txtN")[0].value;
+          var r = $("#txtRadius")[0].value;
+          renderer.append(new Bu.Polygon(x, y, n, {radius: r}));
+        });
+      }
+      
+    </script>
+  </head>
+  <body>
+    <div>Left click to add point to the default polygon, right click to finish the current one.</div>
+    <div style="margin: 8px 0;">Or add regular polygon whose
+      <label>n=
+        <input id="txtN" type="text" style="width: 40px" value="6">
+      </label>and
+      <label>radius=
+        <input id="txtRadius" type="text" style="width: 40px" value="50">
+      </label>
+      <button id="btnAdd">Add</button>
+    </div>
+    <div id="container"></div>
+  </body>
+</html>

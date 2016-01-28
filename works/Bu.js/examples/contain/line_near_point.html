@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Triangle Contains Point</title>
+    <script src="../../lib/za_geom2d.min.js"></script>
+    <script src="../../src/Bu.dev.js"></script>
+    <script type="text/javascript">
+      var renderer;
+      var line;
+      var mousePos = new Bu.Point();
+      
+      $.ready(init);
+      
+      function init() {
+        renderer = new Bu.Renderer({
+          container: "#container"
+        });
+        line = new Bu.Line(
+                Math.rand(renderer.width),
+                Math.rand(renderer.height),
+                Math.rand(renderer.width),
+                Math.rand(renderer.height)
+        );
+        renderer.append(line);
+      
+        renderer.dom.addEventListener("mouseup", onMouseUp);
+        renderer.dom.addEventListener("mousemove", onMouseMove);
+      }
+      
+      function onMouseMove(e) {
+        mousePos.x = e.offsetX;
+        mousePos.y = e.offsetY;
+      
+        if (mousePos.isNear(line))
+          line.stroke(Bu.DEFAULT_FILL_STYLE_HOVER);
+        else
+          line.stroke();
+      }
+      
+      function onMouseUp(e) {
+        line = renderer.shapes[0] = new Bu.Line(
+                Math.rand(renderer.width),
+                Math.rand(renderer.height),
+                Math.rand(renderer.width),
+                Math.rand(renderer.height)
+        );
+      }
+      
+    </script>
+  </head>
+  <body>
+    <div>Move cursor to test. Click to change another line.</div>
+    <div>Not full implemented now.</div>
+    <div id="container"></div>
+  </body>
+</html>

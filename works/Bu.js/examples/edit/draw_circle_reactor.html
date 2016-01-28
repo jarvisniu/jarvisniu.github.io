@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Draw Circle Reactor</title>
+    <script src="../../lib/za_geom2d.min.js"></script>
+    <script src="../../src/Bu.dev.js"></script>
+    <script type="text/javascript">
+      var renderer;
+      var drawCircleReactor;
+      
+      function init() {
+      
+        renderer = new Bu.Renderer({
+          container: "#container"
+        });
+      
+        drawCircleReactor = new Bu.DrawCircleReactor(renderer);
+        drawCircleReactor.enable();
+      }
+      
+      $.ready(init);
+    </script>
+  </head>
+  <body>
+    <div>Drag to draw a circle.</div>
+    <div id="container"></div>
+  </body>
+</html>
