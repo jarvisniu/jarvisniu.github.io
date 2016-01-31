@@ -7,7 +7,7 @@ Bu.Rectangle = (function(superClass) {
 
   function Rectangle(x, y, width, height) {
     Rectangle.__super__.constructor.call(this);
-    this.type = "Rectangle";
+    this.type = 'Rectangle';
     this.position = new Bu.Point(x, y);
     this.center = new Bu.Point(x + width / 2, y + height / 2);
     this.size = new Bu.Size(width, height);
@@ -15,6 +15,7 @@ Bu.Rectangle = (function(superClass) {
     this.pointRB = new Bu.Point(x + width, y + height);
     this.pointLB = new Bu.Point(x, y + height);
     this.points = [this.position, this.pointRT, this.pointRB, this.pointLB];
+    this.keyPoints = this.points;
   }
 
   Rectangle.prototype.containsPoint = function(point) {

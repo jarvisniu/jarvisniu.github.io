@@ -41,7 +41,7 @@ Bu.Colorful = function() {
     if (v == null) {
       v = true;
     }
-    if (typeof v === "number") {
+    if (typeof v === 'number') {
       v = [v, v];
     }
     switch (v) {

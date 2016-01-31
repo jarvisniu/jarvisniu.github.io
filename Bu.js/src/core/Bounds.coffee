@@ -1,9 +1,10 @@
 ## axis aligned bounding box
 
-class Bu.Bounds
+class Bu.Bounds extends Bu.Object2D
 
 	constructor: (@target) ->
-		@type = "Bounds"
+		super()
+		@type = 'Bounds'
 		@x1 = @y1 = @x2 = @y2 = 0
 		@isEmpty = true
 
@@ -14,17 +15,23 @@ class Bu.Bounds
 		@dashStyle = Bu.DEFAULT_BOUND_DASH_STYLE
 		@dashDelta = 0
 
-		self = @
-
 		switch @target.type
-			when "Circle"
+			when 'Line', 'Triangle', 'Rectangle'
+				for v in @target.points
+					@expandByPoint(v)
+			when 'Circle', 'Bow', 'Fan'
 				@expandByCircle(@target)
-				@target.on "centerChanged", ->
-					self.clear()
-					self.expandByCircle self.target
-				@target.on "radiusChanged", ->
-					self.clear()
-					self.expandByCircle self.target
+				@target.on 'centerChanged', =>
+					@clear()
+					@expandByCircle @target
+				@target.on 'radiusChanged', =>
+					@clear()
+					@expandByCircle @target
+			when 'Polyline', 'Polygon'
+				for v in @target.vertices
+					@expandByPoint(v)
+			else
+				console.warn 'Bounds: not support shape type "' + @target.type + '"'
 
 	containsPoint: (p) ->
 		@x1 < p.x && @x2 > p.x && @y1 < p.y && @y2 > p.y

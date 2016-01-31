@@ -12,12 +12,13 @@ Bu.Fan = (function(superClass) {
     this.aFrom = aFrom;
     this.aTo = aTo;
     Fan.__super__.constructor.call(this);
-    this.type = "Fan";
+    this.type = 'Fan';
     this.center = new Bu.Point(this.cx, this.cy);
     this.string = new Bu.Line(this.center.arcTo(this.radius, this.aFrom), this.center.arcTo(this.radius, this.aTo));
+    this.keyPoints = this.string.points;
   }
 
-  Fan.prototype.containsPoint = function(p) {
+  Fan.prototype._containsPoint = function(p) {
     var a, dx, dy;
     dx = p.x - this.cx;
     dy = p.y - this.cy;

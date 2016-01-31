@@ -5,15 +5,14 @@ class Bu.Bow extends Bu.Object2D
 		super()
 		[@aFrom, @aTo] = [@aTo, @aFrom] if @aFrom > @aTo
 
-		@type = "Bow"
+		@type = 'Bow'
 
-		@center = new Bu.Point(@cx, @cy)
-		@string = new Bu.Line(
-				@center.arcTo(@radius, @aFrom)
+		@center = new Bu.Point @cx, @cy
+		@string = new Bu.Line @center.arcTo(@radius, @aFrom),
 				@center.arcTo(@radius, @aTo)
-		)
+		@keyPoints = @string.points
 
-	containsPoint: (point) ->
+	_containsPoint: (point) ->
 		if Math.bevel(@cx - point.x, @cy - point.y) < @radius
 			sameSide = @string.isTwoPointsSameSide(@center, point)
 			smallThanHalfCircle = @aTo - @aFrom < Math.PI

@@ -4,7 +4,7 @@ class Bu.Rectangle extends Bu.Object2D
 
 	constructor: (x, y, width, height) ->
 		super()
-		@type = "Rectangle"
+		@type = 'Rectangle'
 
 		@position = new Bu.Point(x, y)
 		@center = new Bu.Point(x + width / 2, y + height / 2)
@@ -15,6 +15,7 @@ class Bu.Rectangle extends Bu.Object2D
 		@pointLB = new Bu.Point(x, y + height)
 
 		@points = [@position, @pointRT, @pointRB, @pointLB]
+		@keyPoints = @points
 
 	containsPoint: (point) ->
 		return point.x > @position.x and

@@ -2,19 +2,15 @@
 var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 Bu.Renderer = (function() {
-  var POINT_SIZE;
-
-  POINT_SIZE = 4;
-
   function Renderer() {
+    this.drawShape = bind(this.drawShape, this);
     this.drawShapes = bind(this.drawShapes, this);
     this.toggle = bind(this.toggle, this);
     this["continue"] = bind(this["continue"], this);
     this.pause = bind(this.pause, this);
-    var _self, clearCanvas, onResize, options, tick, tickCount;
+    var clearCanvas, onResize, options, tick, tickCount;
     Za.EventListenerPattern.apply(this);
-    this.type = "Renderer";
-    _self = this;
+    this.type = 'Renderer';
     options = Bu.combineOptions(arguments, {
       width: 800,
       height: 600,
@@ -26,81 +22,83 @@ Bu.Renderer = (function() {
     this.height = options.height;
     this.fps = options.fps;
     this.container = options.container;
-    this.isDrawVertexes = true;
-    this.dom = document.createElement("canvas");
-    this.context = this.dom.getContext("2d");
+    this.isDrawKeyPoints = true;
+    this.dom = document.createElement('canvas');
+    this.context = this.dom.getContext('2d');
     this.context.textBaseline = 'top';
     if (typeof ClipMeter !== "undefined" && ClipMeter !== null) {
       this.clipMeter = new ClipMeter();
     }
     this.shapes = [];
-    if (options.fillParent) {
-
-    } else {
+    if (!options.fillParent) {
       this.dom.width = this.width;
       this.dom.height = this.height;
-      this.dom.style.width = this.width + "px";
-      this.dom.style.height = this.height + "px";
+      this.dom.style.width = this.width + 'px';
+      this.dom.style.height = this.height + 'px';
     }
     if ((options.border != null) && options.border) {
-      this.dom.style.border = "solid 1px gray";
+      this.dom.style.border = 'solid 1px gray';
     }
-    this.dom.style.cursor = "crosshair";
-    this.dom.style.background = "#eee";
-    this.dom.oncontextmenu = (function(_this) {
-      return function() {
-        return false;
+    this.dom.style.cursor = 'crosshair';
+    this.dom.style.background = '#eee';
+    this.dom.oncontextmenu = function() {
+      return false;
+    };
+    window.canvas = this.dom;
+    onResize = (function(_this) {
+      return function(e) {
+        var canvasRatio, containerRatio, height, width;
+        canvasRatio = _this.dom.height / _this.dom.width;
+        containerRatio = _this.container.clientHeight / _this.container.clientWidth;
+        if (containerRatio < canvasRatio) {
+          height = _this.container.clientHeight;
+          width = height / containerRatio;
+        } else {
+          width = _this.container.clientWidth;
+          height = width * containerRatio;
+        }
+        _this.width = _this.dom.width = width;
+        _this.height = _this.dom.height = height;
+        _this.dom.style.width = width + 'px';
+        return _this.dom.style.height = height + 'px';
       };
     })(this);
-    window.canvas = this.dom;
-    onResize = function(e) {
-      var canvasRatio, containerRatio, height, width;
-      canvasRatio = _self.dom.height / _self.dom.width;
-      containerRatio = _self.container.clientHeight / _self.container.clientWidth;
-      if (containerRatio < canvasRatio) {
-        height = _self.container.clientHeight;
-        width = height / containerRatio;
-      } else {
-        width = _self.container.clientWidth;
-        height = width * containerRatio;
-      }
-      _self.width = _self.dom.width = width;
-      _self.height = _self.dom.height = height;
-      _self.dom.style.width = width + 'px';
-      return _self.dom.style.height = height + 'px';
-    };
-    window.addEventListener("resize", onResize);
+    window.addEventListener('resize', onResize);
     this.dom.addEventListener('DOMNodeInserted', onResize);
     tick = (function(_this) {
       return function() {
-        if (!_self.isRunning) {
+        if (!_this.isRunning) {
           return;
         }
         if (_this.clipMeter != null) {
-          _self.clipMeter.start();
+          _this.clipMeter.start();
         }
         tickCount += 1;
-        _self.triggerEvent("update", {
-          "tickCount": tickCount
+        _this.triggerEvent('update', {
+          'tickCount': tickCount
         });
         clearCanvas();
-        _self.drawShapes();
+        _this.drawShapes(_this.shapes);
         if (_this.clipMeter != null) {
-          return _self.clipMeter.tick();
+          return _this.clipMeter.tick();
         }
       };
     })(this);
     setInterval(tick, 1000 / this.fps);
     clearCanvas = (function(_this) {
       return function() {
-        return _this.context.clearRect(0, 0, _self.width, _self.height);
+        return _this.context.clearRect(0, 0, _this.width, _this.height);
       };
     })(this);
     if (this.container != null) {
-      if (typeof this.container === "string") {
+      if (typeof this.container === 'string') {
         this.container = document.querySelector(this.container);
       }
-      this.container.appendChild(this.dom);
+      setTimeout((function(_this) {
+        return function() {
+          return _this.container.appendChild(_this.dom);
+        };
+      })(this), 100);
     }
     tickCount = 0;
     this.isRunning = true;
@@ -122,84 +120,79 @@ Bu.Renderer = (function() {
     return this.shapes.push(shape);
   };
 
-  Renderer.prototype.drawShapes = function() {
-    var j, len1, ref, results, shape;
-    ref = this.shapes;
-    results = [];
-    for (j = 0, len1 = ref.length; j < len1; j++) {
-      shape = ref[j];
-      switch (shape.type) {
-        case "Point":
-          results.push(this.drawPoint(shape));
-          break;
-        case "Line":
-          results.push(this.drawLine(shape));
-          break;
-        case "Circle":
-          results.push(this.drawCircle(shape));
-          break;
-        case "Triangle":
-          results.push(this.drawTriangle(shape));
-          break;
-        case "Rectangle":
-          results.push(this.drawRectangle(shape));
-          break;
-        case "Fan":
-          results.push(this.drawFan(shape));
-          break;
-        case "Bow":
-          results.push(this.drawBow(shape));
-          break;
-        case "Polygon":
-          results.push(this.drawPolygon(shape));
-          break;
-        case "Polyline":
-          results.push(this.drawPolyline(shape));
-          break;
-        case "PointText":
-          results.push(this.drawPointText(shape));
-          break;
-        case "Image":
-          results.push(this.drawImage(shape));
-          break;
-        case "Bounds":
-          results.push(this.drawBounds(shape));
-          break;
-        default:
-          results.push(console.log("drawShapes(): unknown shape: ", shape));
+  Renderer.prototype.drawShapes = function(shapes) {
+    var j, len1, shape;
+    if (shapes != null) {
+      for (j = 0, len1 = shapes.length; j < len1; j++) {
+        shape = shapes[j];
+        this.drawShape(shape);
       }
     }
-    return results;
+    return this;
+  };
+
+  Renderer.prototype.drawShape = function(shape) {
+    if (!shape.visible) {
+      return this;
+    }
+    switch (shape.type) {
+      case 'Point':
+        this.drawPoint(shape);
+        break;
+      case 'Line':
+        this.drawLine(shape);
+        break;
+      case 'Circle':
+        this.drawCircle(shape);
+        break;
+      case 'Triangle':
+        this.drawTriangle(shape);
+        break;
+      case 'Rectangle':
+        this.drawRectangle(shape);
+        break;
+      case 'Fan':
+        this.drawFan(shape);
+        break;
+      case 'Bow':
+        this.drawBow(shape);
+        break;
+      case 'Polygon':
+        this.drawPolygon(shape);
+        break;
+      case 'Polyline':
+        this.drawPolyline(shape);
+        break;
+      case 'PointText':
+        this.drawPointText(shape);
+        break;
+      case 'Image':
+        this.drawImage(shape);
+        break;
+      case 'Bounds':
+        this.drawBounds(shape);
+        break;
+      default:
+        console.log('drawShapes(): unknown shape: ', shape);
+    }
+    if (shape.children != null) {
+      this.drawShapes(shape.children);
+    }
+    if (this.isDrawKeyPoints) {
+      this.drawShapes(shape.keyPoints);
+    }
+    return this;
   };
 
   Renderer.prototype.drawPoint = function(shape) {
-    var style;
     this.context.globalAlpha = shape.opacity;
     if (shape.fillStyle != null) {
       this.context.fillStyle = shape.fillStyle;
-      this.context.fillRect(shape.x - POINT_SIZE / 2, shape.y - POINT_SIZE / 2, POINT_SIZE, POINT_SIZE);
+      this.context.fillRect(shape.x - Bu.POINT_RENDER_SIZE / 2, shape.y - Bu.POINT_RENDER_SIZE / 2, Bu.POINT_RENDER_SIZE, Bu.POINT_RENDER_SIZE);
     }
     if (shape.strokeStyle != null) {
       this.context.strokeStyle = shape.strokeStyle;
-      this.context.strokeRect(shape.x - POINT_SIZE / 2, shape.y - POINT_SIZE / 2, POINT_SIZE, POINT_SIZE);
-    }
-    if (shape.label != null) {
-      style = this.context.fillStyle;
-      this.context.fillStyle = "black";
-      this.context.fillText(shape.label, shape.x - POINT_SIZE / 2 + 9, shape.y - POINT_SIZE / 2 + 6);
-      return this.context.fillStyle = style;
-    }
-  };
-
-  Renderer.prototype.drawVertexes = function(points) {
-    var j, len1, point, results;
-    if (this.isDrawVertexes) {
-      results = [];
-      for (j = 0, len1 = points.length; j < len1; j++) {
-        point = points[j];
-        results.push(this.drawPoint(point));
-      }
-      return results;
+      return this.context.strokeRect(shape.x - Bu.POINT_RENDER_SIZE / 2, shape.y - Bu.POINT_RENDER_SIZE / 2, Bu.POINT_RENDER_SIZE, Bu.POINT_RENDER_SIZE);
     }
   };
 
@@ -216,9 +209,8 @@ Bu.Renderer = (function() {
         this.context.lineTo(shape.points[1].x, shape.points[1].y);
         this.context.closePath();
       }
-      this.context.stroke();
+      return this.context.stroke();
     }
-    return this.drawVertexes(shape.points);
   };
 
   Renderer.prototype.drawCircle = function(shape) {
@@ -233,9 +225,8 @@ Bu.Renderer = (function() {
     if (shape.strokeStyle != null) {
       this.context.strokeStyle = shape.strokeStyle;
       this.context.lineWidth = shape.lineWidth;
-      this.context.stroke();
+      return this.context.stroke();
     }
-    return this.drawPoint(shape.center);
   };
 
   Renderer.prototype.drawTriangle = function(shape) {
@@ -260,9 +251,8 @@ Bu.Renderer = (function() {
         this.context.dashedLine(pts[1].x, pts[1].y, pts[2].x, pts[2].y, shape.dashStyle, shape.dashDelta);
         this.context.dashedLine(pts[2].x, pts[2].y, pts[0].x, pts[0].y, shape.dashStyle, shape.dashDelta);
       }
-      this.context.stroke();
+      return this.context.stroke();
     }
-    return this.drawVertexes(shape.points);
   };
 
   Renderer.prototype.drawRectangle = function(shape) {
@@ -276,7 +266,7 @@ Bu.Renderer = (function() {
       this.context.strokeStyle = shape.strokeStyle;
       this.context.lineWidth = shape.lineWidth;
       if (!shape.dashStyle) {
-        this.context.strokeRect(shape.position.x, shape.position.y, shape.size.width, shape.size.height);
+        return this.context.strokeRect(shape.position.x, shape.position.y, shape.size.width, shape.size.height);
       } else {
         this.context.beginPath();
         xL = shape.position.x;
@@ -287,10 +277,9 @@ Bu.Renderer = (function() {
         this.context.dashedLine(xR, yT, xR, yB, shape.dashStyle, shape.dashDelta);
         this.context.dashedLine(xR, yB, xL, yB, shape.dashStyle, shape.dashDelta);
         this.context.dashedLine(xL, yB, xL, yT, shape.dashStyle, shape.dashDelta);
-        this.context.stroke();
+        return this.context.stroke();
       }
     }
-    return this.drawVertexes(shape.points);
   };
 
   Renderer.prototype.drawFan = function(shape) {
@@ -306,9 +295,8 @@ Bu.Renderer = (function() {
     if (shape.strokeStyle != null) {
       this.context.strokeStyle = shape.strokeStyle;
       this.context.lineWidth = shape.lineWidth;
-      this.context.stroke();
+      return this.context.stroke();
     }
-    return this.drawVertexes(shape.string.points);
   };
 
   Renderer.prototype.drawBow = function(shape) {
@@ -323,16 +311,15 @@ Bu.Renderer = (function() {
     if (shape.strokeStyle != null) {
       this.context.strokeStyle = shape.strokeStyle;
       this.context.lineWidth = shape.lineWidth;
-      this.context.stroke();
+      return this.context.stroke();
     }
-    return this.drawVertexes(shape.string.points);
   };
 
   Renderer.prototype.drawPolygon = function(shape) {
     var i, j, k, len, len1, point, pts, ref, ref1;
     this.context.globalAlpha = shape.opacity;
     this.context.beginPath();
-    ref = shape.points;
+    ref = shape.vertices;
     for (j = 0, len1 = ref.length; j < len1; j++) {
       point = ref[j];
       this.context.lineTo(point.x, point.y);
@@ -345,19 +332,18 @@ Bu.Renderer = (function() {
     if (shape.strokeStyle != null) {
       this.context.strokeStyle = shape.strokeStyle;
       this.context.lineWidth = shape.lineWidth;
-      len = shape.points.length;
+      len = shape.vertices.length;
       if (shape.dashStyle && len > 0) {
         this.context.beginPath();
-        pts = shape.points;
+        pts = shape.vertices;
         for (i = k = 0, ref1 = len - 1; 0 <= ref1 ? k < ref1 : k > ref1; i = 0 <= ref1 ? ++k : --k) {
           this.context.dashedLine(pts[i].x, pts[i].y, pts[i + 1].x, pts[i + 1].y, shape.dashStyle, shape.dashDelta);
         }
         this.context.dashedLine(pts[len - 1].x, pts[len - 1].y, pts[0].x, pts[0].y, shape.dashStyle, shape.dashDelta);
         this.context.stroke();
       }
-      this.context.stroke();
+      return this.context.stroke();
     }
-    return this.drawVertexes(shape.points);
   };
 
   Renderer.prototype.drawPolyline = function(shape) {
@@ -368,20 +354,19 @@ Bu.Renderer = (function() {
       this.context.lineWidth = shape.lineWidth;
       this.context.beginPath();
       if (!shape.dashStyle) {
-        ref = shape.points;
+        ref = shape.vertices;
         for (j = 0, len1 = ref.length; j < len1; j++) {
           point = ref[j];
           this.context.lineTo(point.x, point.y);
         }
       } else {
-        pts = shape.points;
+        pts = shape.vertices;
         for (i = k = 0, ref1 = pts.length - 1; 0 <= ref1 ? k < ref1 : k > ref1; i = 0 <= ref1 ? ++k : --k) {
           this.context.dashedLine(pts[i].x, pts[i].y, pts[i + 1].x, pts[i + 1].y, shape.dashStyle, shape.dashDelta);
         }
       }
-      this.context.stroke();
+      return this.context.stroke();
     }
-    return this.drawVertexes(shape.points);
   };
 
   Renderer.prototype.drawPointText = function(shape) {

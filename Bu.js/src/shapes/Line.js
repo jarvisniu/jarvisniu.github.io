@@ -9,7 +9,7 @@ Bu.Line = (function(superClass) {
   function Line(p1, p2, p3, p4) {
     this.onPointChange = bind(this.onPointChange, this);
     Line.__super__.constructor.call(this);
-    this.type = "Line";
+    this.type = 'Line';
     if (arguments.length < 2) {
       this.points = [new Bu.Point(), new Bu.Point()];
     } else if (arguments.length < 4) {
@@ -18,6 +18,7 @@ Bu.Line = (function(superClass) {
       this.points = [new Bu.Point(p1, p2), new Bu.Point(p3, p4)];
     }
     this.midpoint = new Bu.Point();
+    this.keyPoints = this.points;
     this.onPointChange();
   }
 
@@ -120,7 +121,6 @@ Bu.Line = (function(superClass) {
     b2 = q1.x - q2.x;
     c2 = (a2 * q1.x) + (b2 * q1.y);
     det = (a1 * b2) - (a2 * b1);
-    console.log(a1, b1, c1, a2, b2, c2, det);
     return new Bu.Point(((b2 * c1) - (b1 * c2)) / det, ((a1 * c2) - (a2 * c1)) / det);
   };
 

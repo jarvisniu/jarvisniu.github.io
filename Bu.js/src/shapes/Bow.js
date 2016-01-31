@@ -16,12 +16,13 @@ Bu.Bow = (function(superClass) {
     if (this.aFrom > this.aTo) {
       ref = [this.aTo, this.aFrom], this.aFrom = ref[0], this.aTo = ref[1];
     }
-    this.type = "Bow";
+    this.type = 'Bow';
     this.center = new Bu.Point(this.cx, this.cy);
     this.string = new Bu.Line(this.center.arcTo(this.radius, this.aFrom), this.center.arcTo(this.radius, this.aTo));
+    this.keyPoints = this.string.points;
   }
 
-  Bow.prototype.containsPoint = function(point) {
+  Bow.prototype._containsPoint = function(point) {
     var sameSide, smallThanHalfCircle;
     if (Math.bevel(this.cx - point.x, this.cy - point.y) < this.radius) {
       sameSide = this.string.isTwoPointsSameSide(this.center, point);

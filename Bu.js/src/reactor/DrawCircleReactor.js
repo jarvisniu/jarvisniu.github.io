@@ -6,34 +6,39 @@ Bu.DrawCircleReactor = (function(superClass) {
   extend(DrawCircleReactor, superClass);
 
   function DrawCircleReactor(renderer) {
-    var circle, line, mouseButton, mousePos, mousePosDown, self;
+    var circle, line, mouseButton, mousePos, mousePosDown;
     this.renderer = renderer;
     DrawCircleReactor.__super__.constructor.call(this);
-    self = this;
     mouseButton = Bu.MOUSE_BUTTON_NONE;
     mousePos = new Bu.Point;
     mousePosDown = new Bu.Point;
     circle = null;
     line = null;
-    this.onMouseDown = function(e) {
-      mousePosDown.set(e.offsetX, e.offsetY);
-      circle = new Bu.Circle(mousePosDown.x, mousePosDown.y, 1);
-      self.renderer.append(circle);
-      line = new Bu.Line(mousePosDown, mousePosDown);
-      line.stroke("#f44");
-      self.renderer.append(line);
-      return mouseButton = e.button;
-    };
-    this.onMouseMove = function(e) {
-      if (mouseButton === Bu.MOUSE_BUTTON_LEFT) {
-        mousePos.set(e.offsetX, e.offsetY);
-        circle.radius = mousePos.distanceTo(mousePosDown);
-        return line.setPoint1(mousePos);
-      }
-    };
-    this.onMouseUp = function() {
-      return mouseButton = Bu.MOUSE_BUTTON_NONE;
-    };
+    this.onMouseDown = (function(_this) {
+      return function(e) {
+        mousePosDown.set(e.offsetX, e.offsetY);
+        circle = new Bu.Circle(mousePosDown.x, mousePosDown.y, 1);
+        _this.renderer.append(circle);
+        line = new Bu.Line(mousePosDown, mousePosDown);
+        line.stroke('#f44');
+        _this.renderer.append(line);
+        return mouseButton = e.button;
+      };
+    })(this);
+    this.onMouseMove = (function(_this) {
+      return function(e) {
+        if (mouseButton === Bu.MOUSE_BUTTON_LEFT) {
+          mousePos.set(e.offsetX, e.offsetY);
+          circle.radius = mousePos.distanceTo(mousePosDown);
+          return line.setPoint1(mousePos);
+        }
+      };
+    })(this);
+    this.onMouseUp = (function(_this) {
+      return function() {
+        return mouseButton = Bu.MOUSE_BUTTON_NONE;
+      };
+    })(this);
   }
 
   return DrawCircleReactor;

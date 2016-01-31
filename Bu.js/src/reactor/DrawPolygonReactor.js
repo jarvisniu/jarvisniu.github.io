@@ -33,11 +33,11 @@ Bu.DrawPolygonReactor = (function(superClass) {
       var points;
       mousePos.set(e.offsetX, e.offsetY);
       if (mouseButton === Bu.MOUSE_BUTTON_LEFT) {
-        points = polygon.points;
+        points = polygon.vertices;
         return points[points.length - 1].set(mousePos.x, mousePos.y);
       } else if (mouseButton === Bu.MOUSE_BUTTON_NONE && (polygon != null)) {
         if (polygon.containsPoint(mousePos)) {
-          return polygon.fill("yellow");
+          return polygon.fill('yellow');
         } else {
           return polygon.fill(Bu.DEFAULT_FILL_STYLE_HOVER);
         }

@@ -4,7 +4,7 @@ class Bu.Line extends Bu.Object2D
 
 	constructor: (p1, p2, p3, p4) ->
 		super()
-		@type = "Line"
+		@type = 'Line'
 
 		if arguments.length < 2
 			@points = [new Bu.Point(), new Bu.Point()]
@@ -14,6 +14,7 @@ class Bu.Line extends Bu.Object2D
 			@points = [new Bu.Point(p1, p2), new Bu.Point(p3, p4)]
 
 		@midpoint = new Bu.Point()
+		@keyPoints = @points
 		@onPointChange()
 
 	onPointChange: =>
@@ -109,8 +110,6 @@ class Bu.Line extends Bu.Object2D
 		b2 = q1.x - q2.x
 		c2 = (a2 * q1.x) + (b2 * q1.y)
 		det = (a1 * b2) - (a2 * b1)
-
-		console.log a1, b1, c1, a2, b2, c2, det
 
 		return new Bu.Point ((b2 * c1) - (b1 * c2)) / det, ((a1 * c2) - (a2 * c1)) / det
 

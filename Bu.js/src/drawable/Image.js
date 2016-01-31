@@ -6,11 +6,9 @@ Bu.Image = (function(superClass) {
   extend(Image, superClass);
 
   function Image(url, x, y, width, height) {
-    var self;
     this.url = url;
     Image.__super__.constructor.call(this);
-    self = this;
-    this.type = "Image";
+    this.type = 'Image';
     this.autoSize = true;
     this.size = new Bu.Size(Bu.DEFAULT_IMAGE_SIZE, Bu.DEFAULT_IMAGE_SIZE);
     this.position = new Bu.Vector(x, y);
@@ -22,12 +20,14 @@ Bu.Image = (function(superClass) {
     this.pivot = new Bu.Vector(0.5, 0.5);
     this.image = new window.Image;
     this.loaded = false;
-    this.image.onload = function(e) {
-      if (self.autoSize) {
-        self.size.set(self.image.width, self.image.height);
-      }
-      return self.loaded = true;
-    };
+    this.image.onload = (function(_this) {
+      return function(e) {
+        if (_this.autoSize) {
+          _this.size.set(_this.image.width, _this.image.height);
+        }
+        return _this.loaded = true;
+      };
+    })(this);
     this.image.src = this.url;
   }
 

@@ -7,10 +7,11 @@ Bu.Triangle = (function(superClass) {
 
   function Triangle(p1, p2, p3) {
     Triangle.__super__.constructor.call(this);
-    this.type = "Triangle";
+    this.type = 'Triangle';
     this.lines = [new Bu.Line(p1, p2), new Bu.Line(p2, p3), new Bu.Line(p3, p1)];
     this.center = new Bu.Point(Bu.average(p1.x, p2.x, p3.x), Bu.average(p1.y, p2.y, p3.y));
     this.points = [p1, p2, p3];
+    this.keyPoints = this.points;
   }
 
   Triangle.prototype.area = function() {
@@ -21,7 +22,7 @@ Bu.Triangle = (function(superClass) {
     return ((b.x - a.x) * (c.y - a.y)) - ((c.x - a.x) * (b.y - a.y));
   };
 
-  Triangle.prototype.containsPoint = function(p) {
+  Triangle.prototype._containsPoint = function(p) {
     return this.lines[0].isTwoPointsSameSide(p, this.points[2]) && this.lines[1].isTwoPointsSameSide(p, this.points[0]) && this.lines[2].isTwoPointsSameSide(p, this.points[1]);
   };
 

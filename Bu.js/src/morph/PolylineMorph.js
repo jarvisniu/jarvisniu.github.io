@@ -6,7 +6,7 @@ Bu.PolylineMorph = (function() {
     this.polylineA = polylineA;
     this.polylineB = polylineB;
     this.update = bind(this.update, this);
-    this.type = "PolylineMorph";
+    this.type = 'PolylineMorph';
     this.polyline = new Bu.Polyline();
     this.hPointsA = [];
     this.hPointsB = [];
@@ -17,7 +17,7 @@ Bu.PolylineMorph = (function() {
     var i, j, ref, results;
     results = [];
     for (i = j = 0, ref = this.hPointsA.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
-      results.push(Bu.Point.interpolate(this.hPointsA[i], this.hPointsB[i], time, this.polyline.points[i]));
+      results.push(Bu.Point.interpolate(this.hPointsA[i], this.hPointsB[i], time, this.polyline.vertices[i]));
     }
     return results;
   };
@@ -26,8 +26,8 @@ Bu.PolylineMorph = (function() {
     var i, indexA, indexB, j, pointsA, pointsB, posA, posAPrev, posB, posBPrev, ref, secPosA, secPosB;
     this.hPointsA.clear();
     this.hPointsB.clear();
-    pointsA = this.polylineA.points;
-    pointsB = this.polylineB.points;
+    pointsA = this.polylineA.vertices;
+    pointsB = this.polylineB.vertices;
     indexA = 0;
     indexB = 0;
     while (indexA < pointsA.length && indexB < pointsB.length) {
@@ -53,14 +53,14 @@ Bu.PolylineMorph = (function() {
       }
     }
     for (i = j = 0, ref = this.hPointsA.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
-      if (this.polyline.points[i] != null) {
-        this.polyline.points[i].set(this.hPointsA[i].x, this.hPointsA[i].y);
+      if (this.polyline.vertices[i] != null) {
+        this.polyline.vertices[i].set(this.hPointsA[i].x, this.hPointsA[i].y);
       } else {
-        this.polyline.points[i] = new Bu.Point(this.hPointsA[i].x, this.hPointsA[i].y);
+        this.polyline.vertices[i] = new Bu.Point(this.hPointsA[i].x, this.hPointsA[i].y);
       }
     }
-    if (this.polyline.points.length < this.hPointsA.length) {
-      return this.polyline.points.splice(this.hPointsA.length);
+    if (this.polyline.vertices.length < this.hPointsA.length) {
+      return this.polyline.vertices.splice(this.hPointsA.length);
     }
   };
 

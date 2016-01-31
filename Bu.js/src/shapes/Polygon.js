@@ -16,8 +16,8 @@ Bu.Polygon = (function(superClass) {
   function Polygon(points) {
     var i, k, l, n, options, ref, ref1, x, y;
     Polygon.__super__.constructor.call(this);
-    this.type = "Polygon";
-    this.points = [];
+    this.type = 'Polygon';
+    this.vertices = [];
     this.lines = [];
     this.triangles = [];
     options = Bu.combineOptions(arguments, {
@@ -26,25 +26,26 @@ Bu.Polygon = (function(superClass) {
     });
     if (points instanceof Array) {
       if (points != null) {
-        this.points = points;
+        this.vertices = points;
       }
     } else {
       x = arguments[0];
       y = arguments[1];
       n = arguments[2];
-      this.points = Bu.Polygon.generateRegularPoints(x, y, n, options);
+      this.vertices = Bu.Polygon.generateRegularPoints(x, y, n, options);
     }
-    if (this.points.length > 1) {
-      for (i = k = 0, ref = this.points.length - 1; 0 <= ref ? k < ref : k > ref; i = 0 <= ref ? ++k : --k) {
-        this.lines.push(new Bu.Line(this.points[i], this.points[i + 1]));
+    if (this.vertices.length > 1) {
+      for (i = k = 0, ref = this.vertices.length - 1; 0 <= ref ? k < ref : k > ref; i = 0 <= ref ? ++k : --k) {
+        this.lines.push(new Bu.Line(this.vertices[i], this.vertices[i + 1]));
       }
-      this.lines.push(new Bu.Line(this.points[this.points.length - 1], this.points[0]));
+      this.lines.push(new Bu.Line(this.vertices[this.vertices.length - 1], this.vertices[0]));
     }
-    if (this.points.length > 2) {
-      for (i = l = 1, ref1 = this.points.length - 1; 1 <= ref1 ? l < ref1 : l > ref1; i = 1 <= ref1 ? ++l : --l) {
-        this.triangles.push(new Bu.Triangle(this.points[0], this.points[i], this.points[i + 1]));
+    if (this.vertices.length > 2) {
+      for (i = l = 1, ref1 = this.vertices.length - 1; 1 <= ref1 ? l < ref1 : l > ref1; i = 1 <= ref1 ? ++l : --l) {
+        this.triangles.push(new Bu.Triangle(this.vertices[0], this.vertices[i], this.vertices[i + 1]));
       }
     }
+    this.keyPoints = this.vertices;
   }
 
   Polygon.prototype.isSimple = function() {
@@ -62,22 +63,22 @@ Bu.Polygon = (function(superClass) {
 
   Polygon.prototype.addPoint = function(point, insertIndex) {
     if (insertIndex == null) {
-      this.points.push(point);
-      if (this.points.length > 1) {
+      this.vertices.push(point);
+      if (this.vertices.length > 1) {
         this.lines[this.lines.length - 1].points[1] = point;
       }
-      if (this.points.length > 0) {
-        this.lines.push(new Bu.Line(this.points[this.points.length - 1], this.points[0]));
+      if (this.vertices.length > 0) {
+        this.lines.push(new Bu.Line(this.vertices[this.vertices.length - 1], this.vertices[0]));
       }
-      if (this.points.length > 2) {
-        return this.triangles.push(new Bu.Triangle(this.points[0], this.points[this.points.length - 2], this.points[this.points.length - 1]));
+      if (this.vertices.length > 2) {
+        return this.triangles.push(new Bu.Triangle(this.vertices[0], this.vertices[this.vertices.length - 2], this.vertices[this.vertices.length - 1]));
       }
     } else {
-      return this.points.splice(insertIndex, 0, point);
+      return this.vertices.splice(insertIndex, 0, point);
     }
   };
 
-  Polygon.prototype.containsPoint = function(p) {
+  Polygon.prototype._containsPoint = function(p) {
     var k, len1, ref, triangle;
     ref = this.triangles;
     for (k = 0, len1 = ref.length; k < len1; k++) {

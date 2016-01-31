@@ -3,7 +3,7 @@ Bu.Size = (function() {
   function Size(width1, height1) {
     this.width = width1;
     this.height = height1;
-    this.type = "Size";
+    this.type = 'Size';
   }
 
   Size.prototype.set = function(width, height) {

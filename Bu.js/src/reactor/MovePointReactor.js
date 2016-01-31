@@ -40,7 +40,7 @@ Bu.MovePointReactor = (function(superClass) {
           results = [];
           for (i = 0, len = ref.length; i < len; i++) {
             shape = ref[i];
-            if (shape.type === "Point" && shape.isNear(mousePos)) {
+            if (shape.type === 'Point' && shape.isNear(mousePos)) {
               hoveredPoint = shape;
               hoveredPoint.stroke();
               break;

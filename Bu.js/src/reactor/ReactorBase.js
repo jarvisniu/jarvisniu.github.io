@@ -15,15 +15,15 @@ Bu.ReactorBase = (function() {
   };
 
   ReactorBase.prototype.addListeners = function() {
-    this.renderer.dom.addEventListener("mousedown", this.onMouseDown);
-    this.renderer.dom.addEventListener("mousemove", this.onMouseMove);
-    return this.renderer.dom.addEventListener("mouseup", this.onMouseUp);
+    this.renderer.dom.addEventListener('mousedown', this.onMouseDown);
+    this.renderer.dom.addEventListener('mousemove', this.onMouseMove);
+    return this.renderer.dom.addEventListener('mouseup', this.onMouseUp);
   };
 
   ReactorBase.prototype.removeListeners = function() {
-    this.renderer.dom.removeEventListener("mousedown", this.onMouseDown);
-    this.renderer.dom.removeEventListener("mousemove", this.onMouseMove);
-    return this.renderer.dom.removeEventListener("mouseup", this.onMouseUp);
+    this.renderer.dom.removeEventListener('mousedown', this.onMouseDown);
+    this.renderer.dom.removeEventListener('mousemove', this.onMouseMove);
+    return this.renderer.dom.removeEventListener('mouseup', this.onMouseUp);
   };
 
   return ReactorBase;

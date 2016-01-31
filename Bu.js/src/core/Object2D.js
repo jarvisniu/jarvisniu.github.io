@@ -9,9 +9,21 @@ Bu.Object2D = (function() {
     this.rotation = 0;
     this.scale = new Bu.Vector(1, 1);
     this.skew = new Bu.Vector();
+    this.bounds = null;
+    this.keyPoints = null;
     this.children = [];
     this.parent = null;
   }
+
+  Object2D.prototype.containsPoint = function(p) {
+    if ((this.bounds != null) && !this.bounds.containsPoint(p)) {
+      return false;
+    } else if (this._containsPoint) {
+      return this._containsPoint(p);
+    } else {
+      return false;
+    }
+  };
 
   return Object2D;
 

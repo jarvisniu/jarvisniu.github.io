@@ -14,32 +14,33 @@ Bu.Circle = (function(superClass) {
     }
     this._radius = _radius != null ? _radius : 1;
     Circle.__super__.constructor.call(this);
-    this.type = "Circle";
+    this.type = 'Circle';
     this._center = new Bu.Point(cx, cy);
     this.bounds = null;
+    this.keyPoints = [this._center];
   }
 
-  Circle.property("cx", {
+  Circle.property('cx', {
     get: function() {
       return this._center.x;
     },
     set: function(val) {
       this._center.x = val;
-      return this.triggerEvent("centerChanged", this);
+      return this.triggerEvent('centerChanged', this);
     }
   });
 
-  Circle.property("cy", {
+  Circle.property('cy', {
     get: function() {
       return this._center.y;
     },
     set: function(val) {
       this._center.y = val;
-      return this.triggerEvent("centerChanged", this);
+      return this.triggerEvent('centerChanged', this);
     }
   });
 
-  Circle.property("center", {
+  Circle.property('center', {
     get: function() {
       return this._center;
     },
@@ -47,30 +48,27 @@ Bu.Circle = (function(superClass) {
       this._center = val;
       this.cx = val.x;
       this.cy = val.y;
-      return this.triggerEvent("centerChanged", this);
+      this.keyPoints[0] = val;
+      return this.triggerEvent('centerChanged', this);
     }
   });
 
-  Circle.property("radius", {
+  Circle.property('radius', {
     get: function() {
       return this._radius;
     },
     set: function(val) {
       this._radius = val;
-      this.triggerEvent("radiusChanged", this);
+      this.triggerEvent('radiusChanged', this);
       return this;
     }
   });
 
-  Circle.prototype.containsPoint = function(p) {
+  Circle.prototype._containsPoint = function(p) {
     var dx, dy;
-    if ((this.bounds != null) && !this.bounds.containsPoint(p)) {
-      return false;
-    } else {
-      dx = p.x - this.cx;
-      dy = p.y - this.cy;
-      return Math.bevel(dx, dy) < this.radius;
-    }
+    dx = p.x - this.cx;
+    dy = p.y - this.cy;
+    return Math.bevel(dx, dy) < this.radius;
   };
 
   return Circle;

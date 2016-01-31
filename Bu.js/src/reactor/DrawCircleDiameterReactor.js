@@ -20,7 +20,7 @@ Bu.DrawCircleDiameterReactor = (function(superClass) {
       circle = new Bu.Circle(mousePosDown.x, mousePosDown.y, 1);
       renderer.append(circle);
       line = new Bu.Line(mousePosDown, mousePosDown);
-      line.stroke("#f44");
+      line.stroke('#f44');
       renderer.append(line);
       return mouseButton = e.button;
     };

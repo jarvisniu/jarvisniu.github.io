@@ -20,7 +20,7 @@ Bu.DrawPolylineReactor = (function(superClass) {
       if (mouseButton === Bu.MOUSE_BUTTON_LEFT) {
         if (polyline == null) {
           polyline = new Bu.Polyline;
-          polyline.stroke(Bu.DEFAULT_FILL_STYLE_HOVER);
+          polyline.stroke(Bu.DEFAULT_STROKE_STYLE_HOVER);
           renderer.append(polyline);
         }
         return polyline.addPoint(mousePos.clone());
@@ -33,7 +33,7 @@ Bu.DrawPolylineReactor = (function(superClass) {
       var points;
       mousePos.set(e.offsetX, e.offsetY);
       if (mouseButton === Bu.MOUSE_BUTTON_LEFT) {
-        points = polyline.points;
+        points = polyline.vertices;
         return points[points.length - 1].set(mousePos.x, mousePos.y);
       }
     };

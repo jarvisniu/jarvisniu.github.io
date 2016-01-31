@@ -8,20 +8,21 @@ Bu.Polyline = (function(superClass) {
 
   extend(Polyline, superClass);
 
-  function Polyline(points1) {
-    this.points = points1 != null ? points1 : [];
+  function Polyline(vertices) {
+    this.vertices = vertices != null ? vertices : [];
     this.calcLength = bind(this.calcLength, this);
     this.updateLines = bind(this.updateLines, this);
     Polyline.__super__.constructor.call(this);
-    this.type = "Polyline";
+    this.type = 'Polyline';
     this.lines = [];
     this.length = 0;
     this.pointNormalizedPos = [];
+    this.keyPoints = this.vertices;
     onPointChange(this);
   }
 
   onPointChange = function(self) {
-    if (self.points.length > 1) {
+    if (self.vertices.length > 1) {
       self.updateLines();
       self.calcLength();
       return self.calcPointNormalizedPos();
@@ -31,11 +32,11 @@ Bu.Polyline = (function(superClass) {
   Polyline.prototype.updateLines = function() {
     var i, j, ref, results;
     results = [];
-    for (i = j = 0, ref = this.points.length - 1; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+    for (i = j = 0, ref = this.vertices.length - 1; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
       if (this.lines[i] != null) {
-        results.push(this.lines[i].set(this.points[i], this.points[i + 1]));
+        results.push(this.lines[i].set(this.vertices[i], this.vertices[i + 1]));
       } else {
-        results.push(this.lines[i] = new Bu.Line(this.points[i], this.points[i + 1]));
+        results.push(this.lines[i] = new Bu.Line(this.vertices[i], this.vertices[i + 1]));
       }
     }
     return results;
@@ -43,12 +44,12 @@ Bu.Polyline = (function(superClass) {
 
   Polyline.prototype.calcLength = function() {
     var i, j, len, ref;
-    if (this.points.length < 2) {
+    if (this.vertices.length < 2) {
       return this.length = 0;
     } else {
       len = 0;
-      for (i = j = 1, ref = this.points.length; 1 <= ref ? j < ref : j > ref; i = 1 <= ref ? ++j : --j) {
-        len += this.points[i].distanceTo(this.points[i - 1]);
+      for (i = j = 1, ref = this.vertices.length; 1 <= ref ? j < ref : j > ref; i = 1 <= ref ? ++j : --j) {
+        len += this.vertices[i].distanceTo(this.vertices[i - 1]);
       }
       return this.length = len;
     }
@@ -59,8 +60,8 @@ Bu.Polyline = (function(superClass) {
     currPos = 0;
     this.pointNormalizedPos[0] = 0;
     results = [];
-    for (i = j = 1, ref = this.points.length; 1 <= ref ? j < ref : j > ref; i = 1 <= ref ? ++j : --j) {
-      currPos += this.points[i].distanceTo(this.points[i - 1]) / this.length;
+    for (i = j = 1, ref = this.vertices.length; 1 <= ref ? j < ref : j > ref; i = 1 <= ref ? ++j : --j) {
+      currPos += this.vertices[i].distanceTo(this.vertices[i - 1]) / this.length;
       results.push(this.pointNormalizedPos[i] = currPos);
     }
     return results;
@@ -76,23 +77,23 @@ Bu.Polyline = (function(superClass) {
 
   set = function(points) {
     var i, j, ref;
-    for (i = j = 0, ref = this.points.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
-      this.points[i].copy(points[i]);
+    for (i = j = 0, ref = this.vertices.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+      this.vertices[i].copy(points[i]);
     }
-    if (this.points.length > points.length) {
-      this.points.splice(points.length);
+    if (this.vertices.length > points.length) {
+      this.vertices.splice(points.length);
     }
     return onPointChange(this);
   };
 
   Polyline.prototype.addPoint = function(point, insertIndex) {
     if (insertIndex == null) {
-      this.points.push(point);
-      if (this.points.length > 1) {
-        this.lines.push(new Bu.Line(this.points[this.points.length - 2], this.points[this.points.length - 1]));
+      this.vertices.push(point);
+      if (this.vertices.length > 1) {
+        this.lines.push(new Bu.Line(this.vertices[this.vertices.length - 2], this.vertices[this.vertices.length - 1]));
       }
     } else {
-      this.points.splice(insertIndex, 0, point);
+      this.vertices.splice(insertIndex, 0, point);
     }
     return onPointChange(this);
   };
