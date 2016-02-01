@@ -6,29 +6,36 @@ Bu.DrawCircleReactor = (function(superClass) {
   extend(DrawCircleReactor, superClass);
 
   function DrawCircleReactor(renderer) {
-    var circle, line, mouseButton, mousePos, mousePosDown;
+    var circle, isConfirmed, line, mouseButton, mousePos, mousePosDown;
     this.renderer = renderer;
     DrawCircleReactor.__super__.constructor.call(this);
     mouseButton = Bu.MOUSE_BUTTON_NONE;
     mousePos = new Bu.Point;
     mousePosDown = new Bu.Point;
+    isConfirmed = true;
     circle = null;
     line = null;
     this.onMouseDown = (function(_this) {
       return function(e) {
-        mousePosDown.set(e.offsetX, e.offsetY);
-        circle = new Bu.Circle(mousePosDown.x, mousePosDown.y, 1);
-        _this.renderer.append(circle);
-        line = new Bu.Line(mousePosDown, mousePosDown);
-        line.stroke('#f44');
-        _this.renderer.append(line);
+        if (!isConfirmed) {
+          circle = null;
+          isConfirmed = true;
+        } else {
+          mousePosDown.set(e.offsetX, e.offsetY);
+          circle = new Bu.Circle(mousePosDown.x, mousePosDown.y, 1);
+          _this.renderer.append(circle);
+          line = new Bu.Line(mousePosDown, mousePosDown);
+          line.stroke('#f44');
+          _this.renderer.append(line);
+          isConfirmed = false;
+        }
         return mouseButton = e.button;
       };
     })(this);
     this.onMouseMove = (function(_this) {
       return function(e) {
-        if (mouseButton === Bu.MOUSE_BUTTON_LEFT) {
-          mousePos.set(e.offsetX, e.offsetY);
+        mousePos.set(e.offsetX, e.offsetY);
+        if ((!isConfirmed) || (mouseButton === Bu.MOUSE_BUTTON_LEFT && (circle != null))) {
           circle.radius = mousePos.distanceTo(mousePosDown);
           return line.setPoint1(mousePos);
         }
@@ -36,7 +43,8 @@ Bu.DrawCircleReactor = (function(superClass) {
     })(this);
     this.onMouseUp = (function(_this) {
       return function() {
-        return mouseButton = Bu.MOUSE_BUTTON_NONE;
+        mouseButton = Bu.MOUSE_BUTTON_NONE;
+        return isConfirmed = mousePos.distanceTo(mousePosDown) > Bu.POINT_RENDER_SIZE;
       };
     })(this);
   }

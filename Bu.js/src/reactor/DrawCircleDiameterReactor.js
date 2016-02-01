@@ -5,35 +5,44 @@ var extend = function(child, parent) { for (var key in parent) { if (hasProp.cal
 Bu.DrawCircleDiameterReactor = (function(superClass) {
   extend(DrawCircleDiameterReactor, superClass);
 
-  function DrawCircleDiameterReactor(renderer1) {
-    var circle, line, mouseButton, mousePos, mousePosDown, renderer;
-    this.renderer = renderer1;
+  function DrawCircleDiameterReactor(renderer) {
+    var circle, isConfirmed, line, mouseButton, mousePos, mousePosDown;
+    this.renderer = renderer;
     DrawCircleDiameterReactor.__super__.constructor.call(this);
-    renderer = this.renderer;
     mouseButton = Bu.MOUSE_BUTTON_NONE;
     mousePos = new Bu.Point;
     mousePosDown = new Bu.Point;
+    isConfirmed = true;
     circle = null;
     line = null;
-    this.onMouseDown = function(e) {
-      mousePosDown.set(e.offsetX, e.offsetY);
-      circle = new Bu.Circle(mousePosDown.x, mousePosDown.y, 1);
-      renderer.append(circle);
-      line = new Bu.Line(mousePosDown, mousePosDown);
-      line.stroke('#f44');
-      renderer.append(line);
-      return mouseButton = e.button;
-    };
+    this.onMouseDown = (function(_this) {
+      return function(e) {
+        if (!isConfirmed) {
+          circle = null;
+          isConfirmed = true;
+        } else {
+          mousePosDown.set(e.offsetX, e.offsetY);
+          circle = new Bu.Circle(mousePosDown.x, mousePosDown.y, 1);
+          _this.renderer.append(circle);
+          line = new Bu.Line(mousePosDown, mousePosDown);
+          line.stroke('#f44');
+          _this.renderer.append(line);
+          isConfirmed = false;
+        }
+        return mouseButton = e.button;
+      };
+    })(this);
     this.onMouseMove = function(e) {
-      if (mouseButton === Bu.MOUSE_BUTTON_LEFT) {
-        mousePos.set(e.offsetX, e.offsetY);
+      mousePos.set(e.offsetX, e.offsetY);
+      if ((!isConfirmed) || (mouseButton === Bu.MOUSE_BUTTON_LEFT && (circle != null))) {
         line.setPoint2(mousePos);
         circle.radius = mousePos.distanceTo(mousePosDown) / 2;
         return circle.center = line.midpoint;
       }
     };
     this.onMouseUp = function() {
-      return mouseButton = Bu.MOUSE_BUTTON_NONE;
+      mouseButton = Bu.MOUSE_BUTTON_NONE;
+      return isConfirmed = mousePos.distanceTo(mousePosDown) > Bu.POINT_RENDER_SIZE;
     };
   }
 

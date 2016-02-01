@@ -3,7 +3,7 @@
 class Bu.Renderer
 
 	constructor: () ->
-		Za.EventListenerPattern.apply @
+		Bu.Event.apply @
 
 		@type = 'Renderer'
 
@@ -12,7 +12,7 @@ class Bu.Renderer
 			height: 600
 			fps: 60
 			fillParent: off
-			border: on
+			border: off
 		@width = options.width
 		@height = options.height
 		@fps = options.fps
@@ -36,6 +36,7 @@ class Bu.Renderer
 			@dom.style.height = @height + 'px'
 		@dom.style.border = 'solid 1px gray' if options.border? and options.border
 		@dom.style.cursor = 'crosshair'
+		@dom.style.boxSizing = 'border-box'
 		@dom.style.background = '#eee'
 		@dom.oncontextmenu = -> false
 
@@ -63,7 +64,7 @@ class Bu.Renderer
 
 			@clipMeter.start() if @clipMeter?
 			tickCount += 1
-			@triggerEvent 'update', {'tickCount': tickCount}
+			@trigger 'update', {'tickCount': tickCount}
 			clearCanvas()
 			@drawShapes(@shapes)
 			@clipMeter.tick() if @clipMeter?
@@ -154,6 +155,7 @@ class Bu.Renderer
 		if shape.strokeStyle?
 			@context.strokeStyle = shape.strokeStyle
 			@context.lineWidth = shape.lineWidth
+			@context.beginPath()
 			if shape.dashStyle
 				@context.dashedLine(
 						shape.points[0].x, shape.points[0].y,
@@ -161,7 +163,6 @@ class Bu.Renderer
 						shape.dashStyle, shape.dashDelta
 				)
 			else
-				@context.beginPath()
 				@context.lineTo(shape.points[0].x, shape.points[0].y)
 				@context.lineTo(shape.points[1].x, shape.points[1].y)
 				@context.closePath()
@@ -367,37 +368,37 @@ class Bu.Renderer
 # See: http://stackoverflow.com/questions/4576724/dotted-stroke-in-canvas
 (=>
 	CP = window.CanvasRenderingContext2D and CanvasRenderingContext2D.prototype
-	if CP.lineTo?
-		CP.dashedLine = (x, y, x2, y2, da, delta) ->
-			da = Bu.DEFAULT_DASH_STYLE if not da?
-			delta = 0 if not delta?
-			@save()
-			dx = x2 - x
-			dy = y2 - y
-			len = Math.bevel(dx, dy)
-			rot = Math.atan2(dy, dx)
-			@translate(x, y)
-			@rotate(rot)
-			dc = da.length
-			di = 0
-			draw = true
+	CP.dashedLine = (x, y, x2, y2, da, delta) ->
+		da = Bu.DEFAULT_DASH_STYLE if not da?
+		delta = 0 if not delta?
+		@save()
+		dx = x2 - x
+		dy = y2 - y
+		len = Math.bevel(dx, dy)
+		rot = Math.atan2(dy, dx)
+		@translate(x, y)
+		@rotate(rot)
+		dc = da.length
+		di = 0
+		draw = true
 
-			lenU = 0
-			for i in da
-				lenU += i
-			delta %= lenU
-			x = delta
+		lenU = 0
+		for i in da
+			lenU += i
+		delta %= lenU
+		x = delta
 
-			@moveTo(0, 0)
-			# TODO need a small fix
-			while len > x
-				di += 1
-				x += da[di % dc]
-				x = len if x > len
-				if draw
-					@lineTo(x, 0)
-				else
-					@moveTo(x, 0)
-				draw = not draw
-			@restore()
-			return @)()
+		@moveTo(0, 0)
+		# TODO need a small fix
+		while len > x
+			di += 1
+			x += da[di % dc]
+			x = len if x > len
+			if draw
+				@lineTo(x, 0)
+			else
+				@moveTo(x, 0)
+			draw = not draw
+		@restore()
+		return @
+)()

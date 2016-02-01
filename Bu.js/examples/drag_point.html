@@ -3,8 +3,22 @@
   <head>
     <meta charset="utf-8">
     <title>Drag Point</title>
-    <script src="../lib/za_geom2d.min.js"></script>
     <script src="../src/Bu.dev.js"></script>
+    <style>
+      html, body, #container {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      
+      #info {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        padding: 8px;
+      }
+    </style>
     <script type="text/javascript">
       var renderer;
       var movePointReactor;
@@ -36,7 +50,7 @@
     </script>
   </head>
   <body>
-    <div>Drag a point to move it.</div>
+    <div id="info">Drag a point to move it.</div>
     <div id="container"></div>
   </body>
 </html>

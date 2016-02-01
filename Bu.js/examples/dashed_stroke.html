@@ -3,8 +3,22 @@
   <head>
     <meta charset="utf-8">
     <title>Dashed Stroke</title>
-    <script src="../lib/za_geom2d.min.js"></script>
     <script src="../src/Bu.dev.js"></script>
+    <style>
+      html, body, #container {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      
+      #info {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        padding: 8px;
+      }
+    </style>
     <script type="text/javascript">
       var renderer, generator;
       var isFlowOn = true;
@@ -13,7 +27,9 @@
       
       function init() {
         renderer = new Bu.Renderer({
-          container: "#container"
+          container: "#container",
+          fillParent: true,
+          border: false
         });
         generator = new Bu.RandomShapeGenerator(renderer);
         generateShapes();
@@ -55,9 +71,11 @@
     </script>
   </head>
   <body>
-    <button id="btnStrokeFlow">Toggle Flow</button>
-    <div>Dashed line stroke examples. (Curve lines not implemented for now.)</div>
-    <div>Click to regenerate shapes.</div>
+    <div id="info">
+      <div>Dashed line stroke examples. (Curve lines not implemented for now.)</div>
+      <div>Click to regenerate shapes.</div>
+      <button id="btnStrokeFlow">Toggle Flow</button>
+    </div>
     <div id="container"></div>
   </body>
 </html>

@@ -24,8 +24,8 @@ Bu.PolylineMorph = (function() {
 
   PolylineMorph.prototype.update = function() {
     var i, indexA, indexB, j, pointsA, pointsB, posA, posAPrev, posB, posBPrev, ref, secPosA, secPosB;
-    this.hPointsA.clear();
-    this.hPointsB.clear();
+    this.hPointsA = [];
+    this.hPointsB = [];
     pointsA = this.polylineA.vertices;
     pointsB = this.polylineB.vertices;
     indexA = 0;

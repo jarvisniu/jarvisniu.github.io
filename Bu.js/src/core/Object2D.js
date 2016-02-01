@@ -2,7 +2,7 @@
 Bu.Object2D = (function() {
   function Object2D() {
     Bu.Colorful.apply(this);
-    Za.EventListenerPattern.apply(this);
+    Bu.Event.apply(this);
     this.visible = true;
     this.opacity = 1;
     this.position = new Bu.Vector();

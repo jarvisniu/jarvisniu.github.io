@@ -5,47 +5,87 @@ var extend = function(child, parent) { for (var key in parent) { if (hasProp.cal
 Bu.DrawPolygonReactor = (function(superClass) {
   extend(DrawPolygonReactor, superClass);
 
-  function DrawPolygonReactor(renderer1) {
-    var mouseButton, mouseDownPos, mousePos, polygon, renderer;
-    this.renderer = renderer1;
+  function DrawPolygonReactor(renderer) {
+    var guideLineEnd, guideLineStart, mouseButton, mouseDownPos, mousePos, polygon;
+    this.renderer = renderer;
     DrawPolygonReactor.__super__.constructor.call(this);
-    renderer = this.renderer;
     mouseButton = Bu.MOUSE_BUTTON_NONE;
     mousePos = new Bu.Point;
     mouseDownPos = new Bu.Vector;
     polygon = null;
-    this.onMouseDown = function(e) {
-      mouseDownPos.set(e.offsetX, e.offsetY);
-      mouseButton = e.button;
-      if (mouseButton === Bu.MOUSE_BUTTON_LEFT) {
-        if (polygon == null) {
-          polygon = new Bu.Polygon;
-          polygon.fill(Bu.DEFAULT_FILL_STYLE_HOVER);
-          renderer.append(polygon);
+    guideLineEnd = null;
+    guideLineStart = null;
+    this.onMouseDown = (function(_this) {
+      return function(e) {
+        mouseDownPos.set(e.offsetX, e.offsetY);
+        mouseButton = e.button;
+        if (mouseButton === Bu.MOUSE_BUTTON_LEFT) {
+          if (polygon == null) {
+            polygon = new Bu.Polygon;
+            polygon.fill(Bu.DEFAULT_FILL_STYLE_HOVER);
+            _this.renderer.append(polygon);
+          }
+          if (guideLineEnd == null) {
+            guideLineEnd = new Bu.Line(mousePos, mousePos);
+            guideLineEnd.stroke(Bu.DEFAULT_STROKE_STYLE_HOVER);
+            guideLineEnd.dash();
+            _this.renderer.append(guideLineEnd);
+            guideLineStart = new Bu.Line(mousePos, mousePos);
+            guideLineStart.stroke(Bu.DEFAULT_STROKE_STYLE_HOVER);
+            guideLineStart.dash();
+            _this.renderer.append(guideLineStart);
+          } else if (guideLineEnd.visible === false) {
+            guideLineEnd.setPoint1(mousePos);
+            guideLineEnd.setPoint2(mousePos);
+            guideLineEnd.visible = true;
+            guideLineStart.setPoint1(mousePos);
+            guideLineStart.setPoint2(mousePos);
+            guideLineStart.visible = true;
+          }
+          guideLineEnd.setPoint1(guideLineEnd.points[1]);
+          return polygon.addPoint(mousePos.clone());
+        } else if (mouseButton === Bu.MOUSE_BUTTON_RIGHT) {
+          polygon.fill();
+          polygon = null;
+          guideLineEnd.visible = false;
+          return guideLineStart.visible = false;
         }
-        return polygon.addPoint(mousePos.clone());
-      } else if (mouseButton === Bu.MOUSE_BUTTON_RIGHT) {
-        polygon.fill();
-        return polygon = null;
-      }
-    };
-    this.onMouseMove = function(e) {
-      var points;
-      mousePos.set(e.offsetX, e.offsetY);
-      if (mouseButton === Bu.MOUSE_BUTTON_LEFT) {
-        points = polygon.vertices;
-        return points[points.length - 1].set(mousePos.x, mousePos.y);
-      } else if (mouseButton === Bu.MOUSE_BUTTON_NONE && (polygon != null)) {
-        if (polygon.containsPoint(mousePos)) {
-          return polygon.fill('yellow');
-        } else {
-          return polygon.fill(Bu.DEFAULT_FILL_STYLE_HOVER);
+      };
+    })(this);
+    this.onMouseMove = (function(_this) {
+      return function(e) {
+        var points;
+        mousePos.set(e.offsetX, e.offsetY);
+        if (mouseButton === Bu.MOUSE_BUTTON_LEFT) {
+          points = polygon.vertices;
+        } else if (mouseButton === Bu.MOUSE_BUTTON_NONE && (polygon != null)) {
+          if (polygon.containsPoint(mousePos)) {
+            polygon.fill('yellow');
+          } else {
+            polygon.fill(Bu.DEFAULT_FILL_STYLE_HOVER);
+          }
         }
-      }
-    };
-    this.onMouseUp = function() {
-      return mouseButton = Bu.MOUSE_BUTTON_NONE;
-    };
+        if (polygon) {
+          guideLineEnd.setPoint2(mousePos);
+          return guideLineStart.setPoint2(mousePos);
+        }
+      };
+    })(this);
+    this.onMouseUp = (function(_this) {
+      return function() {
+        var len, points;
+        mouseButton = Bu.MOUSE_BUTTON_NONE;
+        if (polygon != null) {
+          guideLineEnd.setPoint2(guideLineEnd.points[0]);
+          guideLineEnd.setPoint1(mousePos);
+          points = polygon.vertices;
+          len = mousePos.distanceTo(points[points.length - 1]);
+          if (len > Bu.POINT_RENDER_SIZE) {
+            return polygon.addPoint(mousePos.clone());
+          }
+        }
+      };
+    })(this);
   }
 
   return DrawPolygonReactor;

@@ -5,41 +5,67 @@ var extend = function(child, parent) { for (var key in parent) { if (hasProp.cal
 Bu.DrawPolylineReactor = (function(superClass) {
   extend(DrawPolylineReactor, superClass);
 
-  function DrawPolylineReactor(renderer1) {
-    var mouseButton, mouseDownPos, mousePos, polyline, renderer;
-    this.renderer = renderer1;
+  function DrawPolylineReactor(renderer) {
+    var line, mouseButton, mouseDownPos, mousePos, polyline;
+    this.renderer = renderer;
     DrawPolylineReactor.__super__.constructor.call(this);
-    renderer = this.renderer;
     mouseButton = Bu.MOUSE_BUTTON_NONE;
     mousePos = new Bu.Point;
     mouseDownPos = new Bu.Vector;
     polyline = null;
-    this.onMouseDown = function(e) {
-      mouseDownPos.set(e.offsetX, e.offsetY);
-      mouseButton = e.button;
-      if (mouseButton === Bu.MOUSE_BUTTON_LEFT) {
-        if (polyline == null) {
-          polyline = new Bu.Polyline;
-          polyline.stroke(Bu.DEFAULT_STROKE_STYLE_HOVER);
-          renderer.append(polyline);
+    line = null;
+    this.onMouseDown = (function(_this) {
+      return function(e) {
+        mouseDownPos.set(e.offsetX, e.offsetY);
+        mouseButton = e.button;
+        if (mouseButton === Bu.MOUSE_BUTTON_LEFT) {
+          if (polyline == null) {
+            polyline = new Bu.Polyline;
+            polyline.stroke(Bu.DEFAULT_STROKE_STYLE_HOVER);
+            _this.renderer.append(polyline);
+          }
+          if (line == null) {
+            line = new Bu.Line(mousePos, mousePos);
+            line.stroke(Bu.DEFAULT_STROKE_STYLE_HOVER);
+            line.dash();
+            _this.renderer.append(line);
+          } else if (line.visible === false) {
+            line.setPoint1(mousePos);
+            line.setPoint2(mousePos);
+            line.visible = true;
+          }
+          line.setPoint1(line.points[1]);
+          return polyline.addPoint(mousePos.clone());
+        } else if (mouseButton === Bu.MOUSE_BUTTON_RIGHT) {
+          polyline.stroke();
+          polyline = null;
+          return line.visible = false;
         }
-        return polyline.addPoint(mousePos.clone());
-      } else if (mouseButton === Bu.MOUSE_BUTTON_RIGHT) {
-        polyline.stroke();
-        return polyline = null;
-      }
-    };
-    this.onMouseMove = function(e) {
-      var points;
-      mousePos.set(e.offsetX, e.offsetY);
-      if (mouseButton === Bu.MOUSE_BUTTON_LEFT) {
-        points = polyline.vertices;
-        return points[points.length - 1].set(mousePos.x, mousePos.y);
-      }
-    };
-    this.onMouseUp = function() {
-      return mouseButton = Bu.MOUSE_BUTTON_NONE;
-    };
+      };
+    })(this);
+    this.onMouseMove = (function(_this) {
+      return function(e) {
+        mousePos.set(e.offsetX, e.offsetY);
+        if (polyline != null) {
+          return line.setPoint2(mousePos);
+        }
+      };
+    })(this);
+    this.onMouseUp = (function(_this) {
+      return function() {
+        var len, points;
+        mouseButton = Bu.MOUSE_BUTTON_NONE;
+        if (polyline != null) {
+          line.setPoint2(line.points[0]);
+          line.setPoint1(mousePos);
+          points = polyline.vertices;
+          len = mousePos.distanceTo(points[points.length - 1]);
+          if (len > Bu.POINT_RENDER_SIZE) {
+            return polyline.addPoint(mousePos.clone());
+          }
+        }
+      };
+    })(this);
   }
 
   return DrawPolylineReactor;

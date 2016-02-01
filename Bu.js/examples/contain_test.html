@@ -3,8 +3,21 @@
   <head>
     <meta charset="utf-8">
     <title>Bow Contains Point</title>
-    <script src="../lib/za_geom2d.min.js"></script>
     <script src="../src/Bu.dev.js"></script>
+    <style>
+      html, body, #container {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      #info {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        padding: 8px;
+      }
+    </style>
     <script type="text/javascript">
       var renderer;
       var generator;
@@ -51,7 +64,7 @@
     </script>
   </head>
   <body>
-    <div>Move cursor to test. Click to regenerate shapes.</div>
+    <div id="info">Move cursor to test. Click to regenerate shapes.</div>
     <div id="container"></div>
   </body>
 </html>

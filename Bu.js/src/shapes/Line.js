@@ -40,7 +40,7 @@ Bu.Line = (function(superClass) {
   };
 
   Line.prototype.setPoint1 = function(a1, a2) {
-    if (typeof p2 !== "undefined" && p2 !== null) {
+    if (a2 != null) {
       this.points[0].set(a1, a2);
     } else {
       this.points[0].copy(a1);
@@ -50,7 +50,7 @@ Bu.Line = (function(superClass) {
   };
 
   Line.prototype.setPoint2 = function(a1, a2) {
-    if (typeof p2 !== "undefined" && p2 !== null) {
+    if (a2 != null) {
       this.points[1].set(a1, a2);
     } else {
       this.points[1].copy(a1);

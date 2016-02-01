@@ -9,14 +9,14 @@ Bu.Renderer = (function() {
     this["continue"] = bind(this["continue"], this);
     this.pause = bind(this.pause, this);
     var clearCanvas, onResize, options, tick, tickCount;
-    Za.EventListenerPattern.apply(this);
+    Bu.Event.apply(this);
     this.type = 'Renderer';
     options = Bu.combineOptions(arguments, {
       width: 800,
       height: 600,
       fps: 60,
       fillParent: false,
-      border: true
+      border: false
     });
     this.width = options.width;
     this.height = options.height;
@@ -40,6 +40,7 @@ Bu.Renderer = (function() {
       this.dom.style.border = 'solid 1px gray';
     }
     this.dom.style.cursor = 'crosshair';
+    this.dom.style.boxSizing = 'border-box';
     this.dom.style.background = '#eee';
     this.dom.oncontextmenu = function() {
       return false;
@@ -74,7 +75,7 @@ Bu.Renderer = (function() {
           _this.clipMeter.start();
         }
         tickCount += 1;
-        _this.triggerEvent('update', {
+        _this.trigger('update', {
           'tickCount': tickCount
         });
         clearCanvas();
@@ -201,10 +202,10 @@ Bu.Renderer = (function() {
     if (shape.strokeStyle != null) {
       this.context.strokeStyle = shape.strokeStyle;
       this.context.lineWidth = shape.lineWidth;
+      this.context.beginPath();
       if (shape.dashStyle) {
         this.context.dashedLine(shape.points[0].x, shape.points[0].y, shape.points[1].x, shape.points[1].y, shape.dashStyle, shape.dashDelta);
       } else {
-        this.context.beginPath();
         this.context.lineTo(shape.points[0].x, shape.points[0].y);
         this.context.lineTo(shape.points[1].x, shape.points[1].y);
         this.context.closePath();
@@ -419,50 +420,48 @@ Bu.Renderer = (function() {
   return function() {
     var CP;
     CP = window.CanvasRenderingContext2D && CanvasRenderingContext2D.prototype;
-    if (CP.lineTo != null) {
-      return CP.dashedLine = function(x, y, x2, y2, da, delta) {
-        var dc, di, draw, dx, dy, i, j, len, len1, lenU, rot;
-        if (da == null) {
-          da = Bu.DEFAULT_DASH_STYLE;
+    return CP.dashedLine = function(x, y, x2, y2, da, delta) {
+      var dc, di, draw, dx, dy, i, j, len, len1, lenU, rot;
+      if (da == null) {
+        da = Bu.DEFAULT_DASH_STYLE;
+      }
+      if (delta == null) {
+        delta = 0;
+      }
+      this.save();
+      dx = x2 - x;
+      dy = y2 - y;
+      len = Math.bevel(dx, dy);
+      rot = Math.atan2(dy, dx);
+      this.translate(x, y);
+      this.rotate(rot);
+      dc = da.length;
+      di = 0;
+      draw = true;
+      lenU = 0;
+      for (j = 0, len1 = da.length; j < len1; j++) {
+        i = da[j];
+        lenU += i;
+      }
+      delta %= lenU;
+      x = delta;
+      this.moveTo(0, 0);
+      while (len > x) {
+        di += 1;
+        x += da[di % dc];
+        if (x > len) {
+          x = len;
         }
-        if (delta == null) {
-          delta = 0;
+        if (draw) {
+          this.lineTo(x, 0);
+        } else {
+          this.moveTo(x, 0);
         }
-        this.save();
-        dx = x2 - x;
-        dy = y2 - y;
-        len = Math.bevel(dx, dy);
-        rot = Math.atan2(dy, dx);
-        this.translate(x, y);
-        this.rotate(rot);
-        dc = da.length;
-        di = 0;
-        draw = true;
-        lenU = 0;
-        for (j = 0, len1 = da.length; j < len1; j++) {
-          i = da[j];
-          lenU += i;
-        }
-        delta %= lenU;
-        x = delta;
-        this.moveTo(0, 0);
-        while (len > x) {
-          di += 1;
-          x += da[di % dc];
-          if (x > len) {
-            x = len;
-          }
-          if (draw) {
-            this.lineTo(x, 0);
-          } else {
-            this.moveTo(x, 0);
-          }
-          draw = !draw;
-        }
-        this.restore();
-        return this;
-      };
-    }
+        draw = !draw;
+      }
+      this.restore();
+      return this;
+    };
   };
 })(this))();
 

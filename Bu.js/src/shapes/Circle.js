@@ -26,7 +26,7 @@ Bu.Circle = (function(superClass) {
     },
     set: function(val) {
       this._center.x = val;
-      return this.triggerEvent('centerChanged', this);
+      return this.trigger('centerChanged', this);
     }
   });
 
@@ -36,7 +36,7 @@ Bu.Circle = (function(superClass) {
     },
     set: function(val) {
       this._center.y = val;
-      return this.triggerEvent('centerChanged', this);
+      return this.trigger('centerChanged', this);
     }
   });
 
@@ -49,7 +49,7 @@ Bu.Circle = (function(superClass) {
       this.cx = val.x;
       this.cy = val.y;
       this.keyPoints[0] = val;
-      return this.triggerEvent('centerChanged', this);
+      return this.trigger('centerChanged', this);
     }
   });
 
@@ -59,7 +59,7 @@ Bu.Circle = (function(superClass) {
     },
     set: function(val) {
       this._radius = val;
-      this.triggerEvent('radiusChanged', this);
+      this.trigger('radiusChanged', this);
       return this;
     }
   });

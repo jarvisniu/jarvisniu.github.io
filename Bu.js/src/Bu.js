@@ -40,6 +40,27 @@ Bu.combineOptions = function(args, defaultOptions) {
   return defaultOptions;
 };
 
+Array.prototype.each = Array.prototype.each || function(fn) {
+  var i;
+  i = 0;
+  while (i < this.length) {
+    fn(this[i]);
+    i++;
+  }
+  return this;
+};
+
+Array.prototype.map = Array.prototype.map || function(fn) {
+  var arr, i;
+  arr = [];
+  i = 0;
+  while (i < this.length) {
+    arr.push(fn(this[i]));
+    i++;
+  }
+  return this;
+};
+
 Bu.average = function() {
   var i, j, len, ns, sum;
   ns = arguments;
@@ -52,6 +73,18 @@ Bu.average = function() {
     sum += i;
   }
   return sum / ns.length;
+};
+
+Math.bevel = Math.bevel || function(x, y) {
+  return Math.sqrt(x * x + y * y);
+};
+
+Math.rand = Math.rand || function(from, to) {
+  if (to === void 0) {
+    to = from;
+    from = 0;
+  }
+  return Math.random() * (to - from) + from;
 };
 
 //# sourceMappingURL=Bu.js.map
