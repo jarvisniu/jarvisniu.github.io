@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Bow Contains Point</title>
+    <title>Contains Point</title>
     <script src="../src/Bu.dev.js"></script>
     <style>
       html, body, #container {
@@ -11,12 +11,14 @@
         height: 100%;
         overflow: hidden;
       }
+      
       #info {
         position: absolute;
         width: 100%;
         text-align: center;
         padding: 8px;
       }
+      
     </style>
     <script type="text/javascript">
       var renderer;
@@ -27,7 +29,8 @@
       
       function init() {
         renderer = new Bu.Renderer({
-          container: "#container"
+          container: "#container",
+          fillParent: true
         });
       
         generator = new Bu.RandomShapeGenerator(renderer);

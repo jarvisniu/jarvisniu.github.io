@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Label</title>
+  <title>Vue Lab</title>
   <script src="js/vue.min.js"></script>
   <script src="js/vue-importer.js"></script>
   <style type="text/css">
@@ -47,31 +47,41 @@
 
   <div>
 
-    <div id="info">I like the style of JetBrains IDEs very much. So I planed to build a widget set for my projects. These widgets are based on Vue.js</div>
+    <div id="info">I like the style of JetBrains IDEs very much. So I planed to build a widget set for my projects.
+      These widgets are based on Vue.js
+    </div>
 
     <horizontal-togglebar :theme.sync="theme" v-ref:togglebar></horizontal-togglebar>
-
     <tab-bar v-ref:tabbar></tab-bar>
-
     <horizontal-toolbar v-ref:h-toolbar></horizontal-toolbar>
 
   </div>
 
-  <br>
-
 </div>
 <script>
 
-  var components = [
-    'ImageButton',
-    'VerticalToolbar',
-    'TabBar',
-    'TabButton',
-    'HorizontalTogglebar',
-    'IconLabel',
-    'HorizontalToolbar',
-    'SidePanel'
-  ];
+  VueImporter.load([
+    'image-button',
+    'vertical-toolbar',
+    'tab-bar',
+    'tab-button',
+    'horizontal-togglebar',
+    'icon-label',
+    'horizontal-toolbar',
+    'side-panel'
+  ], function () {
+    new Vue({
+      el: '#app',
+      props: ['theme'],
+      ready: function () {
+        this.theme = 'theme-light';
+        this.$refs.vToolbar.items = iconLabelsV;
+        this.$refs.hToolbar.items = iconLabelsH;
+        this.$refs.tabbar.tabs = tabBarData;
+        this.$refs.togglebar.items = toggleBarData;
+      }
+    })
+  });
 
   var iconLabelsV = [
     {
@@ -145,19 +155,6 @@
     }
   ];
 
-  new VueInit(components, function() {
-    new Vue({
-      el: '#app',
-      props: ['theme'],
-      ready: function() {
-        this.theme = 'theme-light';
-        this.$refs.vToolbar.items = iconLabelsV;
-        this.$refs.hToolbar.items = iconLabelsH;
-        this.$refs.tabbar.tabs = tabBarData;
-        this.$refs.togglebar.items = toggleBarData;
-      }
-    })
-  });
 </script>
 </body>
 </html>

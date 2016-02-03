@@ -22,6 +22,7 @@ Bu.Renderer = (function() {
     this.height = options.height;
     this.fps = options.fps;
     this.container = options.container;
+    this.fillParent = options.fillParent;
     this.isDrawKeyPoints = true;
     this.dom = document.createElement('canvas');
     this.context = this.dom.getContext('2d');
@@ -30,7 +31,7 @@ Bu.Renderer = (function() {
       this.clipMeter = new ClipMeter();
     }
     this.shapes = [];
-    if (!options.fillParent) {
+    if (!this.fillParent) {
       this.dom.width = this.width;
       this.dom.height = this.height;
       this.dom.style.width = this.width + 'px';
@@ -47,8 +48,11 @@ Bu.Renderer = (function() {
     };
     window.canvas = this.dom;
     onResize = (function(_this) {
-      return function(e) {
+      return function() {
         var canvasRatio, containerRatio, height, width;
+        if (!_this.fillParent) {
+          return;
+        }
         canvasRatio = _this.dom.height / _this.dom.width;
         containerRatio = _this.container.clientHeight / _this.container.clientWidth;
         if (containerRatio < canvasRatio) {
@@ -431,7 +435,7 @@ Bu.Renderer = (function() {
       this.save();
       dx = x2 - x;
       dy = y2 - y;
-      len = Math.bevel(dx, dy);
+      len = Bu.bevel(dx, dy);
       rot = Math.atan2(dy, dx);
       this.translate(x, y);
       this.rotate(rot);

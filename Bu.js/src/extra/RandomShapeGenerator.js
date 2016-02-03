@@ -9,15 +9,15 @@ Bu.RandomShapeGenerator = (function() {
   }
 
   RandomShapeGenerator.prototype.randomX = function() {
-    return Math.random() * (this.renderer.width - MARGIN * 2) + MARGIN;
+    return Bu.rand(MARGIN, this.renderer.width - MARGIN * 2);
   };
 
   RandomShapeGenerator.prototype.randomY = function() {
-    return Math.random() * (this.renderer.height - MARGIN * 2) + MARGIN;
+    return Bu.rand(MARGIN, this.renderer.height - MARGIN * 2);
   };
 
   RandomShapeGenerator.prototype.randomRadius = function() {
-    return Math.random() * Math.min(this.renderer.width, this.renderer.height) / 2;
+    return Bu.rand(5, Math.min(this.renderer.width, this.renderer.height) / 2);
   };
 
   RandomShapeGenerator.prototype.generateCircle = function() {
@@ -29,8 +29,8 @@ Bu.RandomShapeGenerator = (function() {
 
   RandomShapeGenerator.prototype.generateBow = function() {
     var aFrom, aTo, bow;
-    aFrom = Math.random() * Math.PI * 2;
-    aTo = aFrom + Math.random() * Math.PI + Math.PI / 2;
+    aFrom = Bu.rand(Math.PI * 2);
+    aTo = aFrom + Bu.rand(Math.PI / 2, Math.PI * 2);
     bow = new Bu.Bow(this.randomX(), this.randomY(), this.randomRadius(), aFrom, aTo);
     bow.string.points[0].label = "A";
     bow.string.points[1].label = "B";
@@ -51,13 +51,13 @@ Bu.RandomShapeGenerator = (function() {
   };
 
   RandomShapeGenerator.prototype.generateRectangle = function() {
-    return new Bu.Rectangle(Math.rand(this.renderer.width), Math.rand(this.renderer.height), Math.rand(this.renderer.width / 2), Math.rand(this.renderer.height / 2));
+    return new Bu.Rectangle(Bu.rand(this.renderer.width), Bu.rand(this.renderer.height), Bu.rand(this.renderer.width / 2), Bu.rand(this.renderer.height / 2));
   };
 
   RandomShapeGenerator.prototype.generateFan = function() {
     var aFrom, aTo, fan;
-    aFrom = Math.random() * Math.PI * 2;
-    aTo = aFrom + Math.random() * Math.PI + Math.PI / 2;
+    aFrom = Bu.rand(Math.PI * 2);
+    aTo = aFrom + Bu.rand(Math.PI / 2, Math.PI * 2);
     fan = new Bu.Fan(this.randomX(), this.randomY(), this.randomRadius(), aFrom, aTo);
     fan.string.points[0].label = "A";
     fan.string.points[1].label = "B";
@@ -91,5 +91,3 @@ Bu.RandomShapeGenerator = (function() {
   return RandomShapeGenerator;
 
 })();
-
-//# sourceMappingURL=RandomShapeGenerator.js.map

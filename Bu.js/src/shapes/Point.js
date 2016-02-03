@@ -64,7 +64,7 @@ Bu.Point = (function(superClass) {
   };
 
   Point.prototype.distanceTo = function(point) {
-    return Math.bevel(this.x - point.x, this.y - point.y);
+    return Bu.bevel(this.x - point.x, this.y - point.y);
   };
 
   Point.prototype.isNear = function(target, limit) {

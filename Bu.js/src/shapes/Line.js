@@ -89,7 +89,7 @@ Bu.Line = (function(superClass) {
     b = p1.y - (p1.y - p2.y) * p1.x / (p1.x - p2.x);
     czX = (point.y + point.x / a - b) / (a + 1 / a);
     czY = a * czX + b;
-    return Math.bevel(czX - point.x, czY - point.y);
+    return Bu.bevel(czX - point.x, czY - point.y);
   };
 
   Line.prototype.footPointFrom = function(point, footPoint) {

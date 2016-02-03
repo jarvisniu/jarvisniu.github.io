@@ -68,7 +68,7 @@ Bu.Circle = (function(superClass) {
     var dx, dy;
     dx = p.x - this.cx;
     dy = p.y - this.cy;
-    return Math.bevel(dx, dy) < this.radius;
+    return Bu.bevel(dx, dy) < this.radius;
   };
 
   return Circle;

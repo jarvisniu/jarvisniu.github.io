@@ -17,6 +17,7 @@ class Bu.Renderer
 		@height = options.height
 		@fps = options.fps
 		@container = options.container
+		@fillParent = options.fillParent
 
 		@isDrawKeyPoints = true
 
@@ -29,7 +30,7 @@ class Bu.Renderer
 		# API
 		@shapes = []
 
-		if not options.fillParent
+		if not @fillParent
 			@dom.width = @width
 			@dom.height = @height
 			@dom.style.width = @width + 'px'
@@ -42,7 +43,9 @@ class Bu.Renderer
 
 		window.canvas = @dom
 
-		onResize = (e) =>
+		onResize = =>
+			return if not @fillParent
+
 			canvasRatio = @dom.height / @dom.width
 			containerRatio = @container.clientHeight / @container.clientWidth
 			if containerRatio < canvasRatio
@@ -374,7 +377,7 @@ class Bu.Renderer
 		@save()
 		dx = x2 - x
 		dy = y2 - y
-		len = Math.bevel(dx, dy)
+		len = Bu.bevel(dx, dy)
 		rot = Math.atan2(dy, dx)
 		@translate(x, y)
 		@rotate(rot)

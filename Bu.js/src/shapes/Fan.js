@@ -26,7 +26,7 @@ Bu.Fan = (function(superClass) {
     while (a < this.aFrom) {
       a += Math.PI * 2;
     }
-    return Math.bevel(dx, dy) < this.radius && a > this.aFrom && a < this.aTo;
+    return Bu.bevel(dx, dy) < this.radius && a > this.aFrom && a < this.aTo;
   };
 
   return Fan;

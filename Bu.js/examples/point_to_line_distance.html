@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Distance from point to line</title>
+    <title>Distance from Point to Line</title>
     <script src="../src/Bu.dev.js"></script>
     <style>
       html, body, #container {
@@ -18,9 +18,10 @@
         text-align: center;
         padding: 8px;
       }
+      
     </style>
     <script type="text/javascript">
-      var renderer;
+      var renderer, generator;
       var line, lineVertical;
       var mousePos = new Bu.Point();
       
@@ -28,9 +29,11 @@
       
       function init() {
         renderer = new Bu.Renderer({
-          container: "#container"
+          container: "#container",
+          fillParent: true
         });
-        line = createLine();
+        generator = new Bu.RandomShapeGenerator(renderer);
+        line = generator.generateLine();
         renderer.append(line);
         lineVertical = new Bu.Line();
         lineVertical.dash();
@@ -38,17 +41,6 @@
         renderer.append(lineVertical);
         renderer.dom.addEventListener("mouseup", onMouseUp);
         renderer.dom.addEventListener("mousemove", onMouseMove);
-      }
-      
-      function createLine() {
-        var x1 = Math.random() * renderer.width;
-        var y1 = Math.random() * renderer.height;
-        var x2 = Math.random() * renderer.width;
-        var y2 = Math.random() * renderer.height;
-        var _line = new Bu.Line(x1, y1, x2, y2);
-        _line.points[0].label = "A";
-        _line.points[1].label = "B";
-        return _line;
       }
       
       function onMouseMove(e) {
@@ -60,14 +52,14 @@
         lineVertical.points[0].label = "distance: " + Math.round(dist);
       }
       
-      function onMouseUp(e) {
-        line = renderer.shapes[0] = createLine();
+      function onMouseUp() {
+        line = renderer.shapes[0] = generator.generateLine();
       }
       
     </script>
   </head>
   <body>
-    <div id="info">Move cursor to measure distance. Click to change another line.</div>
+    <div id="info">Move cursor to measure the distance. Click to change another line.</div>
     <div id="container"></div>
   </body>
 </html>

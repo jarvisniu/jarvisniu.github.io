@@ -24,7 +24,7 @@ Bu.Bow = (function(superClass) {
 
   Bow.prototype._containsPoint = function(point) {
     var sameSide, smallThanHalfCircle;
-    if (Math.bevel(this.cx - point.x, this.cy - point.y) < this.radius) {
+    if (Bu.bevel(this.cx - point.x, this.cy - point.y) < this.radius) {
       sameSide = this.string.isTwoPointsSameSide(this.center, point);
       smallThanHalfCircle = this.aTo - this.aFrom < Math.PI;
       return sameSide ^ smallThanHalfCircle;

@@ -3,10 +3,6 @@
 @Bu =
 	version: '0.1.0'
 
-	###
-		constants
-	###
-
 	# shapes related
 	DEFAULT_STROKE_STYLE:       '#048'
 	DEFAULT_FILL_STYLE:         'rgba(64, 128, 192, 0.5)'
@@ -37,37 +33,11 @@
 	MOUSE_BUTTON_MIDDLE: 1
 	MOUSE_BUTTON_RIGHT:  2
 
-# polyfill
+###
+# math
+###
 
-Function::property = (prop, desc) ->
-	Object.defineProperty @prototype, prop, desc
-
-Bu.combineOptions = (args, defaultOptions) ->
-	defaultOptions = {} if not defaultOptions?
-	givenOptions = args[args.length - 1]
-	if typeof givenOptions is 'object'
-		for i of givenOptions
-			defaultOptions[i] = givenOptions[i]
-	return defaultOptions
-
-# Array
-Array::each = Array::each or (fn) ->
-	i = 0
-	while i < @length
-		fn @[i]
-		i++
-	return @
-
-Array::map = Array::map or (fn) ->
-	arr = []
-	i = 0
-	while i < @length
-		arr.push fn(@[i])
-		i++
-	return @
-
-# calculate the average number of several numbers
-# you can pass several numbers or a Array of numbers
+# calculate the mean value of several numbers
 Bu.average = ()->
 	ns = arguments
 	ns = arguments[0] if typeof arguments[0] is 'object'
@@ -76,11 +46,50 @@ Bu.average = ()->
 		sum += i
 	sum / ns.length
 
-# TODO move to Bu
-Math.bevel = Math.bevel or (x, y) ->
-				Math.sqrt x * x + y * y
-Math.rand = Math.rand or (from, to) ->
-			if to == undefined
-				to = from
-				from = 0
-			Math.random() * (to - from) + from
+# calculate the hypotenuse from the cathetuses
+Bu.bevel = (x, y) ->
+	Math.sqrt x * x + y * y
+
+# generate a random number between two numbers
+Bu.rand = (from, to) ->
+	if not to?
+		to = from
+		from = 0
+	Math.random() * (to - from) + from
+
+###
+# utils
+###
+
+# combine the given options(last item in arguments) with the default options
+Bu.combineOptions = (args, defaultOptions) ->
+	defaultOptions = {} if not defaultOptions?
+	givenOptions = args[args.length - 1]
+	if typeof givenOptions is 'object'
+		for i of givenOptions
+			defaultOptions[i] = givenOptions[i]
+	return defaultOptions
+
+###
+# polyfill
+###
+
+# define a property for a class
+Function::property = (prop, desc) ->
+	Object.defineProperty @prototype, prop, desc
+
+# Array
+Array::each or= (fn) ->
+	i = 0
+	while i < @length
+		fn @[i]
+		i++
+	return @
+
+Array::map or= (fn) ->
+	arr = []
+	i = 0
+	while i < @length
+		arr.push fn(@[i])
+		i++
+	return @
