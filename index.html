@@ -1,563 +1,573 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>青牛坊</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="./favicon.png">
+  <title>青牛坊</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="./favicon.png">
 
-    <style type="text/css">
+  <style type="text/css">
 
-/* overall */
-* {
-    margin: 0;
-    padding: 0;
-}
+    /* overall */
+    * {
+      margin: 0;
+      padding: 0;
+    }
 
-html {
-	height: 100%;
-    background-color: #eee;
-}
+    html {
+      height: 100%;
+      background-color: #eee;
+    }
 
-body {
-	font-family: Roboto, Corbel, Avenir, 'Lucida Grande', 'Lucida Sans', sans-serif;
-    font-size: 14.4px;
-    max-width: 800px;
-    height: 100%;
-    margin: 0 auto;
-    background-color: #f8f8f8;
-}
+    body {
+      font-family: Roboto, Corbel, Avenir, 'Lucida Grande', 'Lucida Sans', sans-serif;
+      font-size: 14px;
+      max-width: 800px;
+      height: 100%;
+      margin: 0 auto;
+      background-color: #f8f8f8;
+    }
 
-a {
-    color: black;
-    text-decoration: none;
-}
+    a {
+      color: black;
+      text-decoration: none;
+    }
 
-a:hover{
-	/*background: #ccc;*/
-    text-decoration: underline;
-	/*border: solid 1px gray;*/
-}
+    a:hover {
+      /*background: #ccc;*/
+      text-decoration: underline;
+      /*border: solid 1px gray;*/
+    }
 
-hr {
-	border: none;
-	height: 1px;
-	background-color: #CFE3DC;
-	margin-top: 24px;
-}
+    hr {
+      border: none;
+      height: 1px;
+      background-color: #CFE3DC;
+      margin-top: 24px;
+    }
 
-.title {
-	font-size: 2.6em;
-	padding: 0.6em;
-	background-color: #088;
-	color: #eee;
-	font-family: "Microsoft YaHei", SimHei, sans-serif;
-    font-weight: normal;
-}
+    .title {
+      font-size: 2.6em;
+      padding: 0.6em;
+      background-color: #088;
+      color: #eee;
+      font-family: "Microsoft YaHei", SimHei, sans-serif;
+      font-weight: normal;
+    }
 
-pre {
-	margin: 0px;
-	padding: 20px;
-	border: 1px solid #EAEAEA;
-    border-radius: 4px;
-    background-color: rgb(248, 248, 248);
-    font-size: 15px;
-}
+    pre {
+      margin: 0px;
+      padding: 20px;
+      border: 1px solid #EAEAEA;
+      border-radius: 4px;
+      background-color: rgb(248, 248, 248);
+      font-size: 15px;
+    }
 
-code, pre {
-	font-family: Inconsolata, Consolas, Menlo, Monaco, "Courier New", monospace;
-    color: #0C4B33;
-    font-size: 1.07em;
-}
+    code, pre {
+      font-family: Inconsolata, Consolas, Menlo, Monaco, "Courier New", monospace;
+      color: #0C4B33;
+      font-size: 1.07em;
+    }
 
-/* new window icon */
+    /* new window icon */
 
-a.new-window::after {
-	content: "";
-	display: inline-block;
-    width: 16px;
-    height: 2ex;
-    background: url(img/icons/new-window-32.png) no-repeat center;
-	background-size: 16px 16px;
-}
+    a.new-window::after {
+      content: "";
+      display: inline-block;
+      width: 16px;
+      height: 2ex;
+      background: url(img/icons/new-window-32.png) no-repeat center;
+      background-size: 16px 16px;
+    }
 
-.mainbody {
-	min-height: calc(100% - 40px);
-	border: solid #ccc;
-	border-width: 0 0.1em;
-	background-color: #f8f8f8;
-}
+    .mainbody {
+      min-height: calc(100% - 40px);
+      border: solid #ccc;
+      border-width: 0 0.1em;
+      background-color: #f8f8f8;
+    }
 
-footer {
-	height: 40px;
-    line-height: 40px;
-    background-color: #444;
-    color: #bbb;
-    text-align: center;
-    vertical-align: middle;
-}
+    footer {
+      height: 40px;
+      line-height: 40px;
+      background-color: #444;
+      color: #bbb;
+      text-align: center;
+      vertical-align: middle;
+    }
 
-/* nav */
+    /* nav */
 
-nav {
-	height: 32px;
-	border: solid 1px #ccc;
-	border-width: 1px 0;
-	background-color: #ddd;
-	-webkit-user-select: none;
-}
+    nav {
+      height: 32px;
+      border: solid 1px #ccc;
+      border-width: 1px 0;
+      background-color: #ddd;
+      -webkit-user-select: none;
+    }
 
-nav>a {
-	display: inline-block;
-	float: left;
-    height: 20px;
-	border: solid 1px #ccc;
-    border-width: 0 1px 0 0;
-	padding: 6px 10px;
-}
+    nav > a {
+      display: inline-block;
+      float: left;
+      height: 20px;
+      border: solid 1px #ccc;
+      border-width: 0 1px 0 0;
+      padding: 6px 10px;
+    }
 
-nav>a:hover {
-	background-color: #eee;
-    text-decoration: none;
-}
+    nav > a:hover {
+      background-color: #eee;
+      text-decoration: none;
+    }
 
-nav>a:active {
-	background-color: #ccc;
-}
+    nav > a:active {
+      background-color: #ccc;
+    }
 
-nav>a.selected {
-    height: 21px;
-	background-color: #f8f8f8;
-    color: #088;
-}
+    nav > a.selected {
+      height: 21px;
+      background-color: #f8f8f8;
+      color: #088;
+    }
 
-#socialPanel {
-	display: inline-flex;
-	float: right;
-    margin: 3px;
-	padding: 0.15em;
-	border-width: 0;
-	cursor: default;
-}
+    #socialPanel {
+      display: inline-flex;
+      float: right;
+      margin: 3px;
+      padding: 0.15em;
+      border-width: 0;
+      cursor: default;
+    }
 
-#imgLang {
-	width: 26px;
-	height: 18px;
-	padding: 1px;
-}
+    #imgLang {
+      width: 26px;
+      height: 18px;
+      padding: 1px;
+    }
 
-.icon {
-	width: 20px;
-	height: 20px;
-}
+    .icon {
+      width: 20px;
+      height: 20px;
+    }
 
-.social {
-	margin: 0 2px;
-}
+    .social {
+      margin: 0 2px;
+    }
 
-.social {
-	display: inline-block;
-	width: 20px;
-	height: 20px;
-	border: solid 1px #ddd;
-}
+    .social {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: solid 1px #ddd;
+    }
 
-.social:hover {
-	border-color: gray;
-}
+    .social:hover {
+      border-color: gray;
+    }
 
-/* blog */
+    /* blog */
 
-#blog_title {
-    text-align: center;
-    font-size: 2em;
-    margin: 28px 0 16px 0;
-}
+    #blog_title {
+      text-align: center;
+      font-size: 2em;
+      margin: 28px 0 16px 0;
+    }
 
-#blog_date {
-    text-align: center;
-    font-size: 1.1em;
-}
+    #blog_date {
+      text-align: center;
+      font-size: 1.1em;
+    }
 
-/* page */
+    /* page */
 
-article {
-	padding: 16px;
-	display: none;
-}
+    article {
+      padding: 16px;
+      display: none;
+    }
 
-.show {
-	display: block;
-}
+    .show {
+      display: block;
+    }
 
-#body_blog_list a {
-	display: block;
-}
+    #body_blog_list a {
+      display: block;
+    }
 
-#body_blog_text {
-	padding: 0;
-}
+    #body_blog_text {
+      padding: 0;
+    }
 
-iframe {
-	border: none;
-	width: 100%;
-}
+    iframe {
+      border: none;
+      width: 100%;
+    }
 
-/* work */
-.work-frame {
-	display: inline-block;
-	width: 240px;
-	height: 180px;
-	border: solid 1px gray;
-	margin: 4px;
-}
-
-.work-frame img {
-	width: 100%;
-	height: calc(100% - 30px);
-}
-
-.work-frame p {
-    position: relative;
-    top: -4px;
-    box-sizing: border-box;
-	border: solid 1px gray;
-	border-width: 1px 0 0 0;
-    line-height: 30px;
-	height: 30px;
-	background-color: #ddd;
-    padding: 0 6px;
-}
-
-/* 适应小屏 */
-@media screen and (max-width: 400px) {
+    /* work */
     .work-frame {
+      display: inline-block;
+      width: 240px;
+      height: 180px;
+      border: solid 1px gray;
+      margin: 4px;
+    }
+
+    .work-frame img {
+      width: 100%;
+      height: calc(100% - 30px);
+    }
+
+    .work-frame p {
+      position: relative;
+      top: -4px;
+      box-sizing: border-box;
+      border: solid 1px gray;
+      border-width: 1px 0 0 0;
+      line-height: 30px;
+      height: 30px;
+      background-color: #ddd;
+      padding: 0 6px;
+    }
+
+    /* 适应小屏 */
+    @media screen and (max-width: 400px) {
+      .work-frame {
         width: calc(100% - 8px);
         height: 100%;
+      }
     }
-}
-/*end of css*/
 
-    </style>
-    <script src="js/Za-core.min.js"></script>
+    /*end of css*/
+
+  </style>
+  <script src="js/Za-core.min.js"></script>
 
 </head>
 <body>
 <script type="text/javascript">
 
-	var hashPath;
+  var hashPath;
 
-	// dom
-	var header;
-	var reader;
-	var nav_blog, nav_works, nav_about;
-	var body_blog_list, body_blog_text, body_works, body_about;
+  // dom
+  var header;
+  var reader;
+  var nav_blog, nav_works, nav_about;
+  var body_blog_list, body_blog_text, body_works, body_about;
 
-	// i18n
-	var langData = {
-		"__title__" : {
-			"zh": "青牛坊",
-			"en": "Niu Workshop",
-		},
-		"title" : {
-			"zh": "青牛坊",
-			"en": "Niu Workshop",
-		},
-		"blog" : {
-			"zh": "博客",
-			"en": "Blog",
-		},
-		"works" : {
-			"zh": "作品",
-			"en": "Works",
-		},
-		"tools" : {
-			"zh": "工具",
-			"en": "Tools",
-		},
-		"about" : {
-			"zh": "关于",
-			"en": "About",
-		},
-		"tool_jsotg" : {
-			"zh": "JS手机编程",
-			"en": "JS OTG",
-		},
-		"tool_mde" : {
-			"zh": "Markdown编辑器",
-			"en": "Markdown Editor",
-		},
-		"tool_currencies" : {
-			"zh": "世界货币",
-			"en": "Currencies Of The World",
-		},
-		"tool_css_formatting" : {
-			"zh": "在线CSS格式化",
-			"en": "CSS Formatting Online",
-		},
-		"tool_html_2_jade" : {
-			"zh": "HTML到Jade转换器",
-			"en": "HTML to Jade",
-		},
-		"tool_url_docoder" : {
-			"zh": "URL解析",
-			"en": "URL decoder",
-		},
-		"tool_query_string_docoder" : {
-			"zh": "查询字符串解析",
-			"en": "Query String Decoder",
-		},
-		"tool_bach_address_gen" : {
-			"zh": "批量地址生成",
-			"en": "Batch Address Genarator",
-		},
-		"tool_css_formatting" : {
-			"zh": "在线CSS格式化",
-			"en": "CSS Formatting Online",
-		},
-		"tool_zh_trans" : {
-			"zh": "简繁转换",
-			"en": "Simplified/Traditional Chinese Translator",
-		},
-		"intro1" : {
-			"zh": "我叫牛俊为，我的梦想是当一名好的程序员。<br><br>我从高中开始自学编程至今，喜欢尝试各种不同的编程平台。从桌面平台的VB6到.NET，到移动平台的Java和Android，再到开源硬件的Arduino，最后到Web平台的JS和PHP。就这样，我在好奇心引领下，乐此不疲地学习了一项又一项的新技术。虽然看似学了不少东西，但真正深入研究了的其实并不多。<br><br>我目前的工作是Web开发。<br><br>我的业余爱好是打乒乓球和玩游戏，最喜欢的游戏是我的世界。",
-			"en": "I am Jarvis Niu. I am a program developer in Beijing. ",
-		},
-	}
-	var i18n = new Za.i18n(langData);
+  // i18n
+  var langData = {
+    "__title__": {
+      "zh": "青牛坊",
+      "en": "Niu Workshop",
+    },
+    "title": {
+      "zh": "青牛坊",
+      "en": "Niu Workshop",
+    },
+    "blog": {
+      "zh": "博客",
+      "en": "Blog",
+    },
+    "works": {
+      "zh": "作品",
+      "en": "Works",
+    },
+    "tools": {
+      "zh": "工具",
+      "en": "Tools",
+    },
+    "about": {
+      "zh": "关于",
+      "en": "About",
+    },
+    "tool_jsotg": {
+      "zh": "JS手机编程",
+      "en": "JS OTG",
+    },
+    "tool_mde": {
+      "zh": "Markdown编辑器",
+      "en": "Markdown Editor",
+    },
+    "tool_currencies": {
+      "zh": "世界货币",
+      "en": "Currencies Of The World",
+    },
+    "tool_css_formatting": {
+      "zh": "在线CSS格式化",
+      "en": "CSS Formatting Online",
+    },
+    "tool_html_2_jade": {
+      "zh": "HTML到Jade转换器",
+      "en": "HTML to Jade",
+    },
+    "tool_url_docoder": {
+      "zh": "URL解析",
+      "en": "URL decoder",
+    },
+    "tool_query_string_docoder": {
+      "zh": "查询字符串解析",
+      "en": "Query String Decoder",
+    },
+    "tool_bach_address_gen": {
+      "zh": "批量地址生成",
+      "en": "Batch Address Genarator",
+    },
+    "tool_zh_trans": {
+      "zh": "简繁转换",
+      "en": "Simplified/Traditional Chinese Translator",
+    },
+    "intro1": {
+      "zh": "我叫牛俊为，我的梦想是当一名好的程序员。<br><br>我从高中开始自学编程至今，喜欢尝试各种不同的编程平台。从桌面平台的VB6到.NET，到移动平台的Java和Android，再到开源硬件的Arduino，最后到Web平台的JS和PHP。就这样，我在好奇心引领下，乐此不疲地学习了一项又一项的新技术。虽然看似学了不少东西，但真正深入研究了的其实并不多。<br><br>我目前的工作是Web开发。<br><br>我的业余爱好是打乒乓球和玩游戏，最喜欢的游戏是我的世界。",
+      "en": "I am Jarvis Niu. I am a program developer in Beijing. ",
+    },
+  };
+  var i18n = new Za.i18n(langData);
 
-	// blog
-	var pendingTitle;  // 挂起的博文标题
-	var blogList = {
-		"cmd-abort-in-advance": {
-			title: "解决CMD命令不能连续执行的问题",
-			date: "2016-01-24" }, 
-		"d3.js-data-enter-exit": {
-			title: "d3.js中data(), enter() 和 exit()的作用",
-			date: "2015-08-17" },
-	};
+  // blog
+  var pendingTitle;  // 挂起的博文标题
+  var blogList = {
+    "cmd-abort-in-advance": {
+      title: "解决CMD命令不能连续执行的问题",
+      date: "2016-01-24"
+    },
+    "d3.js-data-enter-exit": {
+      title: "d3.js中data(), enter() 和 exit()的作用",
+      date: "2015-08-17"
+    },
+  };
 
-	function initBlogList() {
-		var str = '';
-		for (var url in blogList) {
-			if (!blogList.hasOwnProperty(url)) continue;
+  function initBlogList() {
+    var str = '';
+    for (var url in blogList) {
+      if (!blogList.hasOwnProperty(url)) continue;
 
-			var article = blogList[url];
-			str += '<a href="' + '#!/blog/' + url + '">';
-			str += article.title + " - " + article.date;
-			str += '</a>';
-		}
-		body_blog_list.innerHTML = str;
-	}
+      var article = blogList[url];
+      str += '<a href="' + '#!/blog/' + url + '">';
+      str += article.title + " - " + article.date;
+      str += '</a>';
+    }
+    body_blog_list.innerHTML = str;
+  }
 
-	// 初始化页面
-	function init() {
-		header = document.getElementsByTagName("h1")[0];
-		reader = document.getElementsByTagName("iframe")[0];
-		initNav();
-		initBlogList();
-		onSwitchLang();
-		window.addEventListener("hashchange", onHashChanged);
-	}
+  // 初始化页面
+  function init() {
+    header = document.getElementsByTagName("h1")[0];
+    reader = document.getElementsByTagName("iframe")[0];
+    initNav();
+    initBlogList();
+    onSwitchLang();
+    window.addEventListener("hashchange", onHashChanged);
+  }
 
-	document.addEventListener("DOMContentLoaded", init);
+  document.addEventListener("DOMContentLoaded", init);
 
-	function initNav() {
-		nav_blog = document.getElementById("nav_blog");
-		nav_works = document.getElementById("nav_works");
-		nav_about = document.getElementById("nav_about");
+  function initNav() {
+    nav_blog = document.getElementById("nav_blog");
+    nav_works = document.getElementById("nav_works");
+    nav_about = document.getElementById("nav_about");
 
-		body_blog_list = document.getElementById("body_blog_list");
-		body_blog_text = document.getElementById("body_blog_text");
-		body_works = document.getElementById("body_works");
-		body_about = document.getElementById("body_about");
+    body_blog_list = document.getElementById("body_blog_list");
+    body_blog_text = document.getElementById("body_blog_text");
+    body_works = document.getElementById("body_works");
+    body_about = document.getElementById("body_about");
 
-		hashPath = getHashPath();
+    hashPath = getHashPath();
 
-		onHashChanged();
-	}
+    onHashChanged();
+  }
 
-	// 路由
-	function onHashChanged() {
-			if (hashPath == "blog") {
-				nav_blog.classList.remove("selected");
-				body_blog_list.classList.remove("show");
-			} else if (hashPath == "works") {
-				nav_works.classList.remove("selected");
-				body_works.classList.remove("show");
-			} else if (hashPath == "tools") {
-				nav_tools.classList.remove("selected");
-				body_tools.classList.remove("show");
-			} else if (hashPath == "about") {
-				nav_about.classList.remove("selected");
-				body_about.classList.remove("show");
-			} else if (hashPath.indexOf("blog/") == 0 ) {
-				body_blog_text.classList.remove("show");
-				loadArticle("");
-			}
+  // 路由
+  function onHashChanged() {
+    if (hashPath == "blog") {
+      nav_blog.classList.remove("selected");
+      body_blog_list.classList.remove("show");
+    } else if (hashPath == "works") {
+      nav_works.classList.remove("selected");
+      body_works.classList.remove("show");
+    } else if (hashPath == "tools") {
+      nav_tools.classList.remove("selected");
+      body_tools.classList.remove("show");
+    } else if (hashPath == "about") {
+      nav_about.classList.remove("selected");
+      body_about.classList.remove("show");
+    } else if (hashPath.indexOf("blog/") == 0) {
+      body_blog_text.classList.remove("show");
+      loadArticle("");
+    }
 
-			hashPath = getHashPath();
+    hashPath = getHashPath();
 
-			if (hashPath == "blog") {
-				nav_blog.classList.add("selected");
-				body_blog_list.classList.add("show");
-			} else if (hashPath == "works") {
-				nav_works.classList.add("selected");
-				body_works.classList.add("show");
-			} else if (hashPath == "tools") {
-				nav_tools.classList.add("selected");
-				body_tools.classList.add("show");
-			} else if (hashPath == "about") {
-				nav_about.classList.add("selected");
-				body_about.classList.add("show");
-			} else if (hashPath.indexOf("blog/") == 0 ) {
-				var articleTitle = hashPath.substring(5);
-				loadArticle(articleTitle);
-				body_blog_text.classList.add("show");
-			} else {
-				alert("Error 404 \n 不存在此页面: " + hashPath);
-			}
-	}
+    if (hashPath == "blog") {
+      nav_blog.classList.add("selected");
+      body_blog_list.classList.add("show");
+    } else if (hashPath == "works") {
+      nav_works.classList.add("selected");
+      body_works.classList.add("show");
+    } else if (hashPath == "tools") {
+      nav_tools.classList.add("selected");
+      body_tools.classList.add("show");
+    } else if (hashPath == "about") {
+      nav_about.classList.add("selected");
+      body_about.classList.add("show");
+    } else if (hashPath.indexOf("blog/") == 0) {
+      var articleTitle = hashPath.substring(5);
+      loadArticle(articleTitle);
+      body_blog_text.classList.add("show");
+    } else {
+      alert("Error 404 \n 不存在此页面: " + hashPath);
+    }
+  }
 
 
-	function getHashPath() {
-		var path = location.hash.replace("#!/", "");
-		if (path == "") path = "blog";
-		return path;
-	}
+  function getHashPath() {
+    var path = location.hash.replace("#!/", "");
+    if (path == "") path = "blog";
+    return path;
+  }
 
-	function loadArticle(id) {
-		if (readerDom.window.ready) {
-			readerDom.window.loadArticle(id);
-			if (id !== "") setBlogTitle(id);
-		}
-		else
-			pendingTitle = id;
-	}
+  function loadArticle(id) {
+    if (readerDom.window.ready) {
+      readerDom.window.loadArticle(id);
+      if (id !== "") setBlogTitle(id);
+    }
+    else
+      pendingTitle = id;
+  }
 
-	function onLoadReader() {
-		if (pendingTitle){
-			readerDom.window.loadArticle(pendingTitle);
-			setBlogTitle(pendingTitle);
-		}
-	}
+  function onLoadReader() {
+    if (pendingTitle) {
+      readerDom.window.loadArticle(pendingTitle);
+      setBlogTitle(pendingTitle);
+    }
+  }
 
-	function setBlogTitle(id) {
-		document.querySelector("#blog_title").innerHTML = blogList[id].title;
-		document.querySelector("#blog_date").innerHTML = blogList[id].date;
-	}
+  function setBlogTitle(id) {
+    document.querySelector("#blog_title").innerHTML = blogList[id].title;
+    document.querySelector("#blog_date").innerHTML = blogList[id].date;
+  }
 
-	function setHeight(h) {
-		// console.log("Height: " + h);
-		reader.style.height = h + "px";
-	}
+  function setHeight(h) {
+    // console.log("Height: " + h);
+    reader.style.height = h + "px";
+  }
 
-	function switchLang() {
-		i18n.switchLang();
-		onSwitchLang()
-	}
+  function switchLang() {
+    i18n.switchLang();
+    onSwitchLang()
+  }
 
-	function onSwitchLang() {
-		if (i18n.lang == "en") {
-			document.getElementById("imgLang").src = "img/flags/flag-cn.png";
-			document.documentElement.setAttribute("lang", "en");
-		} else {
-			document.getElementById("imgLang").src = "img/flags/flag-us.png";
-			document.documentElement.setAttribute("lang", "zh");
-		}
-	}
+  function onSwitchLang() {
+    if (i18n.lang == "en") {
+      document.getElementById("imgLang").src = "img/flags/flag-cn.png";
+      document.documentElement.setAttribute("lang", "en");
+    } else {
+      document.getElementById("imgLang").src = "img/flags/flag-us.png";
+      document.documentElement.setAttribute("lang", "zh");
+    }
+  }
 
-	function setHashUrl(url) {
-		if (url === undefined || url == "") {
-			location.hash = "";
-		} else {
-			if (url.indexOf("/") != 0) url = "/" + url;
-			location.hash = "#!" + url;
-		}
-	}
+  function setHashUrl(url) {
+    if (url === undefined || url == "") {
+      location.hash = "";
+    } else {
+      if (url.indexOf("/") != 0) url = "/" + url;
+      location.hash = "#!" + url;
+    }
+  }
 
 </script>
 <div class="mainbody">
 
-    <header>
-		<h1 class="title">{{ title }}</h1>
-    </header>
+  <header>
+    <h1 class="title">{{ title }}</h1>
+  </header>
 
-	<nav>
-		<a id="nav_blog" href="#!/blog">{{ blog }}</a>
-		<a id="nav_works" href="#!/works">{{ works }}</a>
-		<a id="nav_tools" href="#!/tools">{{ tools }}</a>
-		<a id="nav_about" href="#!/about">{{ about }}</a>
+  <nav>
+    <a id="nav_blog" href="#!/blog">{{ blog }}</a>
+    <a id="nav_works" href="#!/works">{{ works }}</a>
+    <a id="nav_tools" href="#!/tools">{{ tools }}</a>
+    <a id="nav_about" href="#!/about">{{ about }}</a>
 		<span id="socialPanel">
 			<a class="social" target="_blank" href="http://github.com/jarvisniu">
-				<img class="icon" src="img/icons/github-32.png">
-			</a>
-			<img class="social" id="imgLang" src="img/flags/flag-us.png" onclick="switchLang(this);"></img>
+        <img class="icon" src="img/icons/github-32.png">
+      </a>
+			<img class="social" id="imgLang" src="img/flags/flag-us.png" onclick="switchLang(this);">
 		</span>
-	</nav>
+  </nav>
 
-	<article id="body_blog_list">
-	</article>
+  <article id="body_blog_list">
+  </article>
 
-	<article id="body_blog_text">
-		<h1 id="blog_title"></h1>
-		<div id="blog_date"></div>
-		<iframe name="readerDom" src="reader.html" onload="onLoadReader();"></iframe>
-	</article>
+  <article id="body_blog_text">
+    <h1 id="blog_title"></h1>
+    <div id="blog_date"></div>
+    <iframe name="readerDom" src="reader.html" onload="onLoadReader();"></iframe>
+  </article>
 
-	<article id="body_works2">
-		<p><a target="_blank" class="new-window" href="works/webgis/index.html">WebGIS</a></p>
-		<p><a target="_blank" class="new-window" href="works/2d_map/index.html">二维地图（未使用API）</a></p>
-		<p><a target="_blank" class="new-window" href="works/line_chart/index.html">可缩放折线图</a></p>
-	</article>
+  <article id="body_works">
+    <div class="work-frame">
+      <a href="Bu.js/" target="_blank">
+        <img src="Bu.js/logo.png">
+        <p>Bu.js</p>
+      </a>
+    </div>
+    <div class="work-frame">
+      <a href="works/webgis/" target="_blank">
+        <img src="img/works/webgis.jpg">
+        <p>WebGIS</p>
+      </a>
+    </div>
+    <div class="work-frame">
+      <a href="works/2d_map/" target="_blank">
+        <img src="img/works/2dmap.jpg">
+        <p>二维地图（未使用API）</p>
+      </a>
+    </div>
+    <div class="work-frame">
+      <a href="works/line_chart/" target="_blank">
+        <img src="img/works/chart.png">
+        <p>可缩放折线图</p>
+      </a>
+    </div>
+  </article>
 
-	<article id="body_works">
-		<div class="work-frame">
-			<a href="works/webgis/index.html" target="_blank">
-				<img src="img/works/webgis.jpg">
-				<p>WebGIS</p>
-			</a>
-		</div>
-		<div class="work-frame">
-			<a href="works/2d_map/index.html" target="_blank">
-				<img src="img/works/2dmap.jpg">
-				<p>二维地图（未使用API）</p>
-			</a>
-		</div>
-		<div class="work-frame">
-			<a href="works/line_chart/index.html" target="_blank">
-				<img src="img/works/chart.png">
-				<p>可缩放折线图</p>
-			</a>
-		</div>
-	</article>
+  <article id="body_tools">
+    <p><a target="_blank" class="new-window" href="tools/js_otg/index.html">{{ tool_jsotg }}</a></p>
+    <p><a target="_blank" class="new-window" href="tools/mde/index.html">{{ tool_mde }}</a></p>
+    <p><a target="_blank" class="new-window" href="tools/currencies.html">{{ tool_currencies }}</a></p>
+    <p><a target="_blank" class="new-window" href="http://html2jade.vida.io/">{{ tool_html_2_jade }}</a></p>
+    <p><a target="_blank" class="new-window" href="http://tool.oschina.net/codeformat/css">{{ tool_css_formatting }}</a>
+    </p>
+    <p><a target="_blank" class="new-window" href="tools/url-decoder.html">{{ tool_url_docoder }}</a></p>
+    <p><a target="_blank" class="new-window" href="tools/url-query-string-docoder.html">{{ tool_query_string_docoder
+      }}</a></p>
+    <p><a target="_blank" class="new-window" href="tools/zh-trans.html">{{ tool_zh_trans }}</a></p>
+    <p><a target="_blank" class="new-window" href="tools/batch-address-gen.html">{{ tool_bach_address_gen }}</a></p>
+  </article>
 
-	<article id="body_tools">
-		<p><a target="_blank" class="new-window" href="tools/js_otg/index.html">{{ tool_jsotg }}</a></p>
-		<p><a target="_blank" class="new-window" href="tools/mde/index.html">{{ tool_mde }}</a></p>
-		<p><a target="_blank" class="new-window" href="tools/currencies.html">{{ tool_currencies }}</a></p>
-		<p><a target="_blank" class="new-window" href="http://html2jade.vida.io/">{{ tool_html_2_jade }}</a></p>
-		<p><a target="_blank" class="new-window" href="http://tool.oschina.net/codeformat/css">{{ tool_css_formatting }}</a></p>
-		<p><a target="_blank" class="new-window" href="tools/url-decoder.html">{{ tool_url_docoder }}</a></p>
-		<p><a target="_blank" class="new-window" href="tools/url-query-string-docoder.html">{{ tool_query_string_docoder }}</a></p>
-		<p><a target="_blank" class="new-window" href="tools/zh-trans.html">{{ tool_zh_trans }}</a></p>
-		<p><a target="_blank" class="new-window" href="tools/batch-address-gen.html">{{ tool_bach_address_gen }}</a></p>
-	</article>
-
-	<article id="body_about">
-		<p>{{ intro1 }}</p>
-	</article>
+  <article id="body_about">
+    <p>{{ intro1 }}</p>
+  </article>
 
 </div>
 
 <footer>
-	© 2016 Jarvis Niu
+  © 2016 Jarvis Niu
 </footer>
+
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
   ga('create', 'UA-72558673-1', 'auto');
   ga('send', 'pageview');
