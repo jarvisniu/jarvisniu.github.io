@@ -5,17 +5,16 @@ Bu.Renderer = (function() {
   function Renderer() {
     this.drawShape = bind(this.drawShape, this);
     this.drawShapes = bind(this.drawShapes, this);
-    this.toggle = bind(this.toggle, this);
-    this["continue"] = bind(this["continue"], this);
-    this.pause = bind(this.pause, this);
-    var clearCanvas, onResize, options, tick, tickCount;
+    var onResize, options, tick;
     Bu.Event.apply(this);
     this.type = 'Renderer';
+    this.pixelRatio = (typeof window !== "undefined" && window !== null ? window.devicePixelRatio : void 0) || 1;
     options = Bu.combineOptions(arguments, {
       width: 800,
       height: 600,
       fps: 60,
       fillParent: false,
+      showKeyPoints: false,
       border: false
     });
     this.width = options.width;
@@ -23,7 +22,9 @@ Bu.Renderer = (function() {
     this.fps = options.fps;
     this.container = options.container;
     this.fillParent = options.fillParent;
-    this.isDrawKeyPoints = true;
+    this.isShowKeyPoints = options.showKeyPoints;
+    this.tickCount = 0;
+    this.isRunning = false;
     this.dom = document.createElement('canvas');
     this.context = this.dom.getContext('2d');
     this.context.textBaseline = 'top';
@@ -32,16 +33,16 @@ Bu.Renderer = (function() {
     }
     this.shapes = [];
     if (!this.fillParent) {
+      this.dom.style.width = Math.floor(this.width / this.pixelRatio) + 'px';
+      this.dom.style.height = Math.floor(this.height / this.pixelRatio) + 'px';
       this.dom.width = this.width;
       this.dom.height = this.height;
-      this.dom.style.width = this.width + 'px';
-      this.dom.style.height = this.height + 'px';
     }
     if ((options.border != null) && options.border) {
       this.dom.style.border = 'solid 1px gray';
     }
     this.dom.style.cursor = 'crosshair';
-    this.dom.style.boxSizing = 'border-box';
+    this.dom.style.boxSizing = 'content-box';
     this.dom.style.background = '#eee';
     this.dom.oncontextmenu = function() {
       return false;
@@ -50,9 +51,6 @@ Bu.Renderer = (function() {
     onResize = (function(_this) {
       return function() {
         var canvasRatio, containerRatio, height, width;
-        if (!_this.fillParent) {
-          return;
-        }
         canvasRatio = _this.dom.height / _this.dom.width;
         containerRatio = _this.container.clientHeight / _this.container.clientWidth;
         if (containerRatio < canvasRatio) {
@@ -62,39 +60,39 @@ Bu.Renderer = (function() {
           width = _this.container.clientWidth;
           height = width * containerRatio;
         }
-        _this.width = _this.dom.width = width;
-        _this.height = _this.dom.height = height;
+        _this.width = _this.dom.width = width * _this.pixelRatio;
+        _this.height = _this.dom.height = height * _this.pixelRatio;
         _this.dom.style.width = width + 'px';
-        return _this.dom.style.height = height + 'px';
+        _this.dom.style.height = height + 'px';
+        return _this.render();
       };
     })(this);
-    window.addEventListener('resize', onResize);
-    this.dom.addEventListener('DOMNodeInserted', onResize);
+    if (this.fillParent) {
+      window.addEventListener('resize', onResize);
+      this.dom.addEventListener('DOMNodeInserted', onResize);
+    }
     tick = (function(_this) {
       return function() {
-        if (!_this.isRunning) {
-          return;
+        _this.startRenderTime = Bu.now();
+        if (_this.isRunning) {
+          if (_this.clipMeter != null) {
+            _this.clipMeter.start();
+          }
+          _this.render();
+          _this.trigger('update', {
+            'tickCount': _this.tickCount
+          });
+          _this.tickCount += 1;
+          if (_this.clipMeter != null) {
+            _this.clipMeter.tick();
+          }
         }
-        if (_this.clipMeter != null) {
-          _this.clipMeter.start();
-        }
-        tickCount += 1;
-        _this.trigger('update', {
-          'tickCount': tickCount
-        });
-        clearCanvas();
-        _this.drawShapes(_this.shapes);
-        if (_this.clipMeter != null) {
-          return _this.clipMeter.tick();
-        }
+        _this.endRenderTime = Bu.now();
+        _this.nextRenderTime = Math.max(1000 / _this.fps - _this.endRenderTime + _this.startRenderTime, 1);
+        return setTimeout(tick, _this.nextRenderTime);
       };
     })(this);
-    setInterval(tick, 1000 / this.fps);
-    clearCanvas = (function(_this) {
-      return function() {
-        return _this.context.clearRect(0, 0, _this.width, _this.height);
-      };
-    })(this);
+    tick();
     if (this.container != null) {
       if (typeof this.container === 'string') {
         this.container = document.querySelector(this.container);
@@ -105,7 +103,6 @@ Bu.Renderer = (function() {
         };
       })(this), 100);
     }
-    tickCount = 0;
     this.isRunning = true;
   }
 
@@ -121,8 +118,36 @@ Bu.Renderer = (function() {
     return this.isRunning = !this.isRunning;
   };
 
+  Renderer.prototype.processArgs = function(e) {
+    return {
+      offsetX: e.offsetX * this.pixelRatio,
+      offsetY: e.offsetY * this.pixelRatio,
+      button: e.button
+    };
+  };
+
   Renderer.prototype.append = function(shape) {
-    return this.shapes.push(shape);
+    var j, len1, s;
+    if (shape instanceof Array) {
+      for (j = 0, len1 = shape.length; j < len1; j++) {
+        s = shape[j];
+        this.shapes.push(s);
+      }
+    } else {
+      this.shapes.push(shape);
+    }
+    return this;
+  };
+
+  Renderer.prototype.render = function() {
+    this.clearCanvas();
+    this.drawShapes(this.shapes);
+    return this;
+  };
+
+  Renderer.prototype.clearCanvas = function() {
+    this.context.clearRect(0, 0, this.width, this.height);
+    return this;
   };
 
   Renderer.prototype.drawShapes = function(shapes) {
@@ -183,7 +208,7 @@ Bu.Renderer = (function() {
     if (shape.children != null) {
       this.drawShapes(shape.children);
     }
-    if (this.isDrawKeyPoints) {
+    if (this.isShowKeyPoints) {
       this.drawShapes(shape.keyPoints);
     }
     return this;
@@ -197,8 +222,9 @@ Bu.Renderer = (function() {
     }
     if (shape.strokeStyle != null) {
       this.context.strokeStyle = shape.strokeStyle;
-      return this.context.strokeRect(shape.x - Bu.POINT_RENDER_SIZE / 2, shape.y - Bu.POINT_RENDER_SIZE / 2, Bu.POINT_RENDER_SIZE, Bu.POINT_RENDER_SIZE);
+      this.context.strokeRect(shape.x - Bu.POINT_RENDER_SIZE / 2, shape.y - Bu.POINT_RENDER_SIZE / 2, Bu.POINT_RENDER_SIZE, Bu.POINT_RENDER_SIZE);
     }
+    return this;
   };
 
   Renderer.prototype.drawLine = function(shape) {
@@ -208,14 +234,15 @@ Bu.Renderer = (function() {
       this.context.lineWidth = shape.lineWidth;
       this.context.beginPath();
       if (shape.dashStyle) {
-        this.context.dashedLine(shape.points[0].x, shape.points[0].y, shape.points[1].x, shape.points[1].y, shape.dashStyle, shape.dashDelta);
+        this.context.dashedLine(shape.points[0].x, shape.points[0].y, shape.points[1].x, shape.points[1].y, shape.dashStyle, shape.dashOffset);
       } else {
         this.context.lineTo(shape.points[0].x, shape.points[0].y);
         this.context.lineTo(shape.points[1].x, shape.points[1].y);
         this.context.closePath();
       }
-      return this.context.stroke();
+      this.context.stroke();
     }
+    return this;
   };
 
   Renderer.prototype.drawCircle = function(shape) {
@@ -230,8 +257,9 @@ Bu.Renderer = (function() {
     if (shape.strokeStyle != null) {
       this.context.strokeStyle = shape.strokeStyle;
       this.context.lineWidth = shape.lineWidth;
-      return this.context.stroke();
+      this.context.stroke();
     }
+    return this;
   };
 
   Renderer.prototype.drawTriangle = function(shape) {
@@ -252,12 +280,13 @@ Bu.Renderer = (function() {
       if (shape.dashStyle) {
         this.context.beginPath();
         pts = shape.points;
-        this.context.dashedLine(pts[0].x, pts[0].y, pts[1].x, pts[1].y, shape.dashStyle, shape.dashDelta);
-        this.context.dashedLine(pts[1].x, pts[1].y, pts[2].x, pts[2].y, shape.dashStyle, shape.dashDelta);
-        this.context.dashedLine(pts[2].x, pts[2].y, pts[0].x, pts[0].y, shape.dashStyle, shape.dashDelta);
+        this.context.dashedLine(pts[0].x, pts[0].y, pts[1].x, pts[1].y, shape.dashStyle, shape.dashOffset);
+        this.context.dashedLine(pts[1].x, pts[1].y, pts[2].x, pts[2].y, shape.dashStyle, shape.dashOffset);
+        this.context.dashedLine(pts[2].x, pts[2].y, pts[0].x, pts[0].y, shape.dashStyle, shape.dashOffset);
       }
-      return this.context.stroke();
+      this.context.stroke();
     }
+    return this;
   };
 
   Renderer.prototype.drawRectangle = function(shape) {
@@ -271,20 +300,21 @@ Bu.Renderer = (function() {
       this.context.strokeStyle = shape.strokeStyle;
       this.context.lineWidth = shape.lineWidth;
       if (!shape.dashStyle) {
-        return this.context.strokeRect(shape.position.x, shape.position.y, shape.size.width, shape.size.height);
+        this.context.strokeRect(shape.position.x, shape.position.y, shape.size.width, shape.size.height);
       } else {
         this.context.beginPath();
         xL = shape.position.x;
         xR = shape.pointRB.x;
         yT = shape.position.y;
         yB = shape.pointRB.y;
-        this.context.dashedLine(xL, yT, xR, yT, shape.dashStyle, shape.dashDelta);
-        this.context.dashedLine(xR, yT, xR, yB, shape.dashStyle, shape.dashDelta);
-        this.context.dashedLine(xR, yB, xL, yB, shape.dashStyle, shape.dashDelta);
-        this.context.dashedLine(xL, yB, xL, yT, shape.dashStyle, shape.dashDelta);
-        return this.context.stroke();
+        this.context.dashedLine(xL, yT, xR, yT, shape.dashStyle, shape.dashOffset);
+        this.context.dashedLine(xR, yT, xR, yB, shape.dashStyle, shape.dashOffset);
+        this.context.dashedLine(xR, yB, xL, yB, shape.dashStyle, shape.dashOffset);
+        this.context.dashedLine(xL, yB, xL, yT, shape.dashStyle, shape.dashOffset);
+        this.context.stroke();
       }
     }
+    return this;
   };
 
   Renderer.prototype.drawFan = function(shape) {
@@ -300,8 +330,9 @@ Bu.Renderer = (function() {
     if (shape.strokeStyle != null) {
       this.context.strokeStyle = shape.strokeStyle;
       this.context.lineWidth = shape.lineWidth;
-      return this.context.stroke();
+      this.context.stroke();
     }
+    return this;
   };
 
   Renderer.prototype.drawBow = function(shape) {
@@ -316,8 +347,9 @@ Bu.Renderer = (function() {
     if (shape.strokeStyle != null) {
       this.context.strokeStyle = shape.strokeStyle;
       this.context.lineWidth = shape.lineWidth;
-      return this.context.stroke();
+      this.context.stroke();
     }
+    return this;
   };
 
   Renderer.prototype.drawPolygon = function(shape) {
@@ -342,13 +374,14 @@ Bu.Renderer = (function() {
         this.context.beginPath();
         pts = shape.vertices;
         for (i = k = 0, ref1 = len - 1; 0 <= ref1 ? k < ref1 : k > ref1; i = 0 <= ref1 ? ++k : --k) {
-          this.context.dashedLine(pts[i].x, pts[i].y, pts[i + 1].x, pts[i + 1].y, shape.dashStyle, shape.dashDelta);
+          this.context.dashedLine(pts[i].x, pts[i].y, pts[i + 1].x, pts[i + 1].y, shape.dashStyle, shape.dashOffset);
         }
-        this.context.dashedLine(pts[len - 1].x, pts[len - 1].y, pts[0].x, pts[0].y, shape.dashStyle, shape.dashDelta);
+        this.context.dashedLine(pts[len - 1].x, pts[len - 1].y, pts[0].x, pts[0].y, shape.dashStyle, shape.dashOffset);
         this.context.stroke();
       }
-      return this.context.stroke();
+      this.context.stroke();
     }
+    return this;
   };
 
   Renderer.prototype.drawPolyline = function(shape) {
@@ -367,11 +400,12 @@ Bu.Renderer = (function() {
       } else {
         pts = shape.vertices;
         for (i = k = 0, ref1 = pts.length - 1; 0 <= ref1 ? k < ref1 : k > ref1; i = 0 <= ref1 ? ++k : --k) {
-          this.context.dashedLine(pts[i].x, pts[i].y, pts[i + 1].x, pts[i + 1].y, shape.dashStyle, shape.dashDelta);
+          this.context.dashedLine(pts[i].x, pts[i].y, pts[i + 1].x, pts[i + 1].y, shape.dashStyle, shape.dashOffset);
         }
       }
-      return this.context.stroke();
+      this.context.stroke();
     }
+    return this;
   };
 
   Renderer.prototype.drawPointText = function(shape) {
@@ -386,8 +420,9 @@ Bu.Renderer = (function() {
     }
     if (shape.fillStyle != null) {
       this.context.fillStyle = shape.fillStyle;
-      return this.context.fillText(shape.text, shape.x, shape.y);
+      this.context.fillText(shape.text, shape.x, shape.y);
     }
+    return this;
   };
 
   Renderer.prototype.drawImage = function(shape) {
@@ -402,18 +437,20 @@ Bu.Renderer = (function() {
       this.context.translate(shape.position.x, shape.position.y);
       this.context.rotate(shape.rotation);
       this.context.drawImage(shape.image, dx, dy, w, h);
-      return this.context.restore();
+      this.context.restore();
     }
+    return this;
   };
 
   Renderer.prototype.drawBounds = function(bounds) {
     this.context.strokeStyle = bounds.strokeStyle;
     this.context.beginPath();
-    this.context.dashedLine(bounds.x1, bounds.y1, bounds.x2, bounds.y1, bounds.dashStyle, bounds.dashDelta);
-    this.context.dashedLine(bounds.x2, bounds.y1, bounds.x2, bounds.y2, bounds.dashStyle, bounds.dashDelta);
-    this.context.dashedLine(bounds.x2, bounds.y2, bounds.x1, bounds.y2, bounds.dashStyle, bounds.dashDelta);
-    this.context.dashedLine(bounds.x1, bounds.y2, bounds.x1, bounds.y1, bounds.dashStyle, bounds.dashDelta);
-    return this.context.stroke();
+    this.context.dashedLine(bounds.x1, bounds.y1, bounds.x2, bounds.y1, bounds.dashStyle, bounds.dashOffset);
+    this.context.dashedLine(bounds.x2, bounds.y1, bounds.x2, bounds.y2, bounds.dashStyle, bounds.dashOffset);
+    this.context.dashedLine(bounds.x2, bounds.y2, bounds.x1, bounds.y2, bounds.dashStyle, bounds.dashOffset);
+    this.context.dashedLine(bounds.x1, bounds.y2, bounds.x1, bounds.y1, bounds.dashStyle, bounds.dashOffset);
+    this.context.stroke();
+    return this;
   };
 
   return Renderer;
@@ -424,13 +461,13 @@ Bu.Renderer = (function() {
   return function() {
     var CP;
     CP = window.CanvasRenderingContext2D && CanvasRenderingContext2D.prototype;
-    return CP.dashedLine = function(x, y, x2, y2, da, delta) {
+    return CP.dashedLine = function(x, y, x2, y2, da, offset) {
       var dc, di, draw, dx, dy, i, j, len, len1, lenU, rot;
       if (da == null) {
         da = Bu.DEFAULT_DASH_STYLE;
       }
-      if (delta == null) {
-        delta = 0;
+      if (offset == null) {
+        offset = 0;
       }
       this.save();
       dx = x2 - x;
@@ -447,8 +484,8 @@ Bu.Renderer = (function() {
         i = da[j];
         lenU += i;
       }
-      delta %= lenU;
-      x = delta;
+      offset %= lenU;
+      x = offset;
       this.moveTo(0, 0);
       while (len > x) {
         di += 1;
@@ -468,5 +505,3 @@ Bu.Renderer = (function() {
     };
   };
 })(this))();
-
-//# sourceMappingURL=Renderer.js.map

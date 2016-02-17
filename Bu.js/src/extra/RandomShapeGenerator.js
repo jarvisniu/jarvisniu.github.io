@@ -23,7 +23,7 @@ Bu.RandomShapeGenerator = (function() {
   RandomShapeGenerator.prototype.generateCircle = function() {
     var circle;
     circle = new Bu.Circle(this.randomX(), this.randomY(), this.randomRadius());
-    circle.center.label = "O";
+    circle.center.label = 'O';
     return circle;
   };
 
@@ -32,8 +32,8 @@ Bu.RandomShapeGenerator = (function() {
     aFrom = Bu.rand(Math.PI * 2);
     aTo = aFrom + Bu.rand(Math.PI / 2, Math.PI * 2);
     bow = new Bu.Bow(this.randomX(), this.randomY(), this.randomRadius(), aFrom, aTo);
-    bow.string.points[0].label = "A";
-    bow.string.points[1].label = "B";
+    bow.string.points[0].label = 'A';
+    bow.string.points[1].label = 'B';
     return bow;
   };
 
@@ -44,9 +44,9 @@ Bu.RandomShapeGenerator = (function() {
       points[i] = new Bu.Point(this.randomX(), this.randomY());
     }
     triangle = new Bu.Triangle(points[0], points[1], points[2]);
-    triangle.points[0].label = "A";
-    triangle.points[1].label = "B";
-    triangle.points[2].label = "C";
+    triangle.points[0].label = 'A';
+    triangle.points[1].label = 'B';
+    triangle.points[2].label = 'C';
     return triangle;
   };
 
@@ -59,8 +59,8 @@ Bu.RandomShapeGenerator = (function() {
     aFrom = Bu.rand(Math.PI * 2);
     aTo = aFrom + Bu.rand(Math.PI / 2, Math.PI * 2);
     fan = new Bu.Fan(this.randomX(), this.randomY(), this.randomRadius(), aFrom, aTo);
-    fan.string.points[0].label = "A";
-    fan.string.points[1].label = "B";
+    fan.string.points[0].label = 'A';
+    fan.string.points[1].label = 'B';
     return fan;
   };
 
@@ -69,21 +69,27 @@ Bu.RandomShapeGenerator = (function() {
     points = [];
     for (i = j = 0; j <= 3; i = ++j) {
       point = new Bu.Point(this.randomX(), this.randomY());
-      point.label = "P" + i;
+      point.label = 'P' + i;
       points.push(point);
     }
     return new Bu.Polygon(points);
   };
 
   RandomShapeGenerator.prototype.generateLine = function() {
-    return new Bu.Line(this.randomX(), this.randomY(), this.randomX(), this.randomY());
+    var line;
+    line = new Bu.Line(this.randomX(), this.randomY(), this.randomX(), this.randomY());
+    line.points[0].label = 'A';
+    line.points[1].label = 'B';
+    return line;
   };
 
   RandomShapeGenerator.prototype.generatePolyline = function() {
-    var i, j, polyline;
+    var i, j, point, polyline;
     polyline = new Bu.Polyline;
     for (i = j = 0; j <= 3; i = ++j) {
-      polyline.addPoint(new Bu.Point(this.randomX(), this.randomY()));
+      point = new Bu.Point(this.randomX(), this.randomY());
+      point.label = 'P' + i;
+      polyline.addPoint(point);
     }
     return polyline;
   };

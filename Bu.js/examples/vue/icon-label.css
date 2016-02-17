@@ -1,0 +1,53 @@
+.icon-label {
+  display: inline-block;
+  font-family: "Microsoft YaHei", Arial, sans-serif;
+  font-size: 13px;
+  height: 100%;
+  padding: 0 6px 0 2px;
+  cursor: default;
+  transition: background 0.3s;
+}
+.icon-label img {
+  margin: 4px;
+  width: 16px;
+  height: 16px;
+}
+.icon-label span {
+  line-height: 24px;
+}
+.theme-light .icon-label {
+  background-color: #e8e8e8;
+}
+.theme-light .icon-label:hover {
+  background-color: #d1d1d1;
+}
+.theme-light .icon-label:active {
+  background-color: #aaa;
+}
+.theme-light .icon-label.selected {
+  background-color: #b7b7b7;
+}
+.theme-light .icon-label.selected:hover {
+  background-color: #b7b7b7;
+}
+.theme-light .icon-label.selected:active {
+  background-color: #aaa;
+}
+.theme-dark .icon-label {
+  background-color: #444;
+}
+.theme-dark .icon-label:hover {
+  background-color: #646464;
+}
+.theme-dark .icon-label:active {
+  background-color: #323232;
+}
+.theme-dark .icon-label.selected {
+  background-color: #808080;
+}
+.theme-dark .icon-label.selected:hover {
+  background-color: #808080;
+}
+.theme-dark .icon-label.selected:active {
+  background-color: #323232;
+}

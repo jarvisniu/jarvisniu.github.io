@@ -1,0 +1,53 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+html,
+body {
+  height: 100%;
+  font-family: "Calibri Light", Calibri, Arial, sans-serif;
+  overflow: hidden;
+}
+#side {
+  position: absolute;
+  overflow-y: scroll;
+  box-sizing: border-box;
+  padding: 20px;
+  width: 250px;
+  height: 100%;
+  border-right: solid #bbb 2px;
+}
+#side #logo {
+  width: 180px;
+  height: 180px;
+}
+#side a {
+  display: block;
+  padding: 2px 0;
+  text-decoration: none;
+  color: #28b;
+}
+#side h1 {
+  font-size: 28px;
+  padding-bottom: 8px;
+}
+#side h1 a {
+  display: inline;
+}
+#side h1 a :hover {
+  text-decoration: underline;
+}
+#side h2 {
+  padding: 12px 0;
+  color: #666;
+  font-size: 20px;
+}
+#container {
+  padding-left: 250px;
+  width: calc(100% - 250px);
+  height: 100%;
+}
+#container iframe {
+  width: 100%;
+  height: 100%;
+}

@@ -101,5 +101,3 @@ Bu.Polyline = (function(superClass) {
   return Polyline;
 
 })(Bu.Object2D);
-
-//# sourceMappingURL=Polyline.js.map

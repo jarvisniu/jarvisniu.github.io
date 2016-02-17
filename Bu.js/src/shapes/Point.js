@@ -3,6 +3,8 @@ var extend = function(child, parent) { for (var key in parent) { if (hasProp.cal
   hasProp = {}.hasOwnProperty;
 
 Bu.Point = (function(superClass) {
+  var footPoint;
+
   extend(Point, superClass);
 
   function Point(x1, y1) {
@@ -67,8 +69,10 @@ Bu.Point = (function(superClass) {
     return Bu.bevel(this.x - point.x, this.y - point.y);
   };
 
+  footPoint = null;
+
   Point.prototype.isNear = function(target, limit) {
-    var verticalDist;
+    var i, isBetween1, isBetween2, len, line, ref, verticalDist;
     if (limit == null) {
       limit = Bu.DEFAULT_NEAR_DIST;
     }
@@ -77,7 +81,22 @@ Bu.Point = (function(superClass) {
         return this.distanceTo(target) < limit;
       case 'Line':
         verticalDist = target.distanceTo(this);
-        return verticalDist < limit;
+        if (footPoint == null) {
+          footPoint = new Bu.Point;
+        }
+        target.footPointFrom(this, footPoint);
+        isBetween1 = footPoint.distanceTo(target.points[0]) < target.length + Bu.DEFAULT_NEAR_DIST;
+        isBetween2 = footPoint.distanceTo(target.points[1]) < target.length + Bu.DEFAULT_NEAR_DIST;
+        return verticalDist < limit && isBetween1 && isBetween2;
+      case 'Polyline':
+        ref = target.lines;
+        for (i = 0, len = ref.length; i < len; i++) {
+          line = ref[i];
+          if (this.isNear(line)) {
+            return true;
+          }
+        }
+        return false;
     }
   };
 
@@ -95,5 +114,3 @@ Bu.Point.interpolate = function(p1, p2, k, p3) {
     return new Bu.Point(x, y);
   }
 };
-
-//# sourceMappingURL=Point.js.map

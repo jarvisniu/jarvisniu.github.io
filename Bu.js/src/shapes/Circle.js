@@ -74,5 +74,3 @@ Bu.Circle = (function(superClass) {
   return Circle;
 
 })(Bu.Object2D);
-
-//# sourceMappingURL=Circle.js.map

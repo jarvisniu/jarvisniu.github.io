@@ -4,7 +4,7 @@ Bu.Colorful = function() {
   this.fillStyle = Bu.DEFAULT_FILL_STYLE;
   this.dashStyle = false;
   this.lineWidth = 1;
-  this.dashDelta = 0;
+  this.dashOffset = 0;
   this.stroke = function(v) {
     if (v == null) {
       v = true;
@@ -57,5 +57,3 @@ Bu.Colorful = function() {
     return this;
   };
 };
-
-//# sourceMappingURL=Colorful.js.map

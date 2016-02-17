@@ -55,10 +55,10 @@
         renderer = new Bu.Renderer({
           container: document.body,
           border: true,
+          showKeyPoints: false,
           width: MARGIN * 2 + getCentralX(net.width - 1, net.height - 1) - OFFSET_X / 2,
           height: MARGIN * 2 + getCentralY(net.width - 1, net.height - 1) - OFFSET_Y / 2
         });
-        renderer.isDrawKeyPoints = false;
         renderer.dom.addEventListener("mousedown", onMouseDown);
         renderer.dom.addEventListener("mousemove", onMouseMove);
         renderer.dom.addEventListener("mouseup", onMouseUp);
@@ -165,8 +165,9 @@
           refreshNode(e.x, e.y);
         });
       
-        engine.on("noSolution", function () {
-          alert("no solution!");
+        engine.on("finished", function (e) {
+          console.log('result: ', e);
+          if (!e.success) alert("no solution!");
         });
       }
       
@@ -218,32 +219,36 @@
       }
       
       function onMouseDown(e) {
+        e = renderer.processArgs(e);
+      
         isMouseDown = true;
       
-        if (isMouseDown) {
-          var x = pixelToIndexX(e.offsetX, e.offsetY);
-          var y = pixelToIndexY(e.offsetX, e.offsetY);
+        var x = pixelToIndexX(e.offsetX, e.offsetY);
+        var y = pixelToIndexY(e.offsetX, e.offsetY);
+        if (x < 0 || y < 0 || x >= net.width || y >= net.height) return;
       
-          var node = net.getNode(x, y);
+        var node = net.getNode(x, y);
       
-          // left button
+        // left button
       
-          if (node.state == AStar.NODE_STATE_DEFAULT) {
-            node.state = AStar.NODE_STATE_OBSTACLE;
-            isClearing = false;
-          } else if (node.state == AStar.NODE_STATE_OBSTACLE) {
-            node.state = AStar.NODE_STATE_DEFAULT;
-            isClearing = true;
-          }
-      
-          engine.trigger("nodeChanged", node.position);
+        if (node.state == AStar.NODE_STATE_DEFAULT) {
+          node.state = AStar.NODE_STATE_OBSTACLE;
+          isClearing = false;
+        } else if (node.state == AStar.NODE_STATE_OBSTACLE) {
+          node.state = AStar.NODE_STATE_DEFAULT;
+          isClearing = true;
         }
+      
+        engine.trigger("nodeChanged", node.position);
       }
       
       function onMouseMove(e) {
+        e = renderer.processArgs(e);
+      
         if (isMouseDown) {
           var x = pixelToIndexX(e.offsetX, e.offsetY);
           var y = pixelToIndexY(e.offsetX, e.offsetY);
+          if (x < 0 || y < 0 || x >= net.width || y >= net.height) return;
       
           var node = net.getNode(x, y);
       

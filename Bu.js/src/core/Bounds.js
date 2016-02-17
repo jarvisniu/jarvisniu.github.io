@@ -16,7 +16,7 @@ Bu.Bounds = (function(superClass) {
     this.point2 = new Bu.Point;
     this.strokeStyle = Bu.DEFAULT_BOUND_STROKE_STYLE;
     this.dashStyle = Bu.DEFAULT_BOUND_DASH_STYLE;
-    this.dashDelta = 0;
+    this.dashOffset = 0;
     switch (this.target.type) {
       case 'Line':
       case 'Triangle':
@@ -116,5 +116,3 @@ Bu.Bounds = (function(superClass) {
   return Bounds;
 
 })(Bu.Object2D);
-
-//# sourceMappingURL=Bounds.js.map

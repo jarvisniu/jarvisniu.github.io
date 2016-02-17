@@ -2,7 +2,7 @@
 ((function(_this) {
   return function() {
     var i, len, lib, libs, results;
-    libs = ['Bu', 'math/Vector', 'core/Event', 'core/MicroJQuery', 'core/Object2D', 'core/Size', 'core/Bounds', 'core/Colorful', 'shapes/Point', 'shapes/Line', 'shapes/Circle', 'shapes/Triangle', 'shapes/Rectangle', 'shapes/Fan', 'shapes/Bow', 'shapes/Polygon', 'shapes/Polyline', 'drawable/PointText', 'drawable/Image', 'morph/PolylineMorph', 'reactor/ReactorBase', 'reactor/MovePointReactor', 'reactor/DrawCircleReactor', 'reactor/DrawPointReactor', 'reactor/DrawCircleDiameterReactor', 'reactor/DrawPolylineReactor', 'reactor/DrawPolygonReactor', 'renderer/Renderer', 'extra/RandomShapeGenerator'];
+    libs = ['Bu', 'math/Vector', 'core/Event', 'core/MicroJQuery', 'core/Object2D', 'core/Size', 'core/Bounds', 'core/Colorful', 'shapes/Point', 'shapes/Line', 'shapes/Circle', 'shapes/Triangle', 'shapes/Rectangle', 'shapes/Fan', 'shapes/Bow', 'shapes/Polygon', 'shapes/Polyline', 'drawable/PointText', 'drawable/Image', 'renderer/Renderer', 'extra/RandomShapeGenerator'];
     results = [];
     for (i = 0, len = libs.length; i < len; i++) {
       lib = libs[i];
@@ -11,5 +11,3 @@
     return results;
   };
 })(this))();
-
-//# sourceMappingURL=Bu.dev.js.map

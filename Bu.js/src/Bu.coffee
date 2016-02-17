@@ -1,7 +1,7 @@
 # namespace and constants
 
 @Bu =
-	version: '0.1.0'
+	version: '0.3.0'
 
 	# shapes related
 	DEFAULT_STROKE_STYLE:       '#048'
@@ -61,6 +61,10 @@ Bu.rand = (from, to) ->
 # utils
 ###
 
+# get current time
+# TODO use performance
+Bu.now = Date.now
+
 # combine the given options(last item in arguments) with the default options
 Bu.combineOptions = (args, defaultOptions) ->
 	defaultOptions = {} if not defaultOptions?
@@ -77,6 +81,31 @@ Bu.combineOptions = (args, defaultOptions) ->
 # define a property for a class
 Function::property = (prop, desc) ->
 	Object.defineProperty @prototype, prop, desc
+
+# throttle
+Function::throttle = (limit = 0.5) ->
+	currTime = 0
+	lastTime = 0
+
+	return () =>
+		currTime = Date.now()
+		if currTime - lastTime > limit * 1000
+			@apply null, arguments
+			lastTime = currTime
+
+# debounce
+Function::debounce = (delay = 0.5) ->
+	args = null
+	timeout = null
+
+	later = =>
+		@apply null, args
+
+	return () ->
+		args = arguments
+		clearTimeout timeout
+		timeout = setTimeout later, delay * 1000
+
 
 # Array
 Array::each or= (fn) ->

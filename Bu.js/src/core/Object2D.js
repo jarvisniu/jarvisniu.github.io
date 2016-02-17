@@ -28,5 +28,3 @@ Bu.Object2D = (function() {
   return Object2D;
 
 })();
-
-//# sourceMappingURL=Object2D.js.map

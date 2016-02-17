@@ -16,143 +16,195 @@
  *   1. g: distance that has gone
  *   2. h: shortest distance to the destination
  *   3. f: g + h
+ *
+ * API:
+ *   finished: bool - Whether the algorithm is finished
+ *   isRunning: bool - Whether the algorithm is running
+ *   fps: bool - AutoStep speed
+ *   result: Object - The result of resolving
+ *     success: bool - Whether reach the end
+ *     time: number - Elapsed time used to solve the process
+ *     step: int - Steps used in the
+ *   init() - Init the variables
+ *   step() - Next step of solving
+ *   run(fps) - Run the algorithm. If the parameter fps is given, the process will be animated.
+ *
+ *
+ * Events:
+ *   nodeChanged: a node state is changed, dedicated to refresh the UI
+ *   finished: the algorithm is finished, no matter if success
  */
 var hasProp = {}.hasOwnProperty;
 
-AStar.Engine = function(net) {
-  var FPS, _net, _step, autoStep, compareNodes, finished, init, listClose, listOpen, nodeId, recalculateLastNode, self, stepCount, traceShortestPath;
-  Bu.Event.apply(this);
-  self = this;
-  _net = net;
-  finished = false;
-  FPS = 10;
-  listOpen = [];
-  listClose = [];
-  nodeId = 0;
-  stepCount = 0;
-  this.noSolution = false;
-  this.result = {};
-  init = function() {
+AStar.Engine = (function() {
+  function Engine(net) {
+    var _end, _net, _step, autoStep, compareNodes, listClose, listOpen, nodeId, recalculateLastNode, startTime, stepCount, traceShortestPath;
+    Bu.Event.apply(this);
+    _net = net;
+    this.finished = false;
+    this.isRunning = false;
+    this.fps = 10;
     listOpen = [];
     listClose = [];
-    _net.startNode.g = 0;
-    _net.startNode.h = parseInt(_net.calcShortestDistance(_net.startNode, _net.endNode));
-    self.trigger('nodeChanged', _net.startNode.position);
-    return listOpen.push(_net.startNode);
-  };
-  this.step = function() {
-    if (!finished) {
-      _step();
-    } else {
-      console.log('It has been finished.');
-    }
-  };
-  this.run = function(fps) {
-    FPS = fps || FPS;
-    if (fps) {
-      autoStep();
-    } else {
-      while (!finished) {
-        _step();
-      }
-    }
-  };
-  autoStep = function() {
-    if (!finished) {
-      _step();
-      setTimeout(autoStep, 1000 / FPS);
-    }
-  };
-  _step = function() {
-    var currentNode, i, neighbour, neighbours;
-    if (self.noSolution) {
-      return;
-    }
-    if (listOpen.length === 0) {
-      init();
-    }
-    currentNode = listOpen.shift();
-    if (currentNode === void 0) {
-      self.noSolution = true;
-      finished = true;
-      self.trigger('finish', self.result);
-      self.trigger('noSolution', self.result);
-      return;
-    }
-    if (currentNode.state !== AStar.NODE_STATE_START) {
-      currentNode.state = AStar.NODE_STATE_DETECTED;
-      self.trigger('nodeChanged', currentNode.position);
-    }
-    listClose.push(currentNode);
-    recalculateLastNode(currentNode);
-    neighbours = _net.getNeighboursOf(currentNode);
-    for (i in neighbours) {
-      if (!hasProp.call(neighbours, i)) continue;
-      neighbour = neighbours[i];
-      if (listClose.indexOf(neighbour) > -1) {
-
-      } else if (listOpen.indexOf(neighbour) > -1) {
-
-      } else {
-        neighbour.prevNode = currentNode;
-        neighbour.id = nodeId++;
-        if (neighbour.state !== AStar.NODE_STATE_END) {
-          neighbour.state = AStar.NODE_STATE_REACHABLE;
+    nodeId = 0;
+    startTime = 0;
+    stepCount = 0;
+    this.result = {};
+    this.init = (function(_this) {
+      return function() {
+        listOpen = [];
+        listClose = [];
+        stepCount = 0;
+        _net.startNode.g = 0;
+        _net.startNode.h = parseInt(_net.calcShortestDistance(_net.startNode, _net.endNode));
+        _this.trigger('nodeChanged', _net.startNode.position);
+        return listOpen.push(_net.startNode);
+      };
+    })(this);
+    this.step = (function(_this) {
+      return function() {
+        if (!_this.finished) {
+          return _step();
+        } else {
+          return console.log('It has been finished.');
         }
-        neighbour.g = currentNode.g + neighbour.calcShortestDistanceTo(currentNode);
-        neighbour.h = neighbour.calcShortestDistanceTo(_net.endNode);
-        self.trigger('nodeChanged', neighbour.position);
-        recalculateLastNode(neighbour);
-        listOpen.push(neighbour);
-      }
-    }
-    listOpen.sort(compareNodes);
-    if (listOpen[0] === _net.endNode) {
-      _net.endNode.state = AStar.NODE_STATE_END;
-      self.trigger('nodeChanged', _net.endNode.position);
-      traceShortestPath();
-      finished = true;
-      self.trigger('finish', self.result);
-      self.trigger('reachEnd', stepCount);
-    }
-    stepCount++;
-  };
-  compareNodes = function(node1, node2) {
-    var delta;
-    delta = node1.f() - node2.f();
-    if (delta === 0) {
-      delta = node2.id - node1.id;
-    }
-    return delta;
-  };
-  recalculateLastNode = function(node) {
-    var g0, g1, i, neighbour, neighbours;
-    neighbours = _net.getNeighboursOf(node);
-    for (i in neighbours) {
-      if (!hasProp.call(neighbours, i)) continue;
-      neighbour = neighbours[i];
-      if (neighbour.state > AStar.NODE_STATE_DEFAULT && neighbour.state < AStar.NODE_STATE_OBSTACLE && neighbour.state !== AStar.NODE_STATE_END) {
-        g0 = node.g;
-        g1 = neighbour.g + node.calcShortestDistanceTo(neighbour);
-        if (g0 > g1) {
-          node.prevNode = neighbour;
-          node.g = g1;
-          self.trigger('nodeChanged', node.position);
+      };
+    })(this);
+    this.run = (function(_this) {
+      return function(fps) {
+        var results;
+        if (fps != null) {
+          _this.fps = fps;
         }
+        if (!_this.isRunning) {
+          _this.init();
+          _this.isRunning = true;
+          startTime = Date.now();
+          if (fps) {
+            return autoStep();
+          } else {
+            results = [];
+            while (!_this.finished) {
+              results.push(_step());
+            }
+            return results;
+          }
+        }
+      };
+    })(this);
+    autoStep = (function(_this) {
+      return function() {
+        if (!_this.finished) {
+          _step();
+          return setTimeout(autoStep, 1000 / _this.fps);
+        }
+      };
+    })(this);
+    _step = (function(_this) {
+      return function() {
+        var currentNode, i, neighbour, neighbours;
+        currentNode = listOpen.shift();
+        if (currentNode == null) {
+          _end(false);
+          return;
+        }
+        if (currentNode.state !== AStar.NODE_STATE_START) {
+          currentNode.state = AStar.NODE_STATE_DETECTED;
+          _this.trigger('nodeChanged', currentNode.position);
+        }
+        listClose.push(currentNode);
+        recalculateLastNode(currentNode);
+        neighbours = _net.getNeighboursOf(currentNode);
+        for (i in neighbours) {
+          if (!hasProp.call(neighbours, i)) continue;
+          neighbour = neighbours[i];
+          if (listClose.indexOf(neighbour) > -1) {
+
+          } else if (listOpen.indexOf(neighbour) > -1) {
+
+          } else {
+            neighbour.prevNode = currentNode;
+            neighbour.id = nodeId++;
+            if (neighbour.state !== AStar.NODE_STATE_END) {
+              neighbour.state = AStar.NODE_STATE_REACHABLE;
+            }
+            neighbour.g = currentNode.g + neighbour.calcShortestDistanceTo(currentNode);
+            neighbour.h = neighbour.calcShortestDistanceTo(_net.endNode);
+            _this.trigger('nodeChanged', neighbour.position);
+            recalculateLastNode(neighbour);
+            listOpen.push(neighbour);
+          }
+        }
+        listOpen.sort(compareNodes);
+        if (listOpen[0] === _net.endNode) {
+          _net.endNode.state = AStar.NODE_STATE_END;
+          _this.trigger('nodeChanged', _net.endNode.position);
+          traceShortestPath();
+          _end(true);
+        }
+        return stepCount++;
+      };
+    })(this);
+    _end = (function(_this) {
+      return function(success) {
+        _this.finished = true;
+        _this.isRunning = false;
+        _this.result.success = success;
+        _this.result.time = Math.round(Date.now() - startTime) + 'ms';
+        _this.result.step = stepCount;
+        return _this.trigger('finished', _this.result);
+      };
+    })(this);
+    compareNodes = function(node1, node2) {
+      var delta;
+      delta = node1.f() - node2.f();
+      if (delta === 0) {
+        delta = node2.id - node1.id;
       }
-    }
-  };
-  traceShortestPath = function() {
-    var count, middleNode;
-    middleNode = _net.endNode.prevNode;
-    count = 0;
-    while (middleNode !== _net.startNode && count < 100) {
-      middleNode.state = AStar.NODE_STATE_SHORTEST;
-      self.trigger('nodeChanged', middleNode.position);
-      middleNode = middleNode.prevNode;
-      count++;
-    }
-  };
-};
+      return delta;
+    };
+    recalculateLastNode = (function(_this) {
+      return function(node) {
+        var g0, g1, i, neighbour, neighbours, results;
+        neighbours = _net.getNeighboursOf(node);
+        results = [];
+        for (i in neighbours) {
+          if (!hasProp.call(neighbours, i)) continue;
+          neighbour = neighbours[i];
+          if (neighbour.state > AStar.NODE_STATE_DEFAULT && neighbour.state < AStar.NODE_STATE_OBSTACLE && neighbour.state !== AStar.NODE_STATE_END) {
+            g0 = node.g;
+            g1 = neighbour.g + node.calcShortestDistanceTo(neighbour);
+            if (g0 > g1) {
+              node.prevNode = neighbour;
+              node.g = g1;
+              results.push(_this.trigger('nodeChanged', node.position));
+            } else {
+              results.push(void 0);
+            }
+          } else {
+            results.push(void 0);
+          }
+        }
+        return results;
+      };
+    })(this);
+    traceShortestPath = (function(_this) {
+      return function() {
+        var middleNode, results;
+        middleNode = _net.endNode.prevNode;
+        results = [];
+        while (middleNode !== _net.startNode) {
+          middleNode.state = AStar.NODE_STATE_SHORTEST;
+          _this.trigger('nodeChanged', middleNode.position);
+          results.push(middleNode = middleNode.prevNode);
+        }
+        return results;
+      };
+    })(this);
+  }
+
+  return Engine;
+
+})();
 
 //# sourceMappingURL=Engine.js.map

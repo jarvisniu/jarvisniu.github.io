@@ -36,5 +36,3 @@ Bu.Bow = (function(superClass) {
   return Bow;
 
 })(Bu.Object2D);
-
-//# sourceMappingURL=Bow.js.map

@@ -1,0 +1,15 @@
+.vertical-toolbar {
+  border: solid 1px #f00;
+  box-sizing: border-box;
+  width: 32px;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+.theme-light .vertical-toolbar {
+  border-color: #a0a0a0;
+  background-color: #e8e8e8;
+}
+.theme-dark .vertical-toolbar {
+  border-color: #a0a0a0;
+  background-color: #444;
+}

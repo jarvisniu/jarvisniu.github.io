@@ -108,5 +108,3 @@ Bu.Polygon = (function(superClass) {
   return Polygon;
 
 })(Bu.Object2D);
-
-//# sourceMappingURL=Polygon.js.map

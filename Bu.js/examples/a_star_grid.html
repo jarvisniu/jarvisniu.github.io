@@ -59,10 +59,10 @@
         renderer = new Bu.Renderer({
           container: document.body,
           border: true,
+          showKeyPoints: false,
           width: OFFSET * net.width + MARGIN * 2,
           height: OFFSET * net.height + MARGIN * 2
         });
-        renderer.isDrawKeyPoints = false;
         renderer.dom.addEventListener("mousedown", onMouseDown);
         renderer.dom.addEventListener("mousemove", onMouseMove);
         renderer.dom.addEventListener("mouseup", onMouseUp);
@@ -169,8 +169,9 @@
           refreshNode(e.x, e.y);
         });
       
-        engine.on("noSolution", function (e) {
-          alert("no solution!");
+        engine.on("finished", function (e) {
+          console.log('result: ', e);
+          if (!e.success) alert("no solution!");
         });
       
       }
@@ -210,8 +211,12 @@
       }
       
       function onMouseDown(e) {
+        isMouseDown = true;
+        e = renderer.processArgs(e);
+      
         var x = pixelToIndexX(e.offsetX, e.offsetY);
         var y = pixelToIndexY(e.offsetX, e.offsetY);
+        if (x < 0 || y < 0 || x >= net.width || y >= net.height) return;
       
         var node = net.getNode(x, y);
       
@@ -230,14 +235,16 @@
           // right button
           console.log("prevNode", node.prevNode);
         }
-        isMouseDown = true;
       }
       
       function onMouseMove(e) {
+        e = renderer.processArgs(e);
+      
         if (isMouseDown && e.button == 0) {
       
           var x = pixelToIndexX(e.offsetX, e.offsetY);
           var y = pixelToIndexY(e.offsetX, e.offsetY);
+          if (x < 0 || y < 0 || x >= net.width || y >= net.height) return;
       
           var node = net.getNode(x, y);
       

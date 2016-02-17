@@ -32,5 +32,3 @@ Bu.Fan = (function(superClass) {
   return Fan;
 
 })(Bu.Object2D);
-
-//# sourceMappingURL=Fan.js.map

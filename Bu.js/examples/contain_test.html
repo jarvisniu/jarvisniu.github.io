@@ -30,6 +30,7 @@
       function init() {
         renderer = new Bu.Renderer({
           container: "#container",
+          showKeyPoints: true,
           fillParent: true
         });
       
@@ -41,6 +42,8 @@
       }
       
       function onMouseMove(e) {
+        e = renderer.processArgs(e);
+      
         mousePos.x = e.offsetX;
         mousePos.y = e.offsetY;
       

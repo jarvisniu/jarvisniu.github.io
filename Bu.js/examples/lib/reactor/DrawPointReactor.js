@@ -5,27 +5,30 @@ var extend = function(child, parent) { for (var key in parent) { if (hasProp.cal
 Bu.DrawPointReactor = (function(superClass) {
   extend(DrawPointReactor, superClass);
 
-  function DrawPointReactor(renderer1) {
-    var drawingPoint, mouseButton, mouseDownPos, mousePos, renderer;
-    this.renderer = renderer1;
+  function DrawPointReactor(renderer) {
+    var drawingPoint, mouseButton, mouseDownPos, mousePos;
+    this.renderer = renderer;
     DrawPointReactor.__super__.constructor.call(this);
-    renderer = this.renderer;
     mouseButton = Bu.MOUSE_BUTTON_NONE;
     mousePos = new Bu.Point;
     mouseDownPos = new Bu.Vector;
     drawingPoint = null;
-    this.onMouseDown = function(e) {
-      mouseDownPos.set(e.offsetX, e.offsetY);
-      mouseButton = e.button;
-      drawingPoint = new Bu.Point(e.offsetX, e.offsetY);
-      return renderer.append(drawingPoint);
-    };
-    this.onMouseMove = function(e) {
-      mousePos.set(e.offsetX, e.offsetY);
-      if (mouseButton === Bu.MOUSE_BUTTON_LEFT) {
-        return drawingPoint.set(mousePos.x, mousePos.y);
-      }
-    };
+    this.onMouseDown = (function(_this) {
+      return function(e) {
+        mouseDownPos.set(e.offsetX, e.offsetY);
+        mouseButton = e.button;
+        drawingPoint = new Bu.Point(e.offsetX, e.offsetY);
+        return _this.renderer.append(drawingPoint);
+      };
+    })(this);
+    this.onMouseMove = (function(_this) {
+      return function(e) {
+        mousePos.set(e.offsetX, e.offsetY);
+        if (mouseButton === Bu.MOUSE_BUTTON_LEFT) {
+          return drawingPoint.set(mousePos.x, mousePos.y);
+        }
+      };
+    })(this);
     this.onMouseUp = (function(_this) {
       return function() {
         mouseButton = Bu.MOUSE_BUTTON_NONE;

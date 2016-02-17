@@ -2,7 +2,7 @@
 var base, base1;
 
 this.Bu = {
-  version: '0.1.0',
+  version: '0.3.0',
   DEFAULT_STROKE_STYLE: '#048',
   DEFAULT_FILL_STYLE: 'rgba(64, 128, 192, 0.5)',
   DEFAULT_DASH_STYLE: [8, 4],
@@ -56,6 +56,8 @@ Bu.rand = function(from, to) {
  * utils
  */
 
+Bu.now = Date.now;
+
 Bu.combineOptions = function(args, defaultOptions) {
   var givenOptions, i;
   if (defaultOptions == null) {
@@ -77,6 +79,43 @@ Bu.combineOptions = function(args, defaultOptions) {
 
 Function.prototype.property = function(prop, desc) {
   return Object.defineProperty(this.prototype, prop, desc);
+};
+
+Function.prototype.throttle = function(limit) {
+  var currTime, lastTime;
+  if (limit == null) {
+    limit = 0.5;
+  }
+  currTime = 0;
+  lastTime = 0;
+  return (function(_this) {
+    return function() {
+      currTime = Date.now();
+      if (currTime - lastTime > limit * 1000) {
+        _this.apply(null, arguments);
+        return lastTime = currTime;
+      }
+    };
+  })(this);
+};
+
+Function.prototype.debounce = function(delay) {
+  var args, later, timeout;
+  if (delay == null) {
+    delay = 0.5;
+  }
+  args = null;
+  timeout = null;
+  later = (function(_this) {
+    return function() {
+      return _this.apply(null, args);
+    };
+  })(this);
+  return function() {
+    args = arguments;
+    clearTimeout(timeout);
+    return timeout = setTimeout(later, delay * 1000);
+  };
 };
 
 (base = Array.prototype).each || (base.each = function(fn) {
