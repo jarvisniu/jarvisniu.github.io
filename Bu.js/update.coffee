@@ -4,4 +4,5 @@
 2. 复制examples, lib, logo.png和src内的除.jade, .styl和.gitignore
 3. 移动index.html和style到root
 4. hashPath = location.hash.replace("#!/", ""); => "" 改为 "examples/"
+5. logo.src = "../" -> "./"
 ###
