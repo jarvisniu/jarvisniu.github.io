@@ -5,9 +5,9 @@ var extend = function(child, parent) { for (var key in parent) { if (hasProp.cal
 Bu.DrawPointReactor = (function(superClass) {
   extend(DrawPointReactor, superClass);
 
-  function DrawPointReactor(renderer) {
+  function DrawPointReactor(bu) {
     var drawingPoint, mouseButton, mouseDownPos, mousePos;
-    this.renderer = renderer;
+    this.bu = bu;
     DrawPointReactor.__super__.constructor.call(this);
     mouseButton = Bu.MOUSE_BUTTON_NONE;
     mousePos = new Bu.Point;
@@ -18,7 +18,7 @@ Bu.DrawPointReactor = (function(superClass) {
         mouseDownPos.set(e.offsetX, e.offsetY);
         mouseButton = e.button;
         drawingPoint = new Bu.Point(e.offsetX, e.offsetY);
-        return _this.renderer.append(drawingPoint);
+        return _this.bu.append(drawingPoint);
       };
     })(this);
     this.onMouseMove = (function(_this) {

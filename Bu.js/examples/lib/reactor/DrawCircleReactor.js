@@ -5,9 +5,9 @@ var extend = function(child, parent) { for (var key in parent) { if (hasProp.cal
 Bu.DrawCircleReactor = (function(superClass) {
   extend(DrawCircleReactor, superClass);
 
-  function DrawCircleReactor(renderer) {
+  function DrawCircleReactor(bu) {
     var circle, isConfirmed, line, mouseButton, mousePos, mousePosDown;
-    this.renderer = renderer;
+    this.bu = bu;
     DrawCircleReactor.__super__.constructor.call(this);
     mouseButton = Bu.MOUSE_BUTTON_NONE;
     mousePos = new Bu.Point;
@@ -23,10 +23,10 @@ Bu.DrawCircleReactor = (function(superClass) {
         } else {
           mousePosDown.set(e.offsetX, e.offsetY);
           circle = new Bu.Circle(mousePosDown.x, mousePosDown.y, 1);
-          _this.renderer.append(circle);
+          _this.bu.append(circle);
           line = new Bu.Line(mousePosDown, mousePosDown);
           line.stroke('#f44');
-          _this.renderer.append(line);
+          _this.bu.append(line);
           isConfirmed = false;
         }
         return mouseButton = e.button;

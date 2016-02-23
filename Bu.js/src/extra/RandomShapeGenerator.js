@@ -4,20 +4,43 @@ Bu.RandomShapeGenerator = (function() {
 
   MARGIN = 30;
 
-  function RandomShapeGenerator(renderer) {
-    this.renderer = renderer;
+  function RandomShapeGenerator(bu) {
+    this.bu = bu;
   }
 
   RandomShapeGenerator.prototype.randomX = function() {
-    return Bu.rand(MARGIN, this.renderer.width - MARGIN * 2);
+    return Bu.rand(MARGIN, this.bu.width - MARGIN * 2);
   };
 
   RandomShapeGenerator.prototype.randomY = function() {
-    return Bu.rand(MARGIN, this.renderer.height - MARGIN * 2);
+    return Bu.rand(MARGIN, this.bu.height - MARGIN * 2);
   };
 
   RandomShapeGenerator.prototype.randomRadius = function() {
-    return Bu.rand(5, Math.min(this.renderer.width, this.renderer.height) / 2);
+    return Bu.rand(5, Math.min(this.bu.width, this.bu.height) / 2);
+  };
+
+  RandomShapeGenerator.prototype.generate = function(type) {
+    switch (type) {
+      case 'circle':
+        return this.generateCircle();
+      case 'bow':
+        return this.generateBow();
+      case 'triangle':
+        return this.generateTriangle();
+      case 'rectangle':
+        return this.generateRectangle();
+      case 'fan':
+        return this.generateFan();
+      case 'polygon':
+        return this.generatePolygon();
+      case 'line':
+        return this.generateLine();
+      case 'polyline':
+        return this.generatePolyline();
+      default:
+        return console.warn('not support shape: ' + type);
+    }
   };
 
   RandomShapeGenerator.prototype.generateCircle = function() {
@@ -51,7 +74,7 @@ Bu.RandomShapeGenerator = (function() {
   };
 
   RandomShapeGenerator.prototype.generateRectangle = function() {
-    return new Bu.Rectangle(Bu.rand(this.renderer.width), Bu.rand(this.renderer.height), Bu.rand(this.renderer.width / 2), Bu.rand(this.renderer.height / 2));
+    return new Bu.Rectangle(Bu.rand(this.bu.width), Bu.rand(this.bu.height), Bu.rand(this.bu.width / 2), Bu.rand(this.bu.height / 2));
   };
 
   RandomShapeGenerator.prototype.generateFan = function() {
@@ -97,3 +120,5 @@ Bu.RandomShapeGenerator = (function() {
   return RandomShapeGenerator;
 
 })();
+
+//# sourceMappingURL=RandomShapeGenerator.js.map

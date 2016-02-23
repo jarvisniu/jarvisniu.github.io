@@ -16,33 +16,33 @@
         position: absolute;
         width: 100%;
         text-align: center;
-        padding: 8px;
+        padding: 8px 0;
       }
       
     </style>
     <script type="text/javascript">
-      var renderer, generator;
+      var bu, generator;
       var line, polyline;
       var mousePos = new Bu.Point();
       
       $.ready(init);
       
       function init() {
-        renderer = new Bu.Renderer({
+        bu = new Bu({
           container: "#container",
           showKeyPoints: true,
           fillParent: true
         });
-        generator = new Bu.RandomShapeGenerator(renderer);
+        generator = new Bu.RandomShapeGenerator(bu);
       
         generateLines();
       
-        renderer.dom.addEventListener("mouseup", generateLines);
-        renderer.dom.addEventListener("mousemove", onMouseMove);
+        bu.dom.addEventListener("mouseup", generateLines);
+        bu.dom.addEventListener("mousemove", onMouseMove);
       }
       
       function onMouseMove(e) {
-        e = renderer.processArgs(e);
+        e = bu.processArgs(e);
       
         mousePos.x = e.offsetX;
         mousePos.y = e.offsetY;
@@ -59,8 +59,8 @@
       }
       
       function generateLines() {
-        line = renderer.shapes[0] = generator.generateLine();
-        polyline = renderer.shapes[1] = generator.generatePolyline();
+        line = bu.shapes[0] = generator.generateLine();
+        polyline = bu.shapes[1] = generator.generatePolyline();
       }
       
     </script>

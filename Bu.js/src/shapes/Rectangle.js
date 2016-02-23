@@ -18,6 +18,10 @@ Bu.Rectangle = (function(superClass) {
     this.keyPoints = this.points;
   }
 
+  Rectangle.prototype.clone = function() {
+    return new Bu.Rectangle(this.position.x, this.position.y, this.size.width, this.size.height);
+  };
+
   Rectangle.prototype.containsPoint = function(point) {
     return point.x > this.position.x && point.y > this.position.y && point.x < this.position.x + this.size.width && point.y < this.position.y + this.size.height;
   };

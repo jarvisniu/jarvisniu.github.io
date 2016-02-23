@@ -5,9 +5,9 @@ var extend = function(child, parent) { for (var key in parent) { if (hasProp.cal
 Bu.DrawPolygonReactor = (function(superClass) {
   extend(DrawPolygonReactor, superClass);
 
-  function DrawPolygonReactor(renderer) {
+  function DrawPolygonReactor(bu) {
     var guideLineEnd, guideLineStart, mouseButton, mouseDownPos, mousePos, polygon;
-    this.renderer = renderer;
+    this.bu = bu;
     DrawPolygonReactor.__super__.constructor.call(this);
     mouseButton = Bu.MOUSE_BUTTON_NONE;
     mousePos = new Bu.Point;
@@ -23,17 +23,17 @@ Bu.DrawPolygonReactor = (function(superClass) {
           if (polygon == null) {
             polygon = new Bu.Polygon;
             polygon.fill(Bu.DEFAULT_FILL_STYLE_HOVER);
-            _this.renderer.append(polygon);
+            _this.bu.append(polygon);
           }
           if (guideLineEnd == null) {
             guideLineEnd = new Bu.Line(mousePos, mousePos);
             guideLineEnd.stroke(Bu.DEFAULT_STROKE_STYLE_HOVER);
             guideLineEnd.dash();
-            _this.renderer.append(guideLineEnd);
+            _this.bu.append(guideLineEnd);
             guideLineStart = new Bu.Line(mousePos, mousePos);
             guideLineStart.stroke(Bu.DEFAULT_STROKE_STYLE_HOVER);
             guideLineStart.dash();
-            _this.renderer.append(guideLineStart);
+            _this.bu.append(guideLineStart);
           } else if (guideLineEnd.visible === false) {
             guideLineEnd.setPoint1(mousePos);
             guideLineEnd.setPoint2(mousePos);

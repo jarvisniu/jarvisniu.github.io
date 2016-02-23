@@ -5,9 +5,9 @@ var extend = function(child, parent) { for (var key in parent) { if (hasProp.cal
 Bu.DrawPolylineReactor = (function(superClass) {
   extend(DrawPolylineReactor, superClass);
 
-  function DrawPolylineReactor(renderer) {
+  function DrawPolylineReactor(bu) {
     var line, mouseButton, mouseDownPos, mousePos, polyline;
-    this.renderer = renderer;
+    this.bu = bu;
     DrawPolylineReactor.__super__.constructor.call(this);
     mouseButton = Bu.MOUSE_BUTTON_NONE;
     mousePos = new Bu.Point;
@@ -22,13 +22,13 @@ Bu.DrawPolylineReactor = (function(superClass) {
           if (polyline == null) {
             polyline = new Bu.Polyline;
             polyline.stroke(Bu.DEFAULT_STROKE_STYLE_HOVER);
-            _this.renderer.append(polyline);
+            _this.bu.append(polyline);
           }
           if (line == null) {
             line = new Bu.Line(mousePos, mousePos);
             line.stroke(Bu.DEFAULT_STROKE_STYLE_HOVER);
             line.dash();
-            _this.renderer.append(line);
+            _this.bu.append(line);
           } else if (line.visible === false) {
             line.setPoint1(mousePos);
             line.setPoint2(mousePos);

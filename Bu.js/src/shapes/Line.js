@@ -27,6 +27,10 @@ Bu.Line = (function(superClass) {
     this.trigger("pointChange", this);
   }
 
+  Line.prototype.clone = function() {
+    return new Bu.Line(this.points[0], this.points[1]);
+  };
+
   Line.prototype.set = function(a1, a2, a3, a4) {
     if (typeof p4 !== "undefined" && p4 !== null) {
       this.points[0].set(a1, a2);
@@ -165,3 +169,5 @@ Bu.Line = (function(superClass) {
   return Line;
 
 })(Bu.Object2D);
+
+//# sourceMappingURL=Line.js.map

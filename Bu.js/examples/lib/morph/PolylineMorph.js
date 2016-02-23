@@ -14,12 +14,11 @@ Bu.PolylineMorph = (function() {
   }
 
   PolylineMorph.prototype.setTime = function(time) {
-    var i, j, ref, results;
-    results = [];
+    var i, j, ref;
     for (i = j = 0, ref = this.hPointsA.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
-      results.push(Bu.Point.interpolate(this.hPointsA[i], this.hPointsB[i], time, this.polyline.vertices[i]));
+      Bu.Point.interpolate(this.hPointsA[i], this.hPointsB[i], time, this.polyline.vertices[i]);
     }
-    return results;
+    return this.polyline.trigger('pointChange', this.polyline);
   };
 
   PolylineMorph.prototype.update = function() {
@@ -60,8 +59,9 @@ Bu.PolylineMorph = (function() {
       }
     }
     if (this.polyline.vertices.length < this.hPointsA.length) {
-      return this.polyline.vertices.splice(this.hPointsA.length);
+      this.polyline.vertices.splice(this.hPointsA.length);
     }
+    return this.polyline.trigger('pointChange', this.polyline);
   };
 
   return PolylineMorph;

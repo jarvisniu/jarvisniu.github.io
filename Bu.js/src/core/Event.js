@@ -50,3 +50,5 @@ Bu.Event = function() {
     }
   };
 };
+
+//# sourceMappingURL=Event.js.map

@@ -11,7 +11,7 @@ Bu.Image = (function(superClass) {
     this.type = 'Image';
     this.autoSize = true;
     this.size = new Bu.Size(Bu.DEFAULT_IMAGE_SIZE, Bu.DEFAULT_IMAGE_SIZE);
-    this.position = new Bu.Vector(x, y);
+    this.translate = new Bu.Vector(x, y);
     this.center = new Bu.Vector(x + width / 2, y + height / 2);
     if (width != null) {
       this.size.set(width, height);

@@ -9,19 +9,18 @@ Bu.Polygon = (function(superClass) {
   /*
      constructors
      1. Polygon(points)
-     2. Polygon(x, y, n, options): to generate regular polygon
-     	options: radius, angle
+     2. Polygon(x, y, radius, n, options): to generate regular polygon
+     	options: angle - start angle of regular polygon
    */
 
   function Polygon(points) {
-    var i, k, l, n, options, ref, ref1, x, y;
+    var i, k, l, n, options, radius, ref, ref1, x, y;
     Polygon.__super__.constructor.call(this);
     this.type = 'Polygon';
     this.vertices = [];
     this.lines = [];
     this.triangles = [];
     options = Bu.combineOptions(arguments, {
-      radius: 100,
       angle: 0
     });
     if (points instanceof Array) {
@@ -29,10 +28,18 @@ Bu.Polygon = (function(superClass) {
         this.vertices = points;
       }
     } else {
-      x = arguments[0];
-      y = arguments[1];
-      n = arguments[2];
-      this.vertices = Bu.Polygon.generateRegularPoints(x, y, n, options);
+      if (arguments.length < 4) {
+        x = 0;
+        y = 0;
+        radius = arguments[0];
+        n = arguments[1];
+      } else {
+        x = arguments[0];
+        y = arguments[1];
+        radius = arguments[2];
+        n = arguments[3];
+      }
+      this.vertices = Bu.Polygon.generateRegularPoints(x, y, radius, n, options);
     }
     if (this.vertices.length > 1) {
       for (i = k = 0, ref = this.vertices.length - 1; 0 <= ref ? k < ref : k > ref; i = 0 <= ref ? ++k : --k) {
@@ -47,6 +54,10 @@ Bu.Polygon = (function(superClass) {
     }
     this.keyPoints = this.vertices;
   }
+
+  Polygon.prototype.clone = function() {
+    return new Bu.Polygon(this.vertices);
+  };
 
   Polygon.prototype.isSimple = function() {
     var i, j, k, l, len, ref, ref1, ref2;
@@ -90,10 +101,10 @@ Bu.Polygon = (function(superClass) {
     return false;
   };
 
-  Polygon.generateRegularPoints = function(cx, cy, n, options) {
+  Polygon.generateRegularPoints = function(cx, cy, radius, n, options) {
     var a, angleDelta, angleSection, i, k, points, r, ref, x, y;
     angleDelta = options.angle;
-    r = options.radius;
+    r = radius;
     points = [];
     angleSection = Math.PI * 2 / n;
     for (i = k = 0, ref = n; 0 <= ref ? k < ref : k > ref; i = 0 <= ref ? ++k : --k) {
@@ -108,3 +119,5 @@ Bu.Polygon = (function(superClass) {
   return Polygon;
 
 })(Bu.Object2D);
+
+//# sourceMappingURL=Polygon.js.map

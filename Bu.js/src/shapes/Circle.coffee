@@ -5,27 +5,30 @@ class Bu.Circle extends Bu.Object2D
 	constructor: (cx = 0, cy = 0, @_radius = 1) ->
 		super()
 		@type = 'Circle'
-		@_center = new Bu.Point(cx, cy)
-		@bounds = null  # for accelerate contain test
 
-		@keyPoints = [ @_center ]
+		@_center = new Bu.Point(cx, cy)
+		@bounds = null # for accelerate contain test
+
+		@keyPoints = [@_center]
+
+	clone: () -> new Bu.Circle @cx, @cy, @radius
 
 	# property
 
 	@property 'cx',
-		get: ->  @_center.x
+		get: -> @_center.x
 		set: (val) ->
 			@_center.x = val
 			@trigger 'centerChanged', @
 
 	@property 'cy',
-		get: ->  @_center.y
+		get: -> @_center.y
 		set: (val) ->
 			@_center.y = val
 			@trigger 'centerChanged', @
 
 	@property 'center',
-		get: ->  @_center
+		get: -> @_center
 		set: (val) ->
 			@_center = val
 			@cx = val.x
@@ -34,7 +37,7 @@ class Bu.Circle extends Bu.Object2D
 			@trigger 'centerChanged', @
 
 	@property 'radius',
-		get: ->  @_radius
+		get: -> @_radius
 		set: (val) ->
 			@_radius = val
 			@trigger 'radiusChanged', @

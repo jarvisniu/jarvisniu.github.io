@@ -9,18 +9,29 @@ class Bu.Object2D
 		@visible = yes
 		@opacity = 1
 
-		@position = new Bu.Vector()
+		@translate = new Bu.Vector()
 		@rotation = 0
-		@scale = new Bu.Vector(1, 1)
+		@scale = 1
 		@skew = new Bu.Vector()
 
-#		@toWorldMatrix = new Bu.Matrix()
-#		@updateMatrix ->
+		#@toWorldMatrix = new Bu.Matrix()
+		#@updateMatrix ->
 
-		@bounds = null  # for accelerate contain test
+		@bounds = null # for accelerate contain test
 		@keyPoints = null
 		@children = []
 		@parent = null
+
+	animate: (anim, args) ->
+		if typeof anim == 'string'
+			if anim of Bu.animations
+				Bu.animations[anim].apply @, args
+			else
+				console.warn "Bu.animations[\"#{ anim }\"] doesn't exists."
+		else if anim instanceof Array
+			@animate a, args for a in anim
+		else
+			anim.apply @, args
 
 	containsPoint: (p) ->
 		if @bounds? and not @bounds.containsPoint p

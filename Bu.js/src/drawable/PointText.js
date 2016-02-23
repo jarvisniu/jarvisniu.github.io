@@ -22,8 +22,8 @@ Bu.PointText = (function(superClass) {
   function PointText(text, x, y) {
     var options;
     this.text = text;
-    this.x = x;
-    this.y = y;
+    this.x = x != null ? x : 0;
+    this.y = y != null ? y : 0;
     this.setContextAlign = bind(this.setContextAlign, this);
     PointText.__super__.constructor.call(this);
     this.type = 'PointText';

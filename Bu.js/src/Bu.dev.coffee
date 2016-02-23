@@ -20,11 +20,15 @@
 		'shapes/Bow',
 		'shapes/Polygon',
 		'shapes/Polyline',
+		'shapes/Spline',
 
 		'drawable/PointText',
 		'drawable/Image',
 
 		'renderer/Renderer',
+
+		'anim/Animation',
+		'anim/AnimationRunner',
 
 		'extra/RandomShapeGenerator',
 	]

@@ -4,10 +4,7 @@ class Bu.Renderer
 
 	constructor: () ->
 		Bu.Event.apply @
-
 		@type = 'Renderer'
-
-		@pixelRatio = window?.devicePixelRatio || 1
 
 		options = Bu.combineOptions arguments,
 			width: 800
@@ -25,6 +22,8 @@ class Bu.Renderer
 
 		@tickCount = 0
 		@isRunning = no
+
+		@pixelRatio = window?.devicePixelRatio or 1
 
 		@dom = document.createElement 'canvas'
 		@context = @dom.getContext '2d'
@@ -46,6 +45,7 @@ class Bu.Renderer
 		@dom.oncontextmenu = -> false
 
 		window.canvas = @dom
+		Bu.animationRunner?.hookUp @
 
 		onResize = =>
 			canvasRatio = @dom.height / @dom.width
@@ -68,7 +68,6 @@ class Bu.Renderer
 
 
 		tick = =>
-			@startRenderTime = Bu.now()
 			if @isRunning
 				@clipMeter.start() if @clipMeter?
 				@render()
@@ -76,9 +75,7 @@ class Bu.Renderer
 				@tickCount += 1
 				@clipMeter.tick() if @clipMeter?
 
-			@endRenderTime = Bu.now()
-			@nextRenderTime = Math.max 1000 / @fps - @endRenderTime + @startRenderTime, 1
-			setTimeout tick, @nextRenderTime
+			requestAnimationFrame tick
 
 		tick()
 
@@ -125,11 +122,34 @@ class Bu.Renderer
 	drawShapes: (shapes) =>
 		if shapes?
 			for shape in shapes
+				@context.save()
 				@drawShape shape
+				@context.restore()
 		@
 
 	drawShape: (shape) =>
 		return @ unless shape.visible
+
+		@context.translate shape.translate.x, shape.translate.y
+		@context.rotate shape.rotation
+		if typeof shape.scale == 'number'
+			sx = shape.scale
+			sy = shape.scale
+		else
+			sx = shape.scale.x
+			sy = shape.scale.y
+		if sx / sy > 100 or sx / sy < 0.01
+			sx = 0 if Math.abs(sx) < 0.02
+			sy = 0 if Math.abs(sy) < 0.02
+		@context.scale sx, sy
+
+		@context.globalAlpha = shape.opacity
+		if shape.strokeStyle?
+			@context.strokeStyle = shape.strokeStyle
+			@context.lineWidth = shape.lineWidth
+			@context.lineCap = shape.lineCap if shape.lineCap?
+			@context.lineJoin = shape.lineJoin if shape.lineJoin?
+
 		switch shape.type
 			when 'Point' then @drawPoint(shape)
 			when 'Line' then @drawLine(shape)
@@ -140,11 +160,12 @@ class Bu.Renderer
 			when 'Bow' then @drawBow(shape)
 			when 'Polygon' then @drawPolygon(shape)
 			when 'Polyline' then @drawPolyline(shape)
+			when 'Spline' then @drawSpline(shape)
 			when 'PointText' then @drawPointText(shape)
 			when 'Image' then @drawImage(shape)
 			when 'Bounds' then @drawBounds(shape)
-			else
-				console.log 'drawShapes(): unknown shape: ', shape
+			else console.log 'drawShapes(): unknown shape: ', shape
+
 		@drawShapes shape.children if shape.children?
 		@drawShapes shape.keyPoints if @isShowKeyPoints
 		@
@@ -153,70 +174,53 @@ class Bu.Renderer
 	drawPoint: (shape) ->
 		@context.globalAlpha = shape.opacity
 
-		if shape.fillStyle?
-			@context.fillStyle = shape.fillStyle
-			@context.fillRect(
-					shape.x - Bu.POINT_RENDER_SIZE / 2
-					shape.y - Bu.POINT_RENDER_SIZE / 2
-					Bu.POINT_RENDER_SIZE
-					Bu.POINT_RENDER_SIZE
-			)
-
-		if shape.strokeStyle?
-			@context.strokeStyle = shape.strokeStyle
-			@context.strokeRect(
-					shape.x - Bu.POINT_RENDER_SIZE / 2
-					shape.y - Bu.POINT_RENDER_SIZE / 2
-					Bu.POINT_RENDER_SIZE
-					Bu.POINT_RENDER_SIZE
-			)
-		@
-
-
-	drawLine: (shape) ->
-		@context.globalAlpha = shape.opacity
-
-		if shape.strokeStyle?
-			@context.strokeStyle = shape.strokeStyle
-			@context.lineWidth = shape.lineWidth
-			@context.beginPath()
-			if shape.dashStyle
-				@context.dashedLine(
-						shape.points[0].x, shape.points[0].y,
-						shape.points[1].x, shape.points[1].y,
-						shape.dashStyle, shape.dashOffset
-				)
-			else
-				@context.lineTo shape.points[0].x, shape.points[0].y
-				@context.lineTo shape.points[1].x, shape.points[1].y
-				@context.closePath()
-
-			@context.stroke()
-		@
-
-
-	drawCircle: (shape) ->
-		@context.globalAlpha = shape.opacity
-
 		@context.beginPath()
-		@context.arc shape.cx, shape.cy, shape.radius, 0, Math.PI * 2
-		@context.closePath()
-		# TODO add dashed arc support
+		@context.arc shape.x, shape.y, Bu.POINT_RENDER_SIZE, 0, Math.PI * 2
 
 		if shape.fillStyle?
 			@context.fillStyle = shape.fillStyle
 			@context.fill()
 
 		if shape.strokeStyle?
-			@context.strokeStyle = shape.strokeStyle
-			@context.lineWidth = shape.lineWidth
+			@context.stroke()
+		@
+
+
+	drawLine: (shape) ->
+		if shape.strokeStyle?
+			@context.beginPath()
+			if shape.dashStyle
+				@context.dashedLine(
+					shape.points[0].x, shape.points[0].y,
+					shape.points[1].x, shape.points[1].y,
+					shape.dashStyle, shape.dashOffset
+				)
+			else
+				@context.moveTo shape.points[0].x, shape.points[0].y
+				@context.lineTo shape.points[1].x, shape.points[1].y
+
+			@context.stroke()
+		@
+
+
+	drawCircle: (shape) ->
+		@context.beginPath()
+		@context.arc shape.cx, shape.cy, shape.radius, 0, Math.PI * 2
+		@context.closePath()
+
+		if shape.fillStyle?
+			@context.fillStyle = shape.fillStyle
+			@context.fill()
+
+		if shape.strokeStyle?
+			if shape.dashStyle
+				@context.beginPath()
+				@context.dashedArc shape.cx, shape.cy, shape.radius, 0, Math.PI * 2, shape.dashStyle, shape.dashOffset
 			@context.stroke()
 		@
 
 
 	drawTriangle: (shape) ->
-		@context.globalAlpha = shape.opacity
-
 		@context.beginPath()
 		@context.lineTo shape.points[0].x, shape.points[0].y
 		@context.lineTo shape.points[1].x, shape.points[1].y
@@ -228,8 +232,6 @@ class Bu.Renderer
 			@context.fill()
 
 		if shape.strokeStyle?
-			@context.strokeStyle = shape.strokeStyle
-			@context.lineWidth = shape.lineWidth
 			if shape.dashStyle
 				@context.beginPath() # clear prev lineTo
 				pts = shape.points
@@ -241,21 +243,17 @@ class Bu.Renderer
 
 
 	drawRectangle: (shape) ->
-		@context.globalAlpha = shape.opacity
-
 		if shape.fillStyle?
 			@context.fillStyle = shape.fillStyle
 			@context.fillRect shape.position.x, shape.position.y, shape.size.width, shape.size.height
 
 		if shape.strokeStyle?
-			@context.strokeStyle = shape.strokeStyle
-			@context.lineWidth = shape.lineWidth
 			if not shape.dashStyle
 				@context.strokeRect(
-						shape.position.x
-						shape.position.y
-						shape.size.width
-						shape.size.height)
+					shape.position.x
+					shape.position.y
+					shape.size.width
+					shape.size.height)
 			else
 				@context.beginPath()
 				xL = shape.position.x
@@ -271,47 +269,51 @@ class Bu.Renderer
 
 
 	drawFan: (shape) ->
-		@context.globalAlpha = shape.opacity
-
 		@context.beginPath()
 		@context.arc shape.cx, shape.cy, shape.radius, shape.aFrom, shape.aTo
 		@context.lineTo shape.cx, shape.cy
 		@context.closePath()
-		# TODO dashed arc
 
 		if shape.fillStyle?
 			@context.fillStyle = shape.fillStyle
 			@context.fill()
 
 		if shape.strokeStyle?
-			@context.strokeStyle = shape.strokeStyle
-			@context.lineWidth = shape.lineWidth
+			if shape.dashStyle
+				@context.beginPath()
+				@context.dashedArc shape.cx, shape.cy, shape.radius, shape.aFrom, shape.aTo, shape.dashStyle, shape.dashOffset
+				@context.dashedLine shape.cx, shape.cy,
+					shape.cx + shape.radius * Math.cos(shape.aFrom),
+					shape.cy + shape.radius * Math.sin(shape.aFrom),
+					shape.dashStyle, shape.dashOffset
+				@context.dashedLine shape.cx + shape.radius * Math.cos(shape.aTo),
+					shape.cy + shape.radius * Math.sin(shape.aTo),
+					shape.cx, shape.cy, shape.dashStyle, shape.dashOffset
 			@context.stroke()
 		@
 
 
 	drawBow: (shape) ->
-		@context.globalAlpha = shape.opacity
-
 		@context.beginPath()
 		@context.arc shape.cx, shape.cy, shape.radius, shape.aFrom, shape.aTo
 		@context.closePath()
-		# TODO dashed arc
 
 		if shape.fillStyle?
 			@context.fillStyle = shape.fillStyle
 			@context.fill()
 
 		if shape.strokeStyle?
-			@context.strokeStyle = shape.strokeStyle
-			@context.lineWidth = shape.lineWidth
+			if shape.dashStyle
+				@context.beginPath()
+				@context.dashedArc shape.cx, shape.cy, shape.radius, shape.aFrom, shape.aTo, shape.dashStyle, shape.dashOffset
+				@context.dashedLine shape.string.points[1].x, shape.string.points[1].y,
+					shape.string.points[0].x, shape.string.points[0].y,
+					shape.dashStyle, shape.dashOffset
 			@context.stroke()
 		@
 
 
 	drawPolygon: (shape) ->
-		@context.globalAlpha = shape.opacity
-
 		@context.beginPath()
 		for point in shape.vertices
 			@context.lineTo point.x, point.y
@@ -322,8 +324,6 @@ class Bu.Renderer
 			@context.fill()
 
 		if shape.strokeStyle?
-			@context.strokeStyle = shape.strokeStyle
-			@context.lineWidth = shape.lineWidth
 			len = shape.vertices.length
 			if shape.dashStyle && len > 0
 				@context.beginPath()
@@ -331,16 +331,12 @@ class Bu.Renderer
 				for i in [0 ... len - 1]
 					@context.dashedLine pts[i].x, pts[i].y, pts[i + 1].x, pts[i + 1].y, shape.dashStyle, shape.dashOffset
 				@context.dashedLine pts[len - 1].x, pts[len - 1].y, pts[0].x, pts[0].y, shape.dashStyle, shape.dashOffset
-				@context.stroke()
 			@context.stroke()
 		@
 
 
 	drawPolyline: (shape) ->
 		if shape.strokeStyle?
-			@context.globalAlpha = shape.opacity
-			@context.strokeStyle = shape.strokeStyle
-			@context.lineWidth = shape.lineWidth
 			@context.beginPath()
 			if not shape.dashStyle
 				for point in shape.vertices
@@ -353,14 +349,38 @@ class Bu.Renderer
 		@
 
 
+	drawSpline: (shape) ->
+		if shape.strokeStyle?
+			@context.beginPath()
+			len = shape.vertices.length
+			if len == 2
+				@context.moveTo shape.vertices[0].x, shape.vertices[0].y
+				@context.lineTo shape.vertices[1].x, shape.vertices[1].y
+			else if len > 2
+				@context.moveTo shape.vertices[0].x, shape.vertices[0].y
+				for i in [1..len - 1]
+					@context.bezierCurveTo(
+						shape.controlPointsBehind[i - 1].x,
+						shape.controlPointsBehind[i - 1].y,
+						shape.controlPointsAhead[i].x,
+						shape.controlPointsAhead[i].y,
+						shape.vertices[i].x,
+						shape.vertices[i].y
+					)
+			if shape.dashStyle and @context.setLineDash?
+				@context.setLineDash shape.dashStyle
+				@context.stroke()
+				@context.setLineDash [] # clear dashStyle
+			else
+				@context.stroke()
+		@
+
+
 	drawPointText: (shape) ->
-		@context.globalAlpha = shape.opacity
 		@context.textAlign = shape.textAlign
 		@context.textBaseline = shape.textBaseline
 		@context.font = shape.font
 		if shape.strokeStyle?
-			@context.strokeStyle = shape.strokeStyle
-			@context.lineWidth = shape.lineWidth
 			@context.strokeText shape.text, shape.x, shape.y
 		if shape.fillStyle?
 			@context.fillStyle = shape.fillStyle
@@ -370,16 +390,11 @@ class Bu.Renderer
 
 	drawImage: (shape) ->
 		if shape.loaded
-			@context.save()
-			@context.globalAlpha = shape.opacity
-			w = shape.size.width * shape.scale.x
-			h = shape.size.height * shape.scale.y
+			w = shape.size.width
+			h = shape.size.height
 			dx = -w * shape.pivot.x
 			dy = -h * shape.pivot.y
-			@context.translate shape.position.x, shape.position.y
-			@context.rotate shape.rotation
 			@context.drawImage shape.image, dx, dy, w, h
-			@context.restore()
 		@
 
 
@@ -398,8 +413,8 @@ class Bu.Renderer
 # See: http://stackoverflow.com/questions/4576724/dotted-stroke-in-canvas
 (=>
 	CP = window.CanvasRenderingContext2D and CanvasRenderingContext2D.prototype
-	CP.dashedLine = (x, y, x2, y2, da, offset) ->
-		da = Bu.DEFAULT_DASH_STYLE if not da?
+	CP.dashedLine = (x, y, x2, y2, dashStyle, offset) ->
+		dashStyle = Bu.DEFAULT_DASH_STYLE if not dashStyle?
 		offset = 0 if not offset?
 		@save()
 		dx = x2 - x
@@ -408,27 +423,87 @@ class Bu.Renderer
 		rot = Math.atan2 dy, dx
 		@translate x, y
 		@rotate rot
-		dc = da.length
-		di = 0
-		draw = true
+		dc = dashStyle.length
 
 		lenU = 0
-		for i in da
+		for i in dashStyle
 			lenU += i
 		offset %= lenU
-		x = offset
 
-		@moveTo 0, 0
-		# TODO need a small fix
+		# draw offset -> 0
+		di = 0
+		x = offset
+		draw = false
+		# no need `@moveTo offset, 0`, because `draw` is false, so the lineTo is in the first
+		while x > 0
+			di -= 1
+			x -= dashStyle[di %% dc]
+			x = 0 if x < 0
+			if draw
+				@lineTo x, 0
+			else
+				@moveTo x, 0
+			draw = not draw
+
+		# draw offset -> len
+		di = 0
+		x = offset
+		draw = true
+		@moveTo offset, 0
 		while len > x
-			di += 1
-			x += da[di % dc]
+			x += dashStyle[di % dc]
 			x = len if x > len
 			if draw
 				@lineTo x, 0
 			else
 				@moveTo x, 0
 			draw = not draw
+			di += 1
 		@restore()
 		@
-)()
+
+	CP.dashedArc = (x, y, radius, startAngle, endAngle, dashStyle, offset) ->
+		dashStyle = Bu.DEFAULT_DASH_STYLE if not dashStyle?
+		offset = 0 if not offset?
+
+		# convert dashStyle and offset from arc length to angle
+		arcStyle = dashStyle.map (x) -> x / radius
+		offset /= radius
+
+		len = Math.abs endAngle - startAngle
+		dc = arcStyle.length
+
+		lenU = 0
+		for i in arcStyle
+			lenU += i
+		offset %= lenU
+
+		# draw offset -> 0
+		di = 0
+		xAngle = offset
+		draw = false
+		while xAngle > 0
+			di -= 1
+			xAngle -= arcStyle[di %% dc]
+			xAngle = 0 if xAngle < 0
+			if draw
+				@lineTo x + radius * Math.cos(startAngle + xAngle), y + radius * Math.sin(startAngle + xAngle)
+			else
+				@moveTo x + radius * Math.cos(startAngle + xAngle), y + radius * Math.sin(startAngle + xAngle)
+			draw = not draw
+
+		# draw offset -> len
+		di = 0
+		xAngle = offset
+		draw = true
+		@moveTo x + radius * Math.cos(startAngle + offset), y + radius * Math.sin(startAngle + offset)
+		while len > xAngle
+			xAngle += arcStyle[di % dc]
+			xAngle = len if xAngle > len
+			if draw
+				@lineTo x + radius * Math.cos(startAngle + xAngle), y + radius * Math.sin(startAngle + xAngle)
+			else
+				@moveTo x + radius * Math.cos(startAngle + xAngle), y + radius * Math.sin(startAngle + xAngle)
+			draw = not draw
+			di += 1
+		@)()

@@ -5,28 +5,34 @@ class Bu.Polygon extends Bu.Object2D
 	###
     constructors
     1. Polygon(points)
-    2. Polygon(x, y, n, options): to generate regular polygon
-    	options: radius, angle
+    2. Polygon(x, y, radius, n, options): to generate regular polygon
+    	options: angle - start angle of regular polygon
 	###
 	constructor: (points) ->
 		super()
 		@type = 'Polygon'
+
 		@vertices = []
 		@lines = []
 		@triangles = []
 
 		options = Bu.combineOptions arguments,
-			radius: 100
 			angle: 0
-
 
 		if points instanceof Array
 			@vertices = points if points?
 		else
-			x = arguments[0]
-			y = arguments[1]
-			n = arguments[2]
-			@vertices = Bu.Polygon.generateRegularPoints(x, y, n, options)
+			if arguments.length < 4
+				x = 0
+				y = 0
+				radius = arguments[0]
+				n = arguments[1]
+			else
+				x = arguments[0]
+				y = arguments[1]
+				radius = arguments[2]
+				n = arguments[3]
+			@vertices = Bu.Polygon.generateRegularPoints x, y, radius, n, options
 
 		# init lines
 		if @vertices.length > 1
@@ -40,6 +46,8 @@ class Bu.Polygon extends Bu.Object2D
 				@triangles.push(new Bu.Triangle(@vertices[0], @vertices[i], @vertices[i + 1]))
 
 		@keyPoints = @vertices
+
+	clone: -> new Bu.Polygon @vertices
 
 	# detect
 
@@ -83,9 +91,9 @@ class Bu.Polygon extends Bu.Object2D
 				return true
 		return false
 
-	@generateRegularPoints = (cx, cy, n, options) ->
+	@generateRegularPoints = (cx, cy, radius, n, options) ->
 		angleDelta = options.angle
-		r = options.radius
+		r = radius
 		points = []
 		angleSection = Math.PI * 2 / n
 		for i in [0 ... n]

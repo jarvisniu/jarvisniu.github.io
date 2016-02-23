@@ -57,3 +57,5 @@ Bu.Colorful = function() {
     return this;
   };
 };
+
+//# sourceMappingURL=Colorful.js.map

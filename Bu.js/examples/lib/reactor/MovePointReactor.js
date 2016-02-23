@@ -5,11 +5,10 @@ var extend = function(child, parent) { for (var key in parent) { if (hasProp.cal
 Bu.MovePointReactor = (function(superClass) {
   extend(MovePointReactor, superClass);
 
-  function MovePointReactor(renderer1) {
-    var hoveredPoint, mouseButton, mousePos, mousePosDown, mousePosDownDelta, renderer;
-    this.renderer = renderer1;
+  function MovePointReactor(bu) {
+    var hoveredPoint, mouseButton, mousePos, mousePosDown, mousePosDownDelta;
+    this.bu = bu;
     MovePointReactor.__super__.constructor.call(this);
-    renderer = this.renderer;
     mouseButton = Bu.MOUSE_BUTTON_NONE;
     mousePos = new Bu.Point;
     mousePosDown = new Bu.Vector;
@@ -22,36 +21,40 @@ Bu.MovePointReactor = (function(superClass) {
       }
       return mouseButton = e.button;
     };
-    this.onMouseMove = function(e) {
-      var i, len, ref, results, shape;
-      mousePos.set(e.offsetX, e.offsetY);
-      if (mouseButton === Bu.MOUSE_BUTTON_LEFT) {
-        if (hoveredPoint != null) {
-          return hoveredPoint.set(mousePos.x - mousePosDownDelta.x, mousePos.y - mousePosDownDelta.y);
-        }
-      } else {
-        if (hoveredPoint != null) {
-          if (!hoveredPoint.isNear(mousePos)) {
-            hoveredPoint.stroke(false);
-            return hoveredPoint = null;
+    this.onMouseMove = (function(_this) {
+      return function(e) {
+        var i, len, ref, results, shape;
+        mousePos.set(e.offsetX, e.offsetY);
+        if (mouseButton === Bu.MOUSE_BUTTON_LEFT) {
+          if (hoveredPoint != null) {
+            return hoveredPoint.set(mousePos.x - mousePosDownDelta.x, mousePos.y - mousePosDownDelta.y);
           }
         } else {
-          ref = renderer.shapes;
-          results = [];
-          for (i = 0, len = ref.length; i < len; i++) {
-            shape = ref[i];
-            if (shape.type === 'Point' && shape.isNear(mousePos)) {
-              hoveredPoint = shape;
-              hoveredPoint.stroke();
-              break;
-            } else {
-              results.push(void 0);
+          if (hoveredPoint != null) {
+            if (!hoveredPoint.isNear(mousePos)) {
+              hoveredPoint.lineWidth = 0.5;
+              hoveredPoint.fill();
+              return hoveredPoint = null;
             }
+          } else {
+            ref = _this.bu.shapes;
+            results = [];
+            for (i = 0, len = ref.length; i < len; i++) {
+              shape = ref[i];
+              if (shape.type === 'Point' && shape.isNear(mousePos)) {
+                hoveredPoint = shape;
+                hoveredPoint.lineWidth = 1;
+                hoveredPoint.fill('#f80');
+                break;
+              } else {
+                results.push(void 0);
+              }
+            }
+            return results;
           }
-          return results;
         }
-      }
-    };
+      };
+    })(this);
     this.onMouseUp = (function(_this) {
       return function() {
         return mouseButton = Bu.MOUSE_BUTTON_NONE;

@@ -4,29 +4,43 @@ var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); 
   hasProp = {}.hasOwnProperty;
 
 Bu.Polyline = (function(superClass) {
-  var onPointChange, set;
+  var set;
 
   extend(Polyline, superClass);
 
-  function Polyline(vertices) {
-    this.vertices = vertices != null ? vertices : [];
+  function Polyline(vertices1) {
+    var i, j, ref, vertices;
+    this.vertices = vertices1 != null ? vertices1 : [];
     this.calcLength = bind(this.calcLength, this);
     this.updateLines = bind(this.updateLines, this);
+    this.clone = bind(this.clone, this);
     Polyline.__super__.constructor.call(this);
     this.type = 'Polyline';
+    if (arguments.length > 1) {
+      vertices = [];
+      for (i = j = 0, ref = arguments.length / 2; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+        vertices.push(new Bu.Point(arguments[i * 2], arguments[i * 2 + 1]));
+      }
+      this.vertices = vertices;
+    }
     this.lines = [];
     this.length = 0;
     this.pointNormalizedPos = [];
     this.keyPoints = this.vertices;
-    onPointChange(this);
+    this.on("pointChange", (function(_this) {
+      return function() {
+        if (_this.vertices.length > 1) {
+          _this.updateLines();
+          _this.calcLength();
+          return _this.calcPointNormalizedPos();
+        }
+      };
+    })(this));
+    this.trigger("pointChange", this);
   }
 
-  onPointChange = function(self) {
-    if (self.vertices.length > 1) {
-      self.updateLines();
-      self.calcLength();
-      return self.calcPointNormalizedPos();
-    }
+  Polyline.prototype.clone = function() {
+    return new Bu.Polyline(this.vertices);
   };
 
   Polyline.prototype.updateLines = function() {
@@ -83,7 +97,7 @@ Bu.Polyline = (function(superClass) {
     if (this.vertices.length > points.length) {
       this.vertices.splice(points.length);
     }
-    return onPointChange(this);
+    return this.trigger("pointChange", this);
   };
 
   Polyline.prototype.addPoint = function(point, insertIndex) {
@@ -95,9 +109,11 @@ Bu.Polyline = (function(superClass) {
     } else {
       this.vertices.splice(insertIndex, 0, point);
     }
-    return onPointChange(this);
+    return this.trigger("pointChange", this);
   };
 
   return Polyline;
 
 })(Bu.Object2D);
+
+//# sourceMappingURL=Polyline.js.map

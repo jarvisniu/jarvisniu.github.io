@@ -15,8 +15,12 @@ Bu.Fan = (function(superClass) {
     this.type = 'Fan';
     this.center = new Bu.Point(this.cx, this.cy);
     this.string = new Bu.Line(this.center.arcTo(this.radius, this.aFrom), this.center.arcTo(this.radius, this.aTo));
-    this.keyPoints = this.string.points;
+    this.keyPoints = [this.string.points[0], this.string.points[1], new Bu.Point(this.cx, this.cy)];
   }
+
+  Fan.prototype.clone = function() {
+    return new Bu.Fan(this.cx, this.cy, this.radius, this.aFrom, this.aTo);
+  };
 
   Fan.prototype._containsPoint = function(p) {
     var a, dx, dy;
@@ -32,3 +36,5 @@ Bu.Fan = (function(superClass) {
   return Fan;
 
 })(Bu.Object2D);
+
+//# sourceMappingURL=Fan.js.map

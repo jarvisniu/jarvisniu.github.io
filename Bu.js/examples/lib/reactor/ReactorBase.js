@@ -20,27 +20,27 @@ Bu.ReactorBase = (function() {
   };
 
   ReactorBase.prototype._onMouseDown = function(e) {
-    return typeof this.onMouseDown === "function" ? this.onMouseDown(this.renderer.processArgs(e)) : void 0;
+    return typeof this.onMouseDown === "function" ? this.onMouseDown(this.bu.processArgs(e)) : void 0;
   };
 
   ReactorBase.prototype._onMouseMove = function(e) {
-    return typeof this.onMouseMove === "function" ? this.onMouseMove(this.renderer.processArgs(e)) : void 0;
+    return typeof this.onMouseMove === "function" ? this.onMouseMove(this.bu.processArgs(e)) : void 0;
   };
 
   ReactorBase.prototype._onMouseUp = function(e) {
-    return typeof this.onMouseUp === "function" ? this.onMouseUp(this.renderer.processArgs(e)) : void 0;
+    return typeof this.onMouseUp === "function" ? this.onMouseUp(this.bu.processArgs(e)) : void 0;
   };
 
   ReactorBase.prototype.addListeners = function() {
-    this.renderer.dom.addEventListener('mousedown', this._onMouseDown);
-    this.renderer.dom.addEventListener('mousemove', this._onMouseMove);
-    return this.renderer.dom.addEventListener('mouseup', this._onMouseUp);
+    this.bu.dom.addEventListener('mousedown', this._onMouseDown);
+    this.bu.dom.addEventListener('mousemove', this._onMouseMove);
+    return this.bu.dom.addEventListener('mouseup', this._onMouseUp);
   };
 
   ReactorBase.prototype.removeListeners = function() {
-    this.renderer.dom.removeEventListener('mousedown', this._onMouseDown);
-    this.renderer.dom.removeEventListener('mousemove', this._onMouseMove);
-    return this.renderer.dom.removeEventListener('mouseup', this._onMouseUp);
+    this.bu.dom.removeEventListener('mousedown', this._onMouseDown);
+    this.bu.dom.removeEventListener('mousemove', this._onMouseMove);
+    return this.bu.dom.removeEventListener('mouseup', this._onMouseUp);
   };
 
   return ReactorBase;

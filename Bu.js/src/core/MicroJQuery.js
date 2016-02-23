@@ -181,11 +181,14 @@
     })(this);
     this.attr = (function(_this) {
       return function(name, value) {
-        value || (value = '');
-        _this.each(function(dom) {
-          return dom.setAttribute(name, value);
-        });
-        return _this;
+        if (value != null) {
+          _this.each(function(dom) {
+            return dom.setAttribute(name, value);
+          });
+          return _this;
+        } else {
+          return _this[0].getAttribute(name);
+        }
       };
     })(this);
     this.hasAttr = (function(_this) {
@@ -204,12 +207,18 @@
         return _this;
       };
     })(this);
-    return this.removeAttr = (function(_this) {
+    this.removeAttr = (function(_this) {
       return function(name) {
         _this.each(function(dom) {
           return dom.removeAttribute(name);
         });
         return _this;
+      };
+    })(this);
+    return this.val = (function(_this) {
+      return function() {
+        var ref;
+        return (ref = _this[0]) != null ? ref.value : void 0;
       };
     })(this);
   };
@@ -265,3 +274,5 @@
     return xhr.send(null);
   };
 })(window || this);
+
+//# sourceMappingURL=MicroJQuery.js.map

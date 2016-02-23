@@ -5,9 +5,9 @@ var extend = function(child, parent) { for (var key in parent) { if (hasProp.cal
 Bu.DrawFreelineReactor = (function(superClass) {
   extend(DrawFreelineReactor, superClass);
 
-  function DrawFreelineReactor(renderer) {
+  function DrawFreelineReactor(bu) {
     var line, mouseButton, mouseDownPos, mousePos, polyline;
-    this.renderer = renderer;
+    this.bu = bu;
     DrawFreelineReactor.__super__.constructor.call(this);
     this.lineSplitThresh = 8;
     mouseButton = Bu.MOUSE_BUTTON_NONE;
@@ -22,7 +22,7 @@ Bu.DrawFreelineReactor = (function(superClass) {
         if (mouseButton === Bu.MOUSE_BUTTON_LEFT) {
           polyline = new Bu.Polyline;
           polyline.stroke(Bu.DEFAULT_STROKE_STYLE_HOVER);
-          return _this.renderer.append(polyline);
+          return _this.bu.append(polyline);
         }
       };
     })(this);

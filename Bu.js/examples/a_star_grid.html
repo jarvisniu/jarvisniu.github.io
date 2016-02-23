@@ -31,7 +31,7 @@
       net.engine = engine;
       
       // Renderer
-      var renderer;
+      var bu;
       
       // shapes
       var rectRows = [];
@@ -56,16 +56,16 @@
         net.setEnd(END_POS.x, END_POS.y);
       
         // append dom
-        renderer = new Bu.Renderer({
+        bu = new Bu({
           container: document.body,
           border: true,
           showKeyPoints: false,
           width: OFFSET * net.width + MARGIN * 2,
           height: OFFSET * net.height + MARGIN * 2
         });
-        renderer.dom.addEventListener("mousedown", onMouseDown);
-        renderer.dom.addEventListener("mousemove", onMouseMove);
-        renderer.dom.addEventListener("mouseup", onMouseUp);
+        bu.dom.addEventListener("mousedown", onMouseDown);
+        bu.dom.addEventListener("mousemove", onMouseMove);
+        bu.dom.addEventListener("mouseup", onMouseUp);
       
         // bind events
         $("#btnRun").on("click", function () {
@@ -92,7 +92,7 @@
                     GRID_SIZE,
                     GRID_SIZE
             );
-            renderer.append(rectRows[i][j]);
+            bu.append(rectRows[i][j]);
           }
         }
       
@@ -108,7 +108,7 @@
             );
             //lineRows[i][j].stroke("rgba(0, 128, 255, 0.5");
             lineRows[i][j].lineWidth = 0.5;
-            renderer.append(lineRows[i][j]);
+            bu.append(lineRows[i][j]);
           }
         }
       
@@ -140,9 +140,9 @@
             labelGRows[i][j].fontFamily =
                     labelHRows[i][j].fontFamily =
                             labelFRows[i][j].fontFamily = "SimSun";
-            renderer.append(labelGRows[i][j]);
-            renderer.append(labelHRows[i][j]);
-            renderer.append(labelFRows[i][j]);
+            bu.append(labelGRows[i][j]);
+            bu.append(labelHRows[i][j]);
+            bu.append(labelFRows[i][j]);
             refreshNode(i, j);
           }
         }
@@ -154,7 +154,7 @@
                   MARGIN + OFFSET * i + GRID_SIZE / 2,
                   MARGIN / 2
           );
-          renderer.append(axisTextX[i]);
+          bu.append(axisTextX[i]);
         }
         for (i = 0; i < yCount; i++) {
           axisTextY[i] = new Bu.PointText(
@@ -162,7 +162,7 @@
                   MARGIN / 2,
                   MARGIN + OFFSET * i + GRID_SIZE / 2
           );
-          renderer.append(axisTextY[i]);
+          bu.append(axisTextY[i]);
         }
       
         engine.on("nodeChanged", function (e) {
@@ -212,7 +212,7 @@
       
       function onMouseDown(e) {
         isMouseDown = true;
-        e = renderer.processArgs(e);
+        e = bu.processArgs(e);
       
         var x = pixelToIndexX(e.offsetX, e.offsetY);
         var y = pixelToIndexY(e.offsetX, e.offsetY);
@@ -238,7 +238,7 @@
       }
       
       function onMouseMove(e) {
-        e = renderer.processArgs(e);
+        e = bu.processArgs(e);
       
         if (isMouseDown && e.button == 0) {
       

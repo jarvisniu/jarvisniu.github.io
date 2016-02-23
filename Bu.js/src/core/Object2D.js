@@ -5,15 +5,35 @@ Bu.Object2D = (function() {
     Bu.Event.apply(this);
     this.visible = true;
     this.opacity = 1;
-    this.position = new Bu.Vector();
+    this.translate = new Bu.Vector();
     this.rotation = 0;
-    this.scale = new Bu.Vector(1, 1);
+    this.scale = 1;
     this.skew = new Bu.Vector();
     this.bounds = null;
     this.keyPoints = null;
     this.children = [];
     this.parent = null;
   }
+
+  Object2D.prototype.animate = function(anim, args) {
+    var a, i, len, results;
+    if (typeof anim === 'string') {
+      if (anim in Bu.animations) {
+        return Bu.animations[anim].apply(this, args);
+      } else {
+        return console.warn("Bu.animations[\"" + anim + "\"] doesn't exists.");
+      }
+    } else if (anim instanceof Array) {
+      results = [];
+      for (i = 0, len = anim.length; i < len; i++) {
+        a = anim[i];
+        results.push(this.animate(a, args));
+      }
+      return results;
+    } else {
+      return anim.apply(this, args);
+    }
+  };
 
   Object2D.prototype.containsPoint = function(p) {
     if ((this.bounds != null) && !this.bounds.containsPoint(p)) {
@@ -28,3 +48,5 @@ Bu.Object2D = (function() {
   return Object2D;
 
 })();
+
+//# sourceMappingURL=Object2D.js.map

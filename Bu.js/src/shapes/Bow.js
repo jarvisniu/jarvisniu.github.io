@@ -13,14 +13,18 @@ Bu.Bow = (function(superClass) {
     this.aFrom = aFrom;
     this.aTo = aTo;
     Bow.__super__.constructor.call(this);
+    this.type = 'Bow';
     if (this.aFrom > this.aTo) {
       ref = [this.aTo, this.aFrom], this.aFrom = ref[0], this.aTo = ref[1];
     }
-    this.type = 'Bow';
     this.center = new Bu.Point(this.cx, this.cy);
     this.string = new Bu.Line(this.center.arcTo(this.radius, this.aFrom), this.center.arcTo(this.radius, this.aTo));
     this.keyPoints = this.string.points;
   }
+
+  Bow.prototype.clone = function() {
+    return new Bu.Bow(this.cx, this.cy, this.radius, this.aFrom, this.aTo);
+  };
 
   Bow.prototype._containsPoint = function(point) {
     var sameSide, smallThanHalfCircle;
@@ -36,3 +40,5 @@ Bu.Bow = (function(superClass) {
   return Bow;
 
 })(Bu.Object2D);
+
+//# sourceMappingURL=Bow.js.map

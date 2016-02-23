@@ -116,3 +116,5 @@ Bu.Bounds = (function(superClass) {
   return Bounds;
 
 })(Bu.Object2D);
+
+//# sourceMappingURL=Bounds.js.map

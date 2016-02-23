@@ -20,6 +20,10 @@ Bu.Circle = (function(superClass) {
     this.keyPoints = [this._center];
   }
 
+  Circle.prototype.clone = function() {
+    return new Bu.Circle(this.cx, this.cy, this.radius);
+  };
+
   Circle.property('cx', {
     get: function() {
       return this._center.x;
@@ -74,3 +78,5 @@ Bu.Circle = (function(superClass) {
   return Circle;
 
 })(Bu.Object2D);
+
+//# sourceMappingURL=Circle.js.map

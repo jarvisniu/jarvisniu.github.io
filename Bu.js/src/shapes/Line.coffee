@@ -23,6 +23,8 @@ class Bu.Line extends Bu.Object2D
 
 		@trigger "pointChange", @
 
+	clone: -> new Bu.Line @points[0], @points[1]
+
 	# edit
 
 	set: (a1, a2, a3, a4) ->
@@ -71,7 +73,7 @@ class Bu.Line extends Bu.Object2D
 		b = p1.y - a * p1.x
 		return Math.abs(a * point.x + b - point.y) / Math.sqrt(a * a + 1)
 
-	# 这个是自己推导的
+	# this one is inferred by myself
 	distanceTo2: (point) ->
 		p1 = @points[0]
 		p2 = @points[1]
@@ -81,7 +83,7 @@ class Bu.Line extends Bu.Object2D
 		czY = a * czX + b
 		return Bu.bevel(czX - point.x, czY - point.y)
 
-	# get foot point from a point 计算垂足点
+	# get foot point from a point
 	# save to footPoint or create a new point
 	footPointFrom: (point, footPoint) ->
 		p1 = @points[0]
@@ -132,9 +134,9 @@ class Bu.Line extends Bu.Object2D
 			x0 = ((x2 - x1) * (x4 - x3) * (y3 - y1) + (y2 - y1) * (x4 - x3) * x1 - (y4 - y3) * (x2 - x1) * x3) / d
 			y0 = ((y2 - y1) * (y4 - y3) * (x3 - x1) + (x2 - x1) * (y4 - y3) * y1 - (x4 - x3) * (y2 - y1) * y3) / -d
 		return (x0 - x1) * (x0 - x2) < 0 and
-						(x0 - x3) * (x0 - x4) < 0 and
-						(y0 - y1) * (y0 - y2) < 0 and
-						(y0 - y3) * (y0 - y4) < 0
+				(x0 - x3) * (x0 - x4) < 0 and
+				(y0 - y1) * (y0 - y2) < 0 and
+				(y0 - y3) * (y0 - y4) < 0
 
 	# TODO test
 	isCrossWithLine2: (line) ->

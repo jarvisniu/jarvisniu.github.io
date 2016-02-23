@@ -11,10 +11,14 @@ Bu.Point = (function(superClass) {
     this.x = x1 != null ? x1 : 0;
     this.y = y1 != null ? y1 : 0;
     Point.__super__.constructor.call(this);
-    this.stroke(false);
     this.type = 'Point';
+    this.lineWidth = 0.5;
     this._labelIndex = -1;
   }
+
+  Point.prototype.clone = function() {
+    return new Bu.Point(this.x, this.y);
+  };
 
   Point.property('label', {
     get: function() {
@@ -27,7 +31,7 @@ Bu.Point = (function(superClass) {
     set: function(val) {
       var pointText;
       if (this._labelIndex === -1) {
-        pointText = new Bu.PointText(val, this.x + Bu.POINT_RENDER_SIZE, this.y, {
+        pointText = new Bu.PointText(val, this.x + Bu.POINT_LABEL_OFFSET, this.y, {
           align: '+0'
         });
         this.children.push(pointText);
@@ -40,10 +44,6 @@ Bu.Point = (function(superClass) {
 
   Point.prototype.arcTo = function(radius, arc) {
     return new Bu.Point(this.x + Math.cos(arc) * radius, this.y + Math.sin(arc) * radius);
-  };
-
-  Point.prototype.clone = function() {
-    return new Bu.Point(this.x, this.y);
   };
 
   Point.prototype.copy = function(point) {
@@ -60,7 +60,7 @@ Bu.Point = (function(superClass) {
 
   Point.prototype.updateLabel = function() {
     if (this._labelIndex > -1) {
-      this.children[this._labelIndex].x = this.x + Bu.POINT_RENDER_SIZE;
+      this.children[this._labelIndex].x = this.x + Bu.POINT_LABEL_OFFSET;
       return this.children[this._labelIndex].y = this.y;
     }
   };
@@ -114,3 +114,5 @@ Bu.Point.interpolate = function(p1, p2, k, p3) {
     return new Bu.Point(x, y);
   }
 };
+
+//# sourceMappingURL=Point.js.map

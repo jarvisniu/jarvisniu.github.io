@@ -37,7 +37,6 @@
 	jQuery = ->
 
 		# event
-
 		@on = (type, callback) =>
 			@each (dom) ->
 				dom.addEventListener type, callback
@@ -125,7 +124,7 @@
 
 		@toggleClass = (name) =>
 			@each (dom) ->
-				classText = dom.getAttribute 'class'  or ''
+				classText = dom.getAttribute 'class' or ''
 				classes = classText.split RegExp ' +'
 				if classes.contains name
 					classes.remove name
@@ -137,15 +136,12 @@
 					dom.removeAttribute 'class'
 			@
 
-		# Not giving the attribute value means just add the attribute name
-		# or clear the existing attribute value.
-		# No, jQuery is to GET the value
-
 		@attr = (name, value) =>
-			value or= ''
-			@each (dom) ->
-				dom.setAttribute name, value
-			@
+			if value?
+				@each (dom) -> dom.setAttribute name, value
+				return @
+			else
+				return @[0].getAttribute name
 
 		@hasAttr = (name) =>
 			if @length == 0
@@ -161,6 +157,8 @@
 			@each (dom) ->
 				dom.removeAttribute name
 			@
+
+		@val = => @[0]?.value
 
 	# $.ready()
 	global.$.ready = (onLoad) ->
@@ -199,6 +197,4 @@
 					ops.complete xhr, xhr.status if ops.complete?
 
 		xhr.open ops.method, url, ops.async, ops.username, ops.password
-		xhr.send null
-
-) window or this
+		xhr.send null) window or this
