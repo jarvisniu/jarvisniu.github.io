@@ -251,8 +251,8 @@
   // dom
   var header;
   var reader;
-  var nav_blog, nav_works, nav_about;
-  var body_blog_list, body_blog_text, body_works, body_about;
+  var nav_blog, nav_projects, nav_about;
+  var body_blog_list, body_blog_text, body_projects, body_about;
 
   // i18n
   var langData = {
@@ -264,9 +264,9 @@
       "zh": "博客",
       "en": "Blog",
     },
-    "works": {
-      "zh": "作品",
-      "en": "Works",
+    "projects": {
+      "zh": "项目",
+      "en": "Projects",
     },
     "tools": {
       "zh": "工具",
@@ -353,18 +353,19 @@
     initBlogList();
     onSwitchLang();
     window.addEventListener("hashchange", onHashChanged);
+    document.querySelector(".mainbody").style.display = "";
   }
 
   document.addEventListener("DOMContentLoaded", init);
 
   function initNav() {
     nav_blog = document.getElementById("nav_blog");
-    nav_works = document.getElementById("nav_works");
+    nav_projects = document.getElementById("nav_projects");
     nav_about = document.getElementById("nav_about");
 
     body_blog_list = document.getElementById("body_blog_list");
     body_blog_text = document.getElementById("body_blog_text");
-    body_works = document.getElementById("body_works");
+    body_projects = document.getElementById("body_projects");
     body_about = document.getElementById("body_about");
 
     hashPath = getHashPath();
@@ -377,9 +378,9 @@
     if (hashPath == "blog") {
       nav_blog.classList.remove("selected");
       body_blog_list.classList.remove("show");
-    } else if (hashPath == "works") {
-      nav_works.classList.remove("selected");
-      body_works.classList.remove("show");
+    } else if (hashPath == "projects") {
+      nav_projects.classList.remove("selected");
+      body_projects.classList.remove("show");
     } else if (hashPath == "tools") {
       nav_tools.classList.remove("selected");
       body_tools.classList.remove("show");
@@ -397,10 +398,10 @@
       nav_blog.classList.add("selected");
       body_blog_list.classList.add("show");
       document.title = _("blog") + " - " + _("title");
-    } else if (hashPath == "works") {
-      nav_works.classList.add("selected");
-      body_works.classList.add("show");
-      document.title = _("works") + " - " + _("title");
+    } else if (hashPath == "projects") {
+      nav_projects.classList.add("selected");
+      body_projects.classList.add("show");
+      document.title = _("projects") + " - " + _("title");
     } else if (hashPath == "tools") {
       nav_tools.classList.add("selected");
       body_tools.classList.add("show");
@@ -482,7 +483,7 @@
   }
 
 </script>
-<div class="mainbody">
+<div class="mainbody" style="display: none;">
 
   <header>
     <h1 class="title">{{ title }}</h1>
@@ -490,7 +491,7 @@
 
   <nav>
     <a id="nav_blog" href="#!/blog">{{ blog }}</a>
-    <a id="nav_works" href="#!/works">{{ works }}</a>
+    <a id="nav_projects" href="#!/projects">{{ projects }}</a>
     <a id="nav_tools" href="#!/tools">{{ tools }}</a>
     <a id="nav_about" href="#!/about">{{ about }}</a>
 		<span id="socialPanel">
@@ -510,7 +511,7 @@
     <iframe name="readerDom" src="reader.html" onload="onLoadReader();"></iframe>
   </article>
 
-  <article id="body_works">
+  <article id="body_projects">
     <div class="work-frame">
       <a href="Bu.js/" target="_blank">
         <img src="Bu.js/logo.png">
@@ -518,20 +519,20 @@
       </a>
     </div>
     <div class="work-frame">
-      <a href="works/webgis/" target="_blank">
-        <img src="img/works/webgis.jpg">
+      <a href="projects/webgis/" target="_blank">
+        <img src="img/projects/webgis.jpg">
         <p>WebGIS</p>
       </a>
     </div>
     <div class="work-frame">
-      <a href="works/2d_map/" target="_blank">
-        <img src="img/works/2dmap.jpg">
+      <a href="projects/2d_map/" target="_blank">
+        <img src="img/projects/2dmap.jpg">
         <p>二维地图（未使用API）</p>
       </a>
     </div>
     <div class="work-frame">
-      <a href="works/line_chart/" target="_blank">
-        <img src="img/works/chart.png">
+      <a href="projects/line_chart/" target="_blank">
+        <img src="img/projects/chart.png">
         <p>可缩放折线图</p>
       </a>
     </div>
