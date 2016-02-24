@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>青牛坊</title>
+  <title>牛俊为</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" href="./favicon.png">
@@ -256,13 +256,9 @@
 
   // i18n
   var langData = {
-    "__title__": {
-      "zh": "青牛坊",
-      "en": "Niu Workshop",
-    },
     "title": {
-      "zh": "青牛坊",
-      "en": "Niu Workshop",
+      "zh": "牛俊为",
+      "en": "Jarvis Niu",
     },
     "blog": {
       "zh": "博客",
@@ -304,7 +300,7 @@
       "zh": "URL解析",
       "en": "URL decoder",
     },
-    "tool_query_string_docoder": {
+    "tool_query_string_decoder": {
       "zh": "查询字符串解析",
       "en": "Query String Decoder",
     },
@@ -400,22 +396,31 @@
     if (hashPath == "blog") {
       nav_blog.classList.add("selected");
       body_blog_list.classList.add("show");
+      document.title = _("blog") + " - " + _("title");
     } else if (hashPath == "works") {
       nav_works.classList.add("selected");
       body_works.classList.add("show");
+      document.title = _("works") + " - " + _("title");
     } else if (hashPath == "tools") {
       nav_tools.classList.add("selected");
       body_tools.classList.add("show");
+      document.title = _("tools") + " - " + _("title");
     } else if (hashPath == "about") {
       nav_about.classList.add("selected");
       body_about.classList.add("show");
+      document.title = _("about") + " - " + _("title");
     } else if (hashPath.indexOf("blog/") == 0) {
       var articleTitle = hashPath.substring(5);
       loadArticle(articleTitle);
       body_blog_text.classList.add("show");
+      document.title = blogList[articleTitle].title + " - " + _("title");
     } else {
       alert("Error 404 \n 不存在此页面: " + hashPath);
     }
+  }
+
+  function _(key) {
+    return langData[key][i18n.lang];
   }
 
 
@@ -464,6 +469,7 @@
       document.getElementById("imgLang").src = "img/flags/flag-us.png";
       document.documentElement.setAttribute("lang", "zh");
     }
+    onHashChanged();
   }
 
   function setHashUrl(url) {
@@ -539,8 +545,7 @@
     <p><a target="_blank" class="new-window" href="http://tool.oschina.net/codeformat/css">{{ tool_css_formatting }}</a>
     </p>
     <p><a target="_blank" class="new-window" href="tools/url-decoder.html">{{ tool_url_docoder }}</a></p>
-    <p><a target="_blank" class="new-window" href="tools/url-query-string-docoder.html">{{ tool_query_string_docoder
-      }}</a></p>
+    <p><a target="_blank" class="new-window" href="tools/url-query-string-docoder.html">{{ tool_query_string_decoder }}</a></p>
     <p><a target="_blank" class="new-window" href="tools/zh-trans.html">{{ tool_zh_trans }}</a></p>
     <p><a target="_blank" class="new-window" href="tools/batch-address-gen.html">{{ tool_bach_address_gen }}</a></p>
   </article>
