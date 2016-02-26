@@ -134,7 +134,7 @@
     #socialPanel {
       display: inline-flex;
       float: right;
-      margin: 3px;
+      margin: 1px;
       padding: 0.15em;
       border-width: 0;
       cursor: default;
@@ -143,22 +143,23 @@
     #imgLang {
       width: 26px;
       height: 18px;
-      padding: 1px;
+      padding: 3px;
     }
 
     .icon {
       width: 20px;
       height: 20px;
+      margin: 2px;
     }
 
     .social {
-      margin: 0 2px;
+      margin-right: 2px;
     }
 
     .social {
       display: inline-block;
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
       border: solid 1px #ddd;
     }
 
@@ -275,6 +276,26 @@
     "about": {
       "zh": "关于",
       "en": "About",
+    },
+    "project_niv": {
+      "zh": "小牛看图：小巧快速的看图软件",
+      "en": "Niv: a fast image viewer",
+    },
+    "project_bu_js": {
+      "zh": "Bu.js：一个Canvas图形图",
+      "en": "Bu.js: A Canvas 2D Graphics Library",
+    },
+    "project_3d_map": {
+      "zh": "WebGL三维地图",
+      "en": "A WebGL 3D Map",
+    },
+    "project_2d_map": {
+      "zh": "Canvas二维地图",
+      "en": "A Canvas 2D Map",
+    },
+    "project_scalable_chart": {
+      "zh": "可缩放折线图",
+      "en": "Scalable Line Chart",
     },
     "tool_jsotg": {
       "zh": "JS手机编程",
@@ -515,25 +536,31 @@
     <div class="work-frame">
       <a href="Bu.js/" target="_blank">
         <img src="Bu.js/logo.png">
-        <p>Bu.js: 2D图形库</p>
+        <p>{{ project_bu_js }}</p>
       </a>
     </div>
+    <!--<div class="work-frame">-->
+      <!--<a href="niv/" target="_blank">-->
+        <!--<img src="img/projects/image-viewer.png">-->
+        <!--<p>{{ project_niv }}</p>-->
+      <!--</a>-->
+    <!--</div>-->
     <div class="work-frame">
       <a href="projects/webgis/" target="_blank">
         <img src="img/projects/webgis.jpg">
-        <p>WebGIS</p>
+        <p>{{ project_3d_map }}</p>
       </a>
     </div>
     <div class="work-frame">
       <a href="projects/2d_map/" target="_blank">
         <img src="img/projects/2dmap.jpg">
-        <p>二维地图（未使用API）</p>
+        <p>{{ project_3d_map }}</p>
       </a>
     </div>
     <div class="work-frame">
       <a href="projects/line_chart/" target="_blank">
         <img src="img/projects/chart.png">
-        <p>可缩放折线图</p>
+        <p>{{ project_scalable_chart }}</p>
       </a>
     </div>
   </article>
