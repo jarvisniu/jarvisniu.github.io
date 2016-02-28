@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Bu.js demo - shapes</title>
-    <script src="../src/Bu.dev.js"></script>
+    <script src="../build/bu.js"></script>
     <style>
       html, body, #container {
         margin: 0;
@@ -26,8 +26,9 @@
       
     </style>
     <script type="text/javascript">
-      var bu, hexagon;
+      var bu, bunny;
       var animSpin, animHelical;
+      var imageUrl = "./assets/textures/bunny.png";
       
       $.ready(init);
       
@@ -38,11 +39,12 @@
           border: false
         });
       
-        hexagon = new Bu.Polygon(100, 5).fill('white');
-        hexagon.translate.x = bu.width / 2;
-        hexagon.translate.y = bu.height / 2;
+        bunny = new Bu.Image(imageUrl);
+        bunny.scale = 2;
+        bunny.translate.x = bu.width / 2;
+        bunny.translate.y = bu.height / 2;
       
-        bu.append(hexagon);
+        bu.append(bunny);
       
         // custom animation
         animHelical = new Bu.Animation({
@@ -50,51 +52,53 @@
           init: function (anim) {
             anim.data.ox = this.translate.x;
             anim.data.oy = this.translate.y;
+            anim.data.or = this.rotation;
           },
           update: function (t, data) {
             var theta = Math.PI * 8 * t;
             var radius = 300 * t;
             this.translate.x = radius * Math.cos(theta) + data.ox;
             this.translate.y = radius * Math.sin(theta) + data.oy;
+            this.rotation = theta;
           },
           finish: function (anim) {
             this.translate.x = anim.data.ox;
             this.translate.y = anim.data.oy;
+            this.rotation = anim.data.or;
           }
         });
       
       
         $('#prefab button').attr('onclick', 'prefabAnim(this.innerText);');
-        $('#withArgs button').attr('onclick', 'hexagon.animate(this.innerText, $("#inputMove").val());');
+        $('#withArgs button').attr('onclick', 'bunny.animate(this.innerText, $("#inputMove").val());');
+        $('#spinIn').attr('onclick', 'bunny.animate("spinIn", 2);');
         $('#helical').on('click', applyHelical);
         $('#multiple').on('click', applyMultiple);
       }
       
       function prefabAnim(type) {
-        hexagon.animate(type);
+        bunny.animate(type);
       }
       
       function applyHelical() {
-        hexagon.animate(animHelical); // first writing
+        bunny.animate(animHelical); // first writing
       }
       
       function applyMultiple() {
-        Bu.animations['spin'].duration = 2;
-        hexagon.animate([animHelical, 'spin']);
+        bunny.animate(['moveBy', 'spin'], $("#inputMove").val());
       }
       
     </script>
   </head>
   <body>
-    <div id="info"><span>Animation demos.</span>
+    <div id="info"><span>Click the buttons to play the animations.</span>
       <div id="prefab">Prefab:
         <button>fadeOut</button>
         <button>fadeIn</button>
         <button>spin</button>
         <button>spinOut</button>
-        <button>spinIn</button>
-        <button>blink</button>
-        <button>shake</button><br><span>Toggle:</span>
+        <button id="spinIn">spinIn</button>
+        <button>shake</button><br><span>Toggle (need to click twice):</span>
         <button>puff</button>
         <button>clip</button>
         <button>flipX</button>
@@ -102,13 +106,13 @@
       <div id="withArgs">With arguments:
         <button id="moveBy">moveBy</button>
         <button id="moveTo">moveTo</button>
-        <input type="text" id="inputMove" name="move" value="150">
+        <input type="text" id="inputMove" name="move" value="160">
+      </div>
+      <div>Multiple(Mix):
+        <button id="multiple">move + spin</button>
       </div>
       <div>Custom:
         <button id="helical">helical</button>
-      </div>
-      <div>Multiple(Mix):
-        <button id="multiple">helical + spin</button>
       </div>
     </div>
     <div id="container"></div>

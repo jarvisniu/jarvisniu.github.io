@@ -9,7 +9,7 @@
       }
       
     </style>
-    <script src="../src/Bu.dev.js"></script>
+    <script src="../build/bu.js"></script>
     <script src="./lib/a-star/AStar.js"></script>
     <script src="./lib/a-star/Node.js"></script>
     <script src="./lib/a-star/Engine.js"></script>
@@ -218,7 +218,6 @@
       }
       
       function onMouseDown(e) {
-        e = bu.processArgs(e);
       
         isMouseDown = true;
       
@@ -242,7 +241,6 @@
       }
       
       function onMouseMove(e) {
-        e = bu.processArgs(e);
       
         if (isMouseDown) {
           var x = pixelToIndexX(e.offsetX, e.offsetY);

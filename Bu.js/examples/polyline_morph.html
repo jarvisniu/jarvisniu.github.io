@@ -3,7 +3,7 @@
   <head>
     <title>Polyline Morph</title>
     <meta charset="utf-8">
-    <script src="../src/Bu.dev.js"></script>
+    <script src="../build/bu.js"></script>
     <script src="./lib/morph/PolylineMorph.js"></script>
     <script src="js/ClipMeter.min.js"></script>
     <style>
@@ -71,7 +71,6 @@
       }
       
       function onMouseDown(e) {
-        e = bu.processArgs(e);
       
         var newPoint = new Bu.Point(e.offsetX, e.offsetY);
         if (e.button == 0) {
