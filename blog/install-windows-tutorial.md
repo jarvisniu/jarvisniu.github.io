@@ -1,6 +1,5 @@
 作者：牛俊为  
-链接：http://localhost:8080/#!/blog/install-windows-tutorial
-【欢迎转载，但请保留原链接】
+链接：[http://jarvisniu.com/#!/blog/install-windows-tutorial](http://jarvisniu.com/#!/blog/install-windows-tutorial)【欢迎转载，但请保留原链接】
 
 
 本文适用于安装Win7、Win8、Win8.1、Win10的32位和64位系统，不适用于Win XP系统。
