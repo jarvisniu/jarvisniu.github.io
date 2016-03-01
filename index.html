@@ -351,6 +351,10 @@
       title: "d3.js中data(), enter() 和 exit()的作用",
       date: "2015-08-17"
     },
+    "install-windows-tutorial": {
+      title: "牛哥教你如何用U盘装系统",
+      date: "2016-03-01"
+    },
   };
 
   function initBlogList() {
@@ -374,7 +378,7 @@
     initBlogList();
     onSwitchLang();
     window.addEventListener("hashchange", onHashChanged);
-    document.querySelector(".mainbody").style.display = "";
+    document.querySelector(".mainbody").style.visibility = "";
   }
 
   document.addEventListener("DOMContentLoaded", init);
@@ -435,7 +439,8 @@
       var articleTitle = hashPath.substring(5);
       loadArticle(articleTitle);
       body_blog_text.classList.add("show");
-      document.title = blogList[articleTitle].title + " - " + _("title");
+      if (articleTitle in blogList)
+        document.title = blogList[articleTitle].title + " - " + _("title");
     } else {
       alert("Error 404 \n 不存在此页面: " + hashPath);
     }
@@ -469,8 +474,10 @@
   }
 
   function setBlogTitle(id) {
-    document.querySelector("#blog_title").innerHTML = blogList[id].title;
-    document.querySelector("#blog_date").innerHTML = blogList[id].date;
+    if (id in blogList) {
+      document.querySelector("#blog_title").innerHTML = blogList[id].title;
+      document.querySelector("#blog_date").innerHTML = blogList[id].date;
+    }
   }
 
   function setHeight(h) {
@@ -504,7 +511,7 @@
   }
 
 </script>
-<div class="mainbody" style="display: none;">
+<div class="mainbody" style="visibility: hidden;">
 
   <header>
     <h1 class="title">{{ title }}</h1>
@@ -535,7 +542,7 @@
   <article id="body_projects">
     <div class="work-frame">
       <a href="Bu.js/" target="_blank">
-        <img src="Bu.js/logo.png">
+        <img src="img/projects/bu.js.png">
         <p>{{ project_bu_js }}</p>
       </a>
     </div>
