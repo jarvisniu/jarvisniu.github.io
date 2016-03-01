@@ -5,7 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" href="./favicon.png">
-
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700italic,700,400italic|Inconsolata'
+        rel='stylesheet' type='text/css'>
   <style type="text/css">
 
     /* overall */
@@ -20,7 +21,7 @@
     }
 
     body {
-      font-family: Roboto, Corbel, Avenir, 'Lucida Grande', 'Lucida Sans', sans-serif;
+      font-family: 'Open Sans', sans-serif;
       font-size: 14px;
       max-width: 800px;
       height: 100%;
@@ -39,19 +40,12 @@
       /*border: solid 1px gray;*/
     }
 
-    hr {
-      border: none;
-      height: 1px;
-      background-color: #CFE3DC;
-      margin-top: 24px;
-    }
-
     .title {
       font-size: 2.6em;
       padding: 0.6em;
       background-color: #088;
       color: #eee;
-      font-family: "Microsoft YaHei", SimHei, sans-serif;
+      font-family: "Open Sans", sans-serif;
       font-weight: normal;
     }
 
@@ -65,7 +59,7 @@
     }
 
     code, pre {
-      font-family: Inconsolata, Consolas, Menlo, Monaco, "Courier New", monospace;
+      font-family: 'Inconsolata', Consolas, Menlo, Monaco, "Courier New", monospace;
       color: #0C4B33;
       font-size: 1.07em;
     }
@@ -90,7 +84,7 @@
 
     nav {
       height: 32px;
-      border: solid 1px #ccc;
+      border: solid #ccc;
       border-width: 1px 0;
       background-color: #ddd;
       -webkit-user-select: none;
@@ -100,7 +94,7 @@
       display: inline-block;
       float: left;
       height: 20px;
-      border: solid 1px #ccc;
+      border: solid #ccc;
       border-width: 0 1px 0 0;
       padding: 6px 10px;
     }
@@ -161,7 +155,7 @@
     #blog_title {
       text-align: center;
       font-size: 2em;
-      margin: 28px 0 16px 0;
+      margin: 32px 8px 24px 8px;
     }
 
     #blog_date {
@@ -211,7 +205,7 @@
       position: relative;
       top: -4px;
       box-sizing: border-box;
-      border: solid 1px gray;
+      border: solid gray;
       border-width: 1px 0 0 0;
       line-height: 30px;
       height: 30px;
@@ -225,6 +219,353 @@
         width: calc(100% - 8px);
         height: 100%;
       }
+    }
+
+    #blog_text {
+      font-family: Helvetica, arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 24px 32px 32px 32px;
+    }
+
+    #blog_text > *:first-child {
+      margin-top: 0 !important;
+    }
+
+    #blog_text > *:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    #blog_text a {
+      color: #4183C4;
+    }
+
+    #blog_text a.absent {
+      color: #cc0000;
+    }
+
+    #blog_text a.anchor {
+      display: block;
+      padding-left: 30px;
+      margin-left: -30px;
+      cursor: pointer;
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+    }
+
+    #blog_text h1, h2, h3, h4, h5, h6 {
+      margin: 20px 0 10px;
+      padding: 0;
+      font-weight: bold;
+      -webkit-font-smoothing: antialiased;
+      cursor: text;
+      position: relative;
+    }
+
+    #blog_text h1 {
+      font-size: 28px;
+      color: black;
+    }
+
+    #blog_text h2 {
+      font-size: 24px;
+      border-bottom: 1px solid #cccccc;
+      color: black;
+    }
+
+    #blog_text h3 {
+      font-size: 18px;
+    }
+
+    #blog_text h4 {
+      font-size: 16px;
+    }
+
+    #blog_text h5 {
+      font-size: 14px;
+    }
+
+    #blog_text h6 {
+      color: #777777;
+      font-size: 14px;
+    }
+
+    #blog_text p, blockquote, ul, ol, dl, li, table, pre {
+      margin: 15px 0;
+    }
+
+    #blog_text hr {
+      /*background: transparent url("../../images/modules/pulls/dirty-shade.png") repeat-x 0 0;*/
+      border: 0 none;
+      background-color: #ccc;
+      height: 4px;
+      padding: 0;
+    }
+
+    #blog_text > h2:first-child {
+      margin-top: 0;
+      padding-top: 0;
+    }
+
+    #blog_text > h1:first-child {
+      margin-top: 0;
+      padding-top: 0;
+    }
+
+    #blog_text > h1:first-child + h2 {
+      margin-top: 0;
+      padding-top: 0;
+    }
+
+    #blog_text > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child {
+      margin-top: 0;
+      padding-top: 0;
+    }
+
+    h1 p, h2 p, h3 p, h4 p, h5 p, h6 p {
+      margin-top: 0;
+    }
+
+    #blog_text li p.first {
+      display: inline-block;
+    }
+
+    #blog_text ul, ol {
+      padding-left: 30px;
+    }
+
+    #blog_text ul :first-child, #blog_text ol :first-child {
+      margin-top: 0;
+    }
+
+    #blog_text ul :last-child, #blog_text ol :last-child {
+      margin-bottom: 0;
+    }
+
+    #blog_text dl {
+      padding: 0;
+    }
+
+    #blog_text dl dt {
+      font-size: 14px;
+      font-weight: bold;
+      font-style: italic;
+      padding: 0;
+      margin: 15px 0 5px;
+    }
+
+    #blog_text dl dt:first-child {
+      padding: 0;
+    }
+
+    #blog_text dl dt > :first-child {
+      margin-top: 0;
+    }
+
+    #blog_text dl dt > :last-child {
+      margin-bottom: 0;
+    }
+
+    #blog_text dl dd {
+      margin: 0 0 15px;
+      padding: 0 15px;
+    }
+
+    #blog_text dl dd > :first-child {
+      margin-top: 0;
+    }
+
+    #blog_text dl dd > :last-child {
+      margin-bottom: 0;
+    }
+
+    #blog_text blockquote {
+      border-left: 4px solid #dddddd;
+      padding: 0 15px;
+      color: #777777;
+    }
+
+    #blog_text blockquote > :first-child {
+      margin-top: 0;
+    }
+
+    #blog_text blockquote > :last-child {
+      margin-bottom: 0;
+    }
+
+    #blog_text table {
+      padding: 0;
+    }
+
+    #blog_text table tr {
+      border-top: 1px solid #cccccc;
+      background-color: white;
+      margin: 0;
+      padding: 0;
+    }
+
+    #blog_text table tr:nth-child(2n) {
+      background-color: #f8f8f8;
+    }
+
+    #blog_text table tr th {
+      font-weight: bold;
+      border: 1px solid #cccccc;
+      text-align: left;
+      margin: 0;
+      padding: 6px 13px;
+    }
+
+    #blog_text table tr td {
+      border: 1px solid #cccccc;
+      text-align: left;
+      margin: 0;
+      padding: 6px 13px;
+    }
+
+    #blog_text table tr th :first-child, table tr td :first-child {
+      margin-top: 0;
+    }
+
+    #blog_text table tr th :last-child, table tr td :last-child {
+      margin-bottom: 0;
+    }
+
+    #blog_text img {
+      max-width: 100%;
+    }
+
+    #blog_text span.frame {
+      display: block;
+      overflow: hidden;
+    }
+
+    #blog_text span.frame > span {
+      border: 1px solid #dddddd;
+      display: block;
+      float: left;
+      overflow: hidden;
+      margin: 13px 0 0;
+      padding: 7px;
+      width: auto;
+    }
+
+    #blog_text span.frame span img {
+      display: block;
+      float: left;
+    }
+
+    #blog_text span.frame span span {
+      clear: both;
+      color: #333333;
+      display: block;
+      padding: 5px 0 0;
+    }
+
+    #blog_text span.align-center {
+      display: block;
+      overflow: hidden;
+      clear: both;
+    }
+
+    #blog_text span.align-center > span {
+      display: block;
+      overflow: hidden;
+      margin: 13px auto 0;
+      text-align: center;
+    }
+
+    #blog_text span.align-center span img {
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    #blog_text span.align-right {
+      display: block;
+      overflow: hidden;
+      clear: both;
+    }
+
+    #blog_text span.align-right > span {
+      display: block;
+      overflow: hidden;
+      margin: 13px 0 0;
+      text-align: right;
+    }
+
+    #blog_text span.align-right span img {
+      margin: 0;
+      text-align: right;
+    }
+
+    #blog_text span.float-left {
+      display: block;
+      margin-right: 13px;
+      overflow: hidden;
+      float: left;
+    }
+
+    #blog_text span.float-left span {
+      margin: 13px 0 0;
+    }
+
+    #blog_text span.float-right {
+      display: block;
+      margin-left: 13px;
+      overflow: hidden;
+      float: right;
+    }
+
+    #blog_text span.float-right > span {
+      display: block;
+      overflow: hidden;
+      margin: 13px auto 0;
+      text-align: right;
+    }
+
+    #blog_text code, tt {
+      margin: 0 2px;
+      padding: 2px 5px;
+      border: 1px solid #cccccc;
+      background-color: #e8e8e8;
+      border-radius: 3px;
+      word-break: break-word;
+      white-space: pre;
+    }
+
+    #blog_text pre code {
+      margin: 0;
+      padding: 0;
+      white-space: pre;
+      border: none;
+      background: transparent;
+    }
+
+    #blog_text .highlight pre {
+      background-color: #e8e8e8;
+      border: 1px solid #cccccc;
+      font-size: 13px;
+      line-height: 19px;
+      overflow: auto;
+      padding: 6px 10px;
+      border-radius: 3px;
+    }
+
+    #blog_text pre {
+      background-color: #e8e8e8;
+      border: 1px solid #cccccc;
+      font-size: 13px;
+      line-height: 19px;
+      overflow: auto;
+      padding: 6px 10px;
+      border-radius: 3px;
+    }
+
+    #blog_text pre code, pre tt {
+      background-color: transparent;
+      border: none;
     }
 
     /*end of css*/
@@ -243,6 +584,9 @@
   var reader;
   var nav_blog, nav_projects, nav_about;
   var body_blog_list, body_blog_text, body_projects, body_about;
+
+  var LOADING = "Loading...";
+  var ERROR404 = "<h1>Error 404</h1>Sorry, this article: <strong>{title}</strong> does not exist, or has been deleted!";
 
   // i18n
   var langData = {
@@ -331,6 +675,7 @@
 
   // blog
   var pendingTitle;  // 挂起的博文标题
+  var markdownItReady = false;
   var blogList = {
     "cmd-abort-in-advance": {
       title: "解决CMD命令不能连续执行的问题",
@@ -366,6 +711,7 @@
     initNav();
     initBlogList();
     onSwitchLang();
+    loadArticle('');
     window.addEventListener("hashchange", onHashChanged);
     document.querySelector(".mainbody").style.visibility = "";
   }
@@ -446,20 +792,41 @@
     return path;
   }
 
-  function loadArticle(id) {
-    if (readerDom.window.ready) {
-      readerDom.window.loadArticle(id);
-      if (id !== "") setBlogTitle(id);
+  function loadArticle(article) {
+    if (article == '') {
+      showHtml(LOADING);
+    } else if (markdownItReady) {
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          showMd(xhr.responseText);
+        } else if (xhr.status == 404) {
+          showHtml(ERROR404.replace("{title}", title));
+        }
+      };
+      var url = "blog/" + article + ".md";
+      xhr.open("GET", url);
+      xhr.send();
+      setBlogTitle(article);
+    } else {
+      pendingTitle = article;
     }
-    else
-      pendingTitle = id;
   }
 
-  function onLoadReader() {
-    if (pendingTitle) {
-      readerDom.window.loadArticle(pendingTitle);
-      setBlogTitle(pendingTitle);
+  function onLoadMarkdownIt() {
+    mdit = new markdownit();
+    markdownItReady = true;
+    if (pendingTitle != null) {
+      loadArticle(pendingTitle);
     }
+  }
+
+  function showMd(md) {
+    document.querySelector("#blog_text").innerHTML = mdit.render(md);
+  }
+
+  function showHtml(html) {
+    document.querySelector("#blog_text").innerHTML = html;
   }
 
   function setBlogTitle(id) {
@@ -527,14 +894,17 @@
 
   <article id="body_blog_text">
     <h1 id="blog_title"></h1>
+
     <div id="blog_date"></div>
-    <iframe name="readerDom" src="reader.html" onload="onLoadReader();"></iframe>
+    <!--<iframe name="readerDom" src="reader.html" onload="onLoadReader();"></iframe>-->
+    <div id="blog_text"></div>
   </article>
 
   <article id="body_projects">
     <div class="work-frame">
       <a href="Bu.js/" target="_blank">
         <img src="img/projects/bu.js.png">
+
         <p>{{ project_bu_js }}</p>
       </a>
     </div>
@@ -547,18 +917,21 @@
     <div class="work-frame">
       <a href="projects/webgis/" target="_blank">
         <img src="img/projects/webgis.jpg">
+
         <p>{{ project_3d_map }}</p>
       </a>
     </div>
     <div class="work-frame">
       <a href="projects/2d_map/" target="_blank">
         <img src="img/projects/2dmap.jpg">
+
         <p>{{ project_2d_map }}</p>
       </a>
     </div>
     <div class="work-frame">
       <a href="projects/line_chart/" target="_blank">
         <img src="img/projects/chart.png">
+
         <p>{{ project_scalable_chart }}</p>
       </a>
     </div>
@@ -566,13 +939,21 @@
 
   <article id="body_tools">
     <p><a target="_blank" href="tools/js_otg/index.html">{{ tool_jsotg }}</a></p>
+
     <p><a target="_blank" href="tools/mde/index.html">{{ tool_mde }}</a></p>
+
     <p><a target="_blank" href="tools/currencies.html">{{ tool_currencies }}</a></p>
+
     <p><a target="_blank" href="http://html2jade.vida.io/">{{ tool_html_2_jade }}</a></p>
+
     <p><a target="_blank" href="http://tool.oschina.net/codeformat/css">{{ tool_css_formatting }}</a></p>
+
     <p><a target="_blank" href="tools/url-decoder.html">{{ tool_url_docoder }}</a></p>
+
     <p><a target="_blank" href="tools/url-query-string-docoder.html">{{ tool_query_string_decoder }}</a></p>
+
     <p><a target="_blank" href="tools/zh-trans.html">{{ tool_zh_trans }}</a></p>
+
     <p><a target="_blank" href="tools/batch-address-gen.html">{{ tool_bach_address_gen }}</a></p>
   </article>
 
@@ -604,5 +985,6 @@
   ga('send', 'pageview');
 
 </script>
+<script src="js/lib/markdown-it.min.js" async onload="onLoadMarkdownIt();"></script>
 </body>
 </html>
