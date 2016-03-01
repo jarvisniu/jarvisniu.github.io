@@ -70,17 +70,6 @@
       font-size: 1.07em;
     }
 
-    /* new window icon */
-
-    a.new-window::after {
-      content: "";
-      display: inline-block;
-      width: 16px;
-      height: 2ex;
-      background: url(img/icons/new-window-32.png) no-repeat center;
-      background-size: 16px 16px;
-    }
-
     .mainbody {
       min-height: calc(100% - 40px);
       border: solid #ccc;
@@ -282,7 +271,7 @@
       "en": "Niv: a fast image viewer",
     },
     "project_bu_js": {
-      "zh": "Bu.js：一个Canvas图形图",
+      "zh": "Bu.js：一个Canvas图形库",
       "en": "Bu.js: A Canvas 2D Graphics Library",
     },
     "project_3d_map": {
@@ -522,12 +511,15 @@
     <a id="nav_projects" href="#!/projects">{{ projects }}</a>
     <a id="nav_tools" href="#!/tools">{{ tools }}</a>
     <a id="nav_about" href="#!/about">{{ about }}</a>
-		<span id="socialPanel">
-			<a class="social" target="_blank" href="http://github.com/jarvisniu">
-        <img class="icon" src="img/icons/github-32.png">
-      </a>
-			<img class="social" id="imgLang" src="img/flags/flag-us.png" onclick="switchLang(this);">
-		</span>
+	<span id="socialPanel">
+		<a class="social" target="_blank" href="http://weibo.com/jarvisniu">
+      <img class="icon" src="img/icons/weibo-32.png">
+    </a>
+		<a class="social" target="_blank" href="http://github.com/jarvisniu">
+      <img class="icon" src="img/icons/github-32.png">
+    </a>
+		<img class="social" id="imgLang" src="img/flags/flag-us.png" onclick="switchLang(this);">
+	</span>
   </nav>
 
   <article id="body_blog_list">
@@ -547,10 +539,10 @@
       </a>
     </div>
     <!--<div class="work-frame">-->
-      <!--<a href="niv/" target="_blank">-->
-        <!--<img src="img/projects/image-viewer.png">-->
-        <!--<p>{{ project_niv }}</p>-->
-      <!--</a>-->
+    <!--<a href="niv/" target="_blank">-->
+    <!--<img src="img/projects/image-viewer.png">-->
+    <!--<p>{{ project_niv }}</p>-->
+    <!--</a>-->
     <!--</div>-->
     <div class="work-frame">
       <a href="projects/webgis/" target="_blank">
@@ -561,7 +553,7 @@
     <div class="work-frame">
       <a href="projects/2d_map/" target="_blank">
         <img src="img/projects/2dmap.jpg">
-        <p>{{ project_3d_map }}</p>
+        <p>{{ project_2d_map }}</p>
       </a>
     </div>
     <div class="work-frame">
@@ -573,16 +565,15 @@
   </article>
 
   <article id="body_tools">
-    <p><a target="_blank" class="new-window" href="tools/js_otg/index.html">{{ tool_jsotg }}</a></p>
-    <p><a target="_blank" class="new-window" href="tools/mde/index.html">{{ tool_mde }}</a></p>
-    <p><a target="_blank" class="new-window" href="tools/currencies.html">{{ tool_currencies }}</a></p>
-    <p><a target="_blank" class="new-window" href="http://html2jade.vida.io/">{{ tool_html_2_jade }}</a></p>
-    <p><a target="_blank" class="new-window" href="http://tool.oschina.net/codeformat/css">{{ tool_css_formatting }}</a>
-    </p>
-    <p><a target="_blank" class="new-window" href="tools/url-decoder.html">{{ tool_url_docoder }}</a></p>
-    <p><a target="_blank" class="new-window" href="tools/url-query-string-docoder.html">{{ tool_query_string_decoder }}</a></p>
-    <p><a target="_blank" class="new-window" href="tools/zh-trans.html">{{ tool_zh_trans }}</a></p>
-    <p><a target="_blank" class="new-window" href="tools/batch-address-gen.html">{{ tool_bach_address_gen }}</a></p>
+    <p><a target="_blank" href="tools/js_otg/index.html">{{ tool_jsotg }}</a></p>
+    <p><a target="_blank" href="tools/mde/index.html">{{ tool_mde }}</a></p>
+    <p><a target="_blank" href="tools/currencies.html">{{ tool_currencies }}</a></p>
+    <p><a target="_blank" href="http://html2jade.vida.io/">{{ tool_html_2_jade }}</a></p>
+    <p><a target="_blank" href="http://tool.oschina.net/codeformat/css">{{ tool_css_formatting }}</a></p>
+    <p><a target="_blank" href="tools/url-decoder.html">{{ tool_url_docoder }}</a></p>
+    <p><a target="_blank" href="tools/url-query-string-docoder.html">{{ tool_query_string_decoder }}</a></p>
+    <p><a target="_blank" href="tools/zh-trans.html">{{ tool_zh_trans }}</a></p>
+    <p><a target="_blank" href="tools/batch-address-gen.html">{{ tool_bach_address_gen }}</a></p>
   </article>
 
   <article id="body_about">
