@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>小牛看图</title>
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+  	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+	<style type="text/css">
+
+	body {
+		margin: 0 auto;
+		font-size: 15px;
+		max-width: 800px;
+		background-color: #eee;
+		font-family: "Open Sans", Tahoma, sans-serif;
+	}
+
+	nav {
+		background-color: #ccc;
+		border: solid gray;
+		border-width: 0 1px 1px 1px;
+		border-radius: 0 0 5px 5px;
+		padding: 0 8px;
+	}
+
+	nav > a {
+		display: inline-flex;
+		padding: 8px;
+		text-decoration: none;
+		color: #444;
+	}
+
+	header {
+		text-align: center;
+		margin: 16px;
+		font-family: SimHei, "Microsoft YaHei", sans-serif;
+	}
+
+	header h1 {
+		font-size: 3em;
+		margin: 32px 0 16px 0;
+		font-weight: normal;
+	}
+
+	header > span {
+		font-size: 17px;
+	}
+
+	.title {
+		/*border-bottom: solid 2px gray;*/
+		background-color: #ccc;
+		padding: 8px;
+	}
+
+	#screenshot {
+		text-align: center;
+		/*background-color: #bbb;*/
+	}
+
+	#screenshot img {
+		padding: 16px;
+		max-width: calc(100% - 32px);
+	}
+
+	#feature {
+		margin: 16px;
+	}
+
+	#version {
+		/*text-align: center;*/
+	}
+
+	#download {
+		margin: 32px 0 32px 0;
+		text-align: center;
+	}
+
+	#dl {
+		display: inline-flex;
+		padding: 8px 12px;
+		margin: 0 8px;
+		line-height: 24px;
+		border: solid 1px green;
+		border-radius: 4px;
+		text-decoration: none;
+		background-color: #088;
+		color: white;
+		font-size: 18px;
+		transition: 0.3s background-color;
+		box-shadow: 0 2px 12px 5px rgba(0,0,0,0.2);
+	}
+
+	#dl:hover {
+		background-color: #2aa;
+	}
+
+	#dl:active {
+		background-color: #066;
+	}
+
+	#dl img {
+		width: 24px;
+		height: 24px;
+	}
+
+	#dl > span {
+		margin: 0 4px;
+	}
+
+	hr {
+		height: 2px;
+		background-color: #bbb;
+		border: 0;
+	}
+
+	footer {
+		/*background-color: #444;
+		color: #ccc;*/
+		padding-bottom: 8px;
+		text-align: center;
+	}
+
+	</style>
+</head>
+<body>
+	<nav>
+		<!-- <a href="https://github.com/jarvisniu/Niv">常见问题</a> -->
+		<!-- <a href="https://github.com/jarvisniu/Niv">反馈</a> -->
+		<a href="https://github.com/jarvisniu/Niv">GitHub</a>
+		<!-- <a href="https://github.com/jarvisniu/Niv">关于</a> -->
+	</nav>
+	<header>
+		<h1>小牛看图</h1>
+		<span>简约·快速·开源</span>
+	</header>
+	<div id="screenshot">
+		<img src="niv-screenshot.png">
+	</div>
+	<div id="feature">
+	小牛看图是一个Windows下的开源图片浏览器。它的界面设计简约而精致，并且具有丰富、流畅的动画效果。它还支持视网膜屏、主题切换、全屏浏览、gif格式等一系列优秀特性。
+	</div>
+	<div id="download">
+		<a id="dl" href="Niv_Setup_v0.4.2.exe">
+			<img src="download.png">
+			<span>下载安装包</span>
+		</a>
+		<a href="Niv_v0.4.2.zip">
+			<span>绿色版(zip)</span>
+		</a>
+	</div>
+	<div id="version">
+		<div class="title">最新版本 v0.4.2 - 2016/03/08</div>
+		<ul>
+			<li>增加删除功能</li>
+			<li>支持Gif格式</li>
+		</ul>
+	</div>
+	<hr>
+	<footer>© 2016 牛俊为</footer>
+</body>
+</html>
