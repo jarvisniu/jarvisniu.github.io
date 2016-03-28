@@ -197,13 +197,13 @@
     }
 
     .work-frame img {
+      display: flex;
       width: 100%;
       height: calc(100% - 30px);
     }
 
     .work-frame p {
       position: relative;
-      top: -4px;
       box-sizing: border-box;
       border: solid gray;
       border-width: 1px 0 0 0;
@@ -581,7 +581,6 @@
 
   // dom
   var header;
-  var reader;
   var nav_blog, nav_projects, nav_about;
   var body_blog_list, body_blog_text, body_projects, body_about;
 
@@ -707,7 +706,6 @@
   // 初始化页面
   function init() {
     header = document.getElementsByTagName("h1")[0];
-    reader = document.getElementsByTagName("iframe")[0];
     initNav();
     initBlogList();
     onSwitchLang();
@@ -788,7 +786,7 @@
 
   function getHashPath() {
     var path = location.hash.replace("#!/", "");
-    if (path == "") path = "blog";
+    if (path == "") path = "projects";
     return path;
   }
 
@@ -836,11 +834,6 @@
     }
   }
 
-  function setHeight(h) {
-    // console.log("Height: " + h);
-    reader.style.height = h + "px";
-  }
-
   function switchLang() {
     i18n.switchLang();
     onSwitchLang()
@@ -874,19 +867,19 @@
   </header>
 
   <nav>
-    <a id="nav_blog" href="#!/blog">{{ blog }}</a>
     <a id="nav_projects" href="#!/projects">{{ projects }}</a>
+    <a id="nav_blog" href="#!/blog">{{ blog }}</a>
     <a id="nav_tools" href="#!/tools">{{ tools }}</a>
     <a id="nav_about" href="#!/about">{{ about }}</a>
-	<span id="socialPanel">
-		<a class="social" target="_blank" href="http://weibo.com/jarvisniu">
+  <span id="socialPanel">
+    <a class="social" target="_blank" href="http://weibo.com/jarvisniu">
       <img class="icon" src="img/icons/weibo-32.png">
     </a>
-		<a class="social" target="_blank" href="http://github.com/jarvisniu">
+    <a class="social" target="_blank" href="http://github.com/jarvisniu">
       <img class="icon" src="img/icons/github-32.png">
     </a>
-		<img class="social" id="imgLang" src="img/flags/flag-us.png" onclick="switchLang(this);">
-	</span>
+    <img class="social" id="imgLang" src="img/flags/flag-us.png" onclick="switchLang(this);">
+  </span>
   </nav>
 
   <article id="body_blog_list">
@@ -896,16 +889,15 @@
     <h1 id="blog_title"></h1>
 
     <div id="blog_date"></div>
-    <!--<iframe name="readerDom" src="reader.html" onload="onLoadReader();"></iframe>-->
     <div id="blog_text"></div>
   </article>
 
   <article id="body_projects">
     <div class="work-frame">
-	    <a href="niv/" target="_blank">
-		    <img src="img/projects/niv.png">
-		    <p>{{ project_niv }}</p>
-	    </a>
+      <a href="niv/" target="_blank">
+        <img src="img/projects/niv.png">
+        <p>{{ project_niv }}</p>
+      </a>
     </div>
     <div class="work-frame">
       <a href="Bu.js/" target="_blank">
