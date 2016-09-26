@@ -55,7 +55,7 @@
 
             /* panels */
 
-            #txtHTML, #txtCSS {
+            #divHTML, #divStyle {
             	display: inline-block;
             	border: none;
             	flex: 1;
@@ -66,19 +66,17 @@
             	border-right: solid 1px silver;
             }
 
-            #txtCode {
-            	display: block;
+            #divCode {
                 width: 100%;
                 height: calc(100% - 200px);
-                border: none;
             }
-            
+
             #divConsoleLog {
                 height: calc(100% - 20px);
                 overflow-x: hidden;
                 overflow-y: scroll;
             }
-            
+
             #divConsoleInput {
                 height: 20px;
                 width: 100%;

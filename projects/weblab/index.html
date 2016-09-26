@@ -4,17 +4,25 @@
         <meta charset="utf-8">
         <title>Weblab</title>
         <link rel="stylesheet" type="text/css" href="index.css">
+
+        <script src="//cdn.bootcss.com/ace/1.2.5/ace.js" type="text/javascript" charset="utf-8"></script>
+        <script src="//cdn.bootcss.com/ace/1.2.5/mode-javascript.js" type="text/javascript" charset="utf-8"></script>
+        <script src="//cdn.bootcss.com/ace/1.2.5/mode-html.js" type="text/javascript" charset="utf-8"></script>
+        <script src="//cdn.bootcss.com/ace/1.2.5/mode-css.js" type="text/javascript" charset="utf-8"></script>
+
         <script type="text/javascript">
-        	
+
         	var CDN_D3 = "http://d3js.org/d3.v3.min.js";
         	var CDN_THREE = "http://threejs.org/build/three.js";
 
-            var txtHTML, txtCSS, txtCode, txtConsoleInput;
+            var txtConsoleInput;
             var preview, previewConsole, divConsoleLog;
             var previewDocument, preveiwScriptLink, previewScript, previewCSS;
 
+            var aceScript, aceStyle, aceHTML;
+
             function refreshPreview() {
-                previewDocument.body.innerHTML = txtHTML.value;
+                previewDocument.body.innerHTML = aceHTML.session.getValue();
                 divConsoleLog.innerHTML = "";
 
                 savePage();
@@ -26,7 +34,7 @@
             function refreshPreviewCode() {
                 previewDocument.head.removeChild(previewScript);
                 previewScript = document.createElement("script");
-                previewScript.innerHTML = txtCode.value;
+                previewScript.innerHTML = aceScript.session.getValue();
                 previewDocument.head.appendChild(previewScript);
             }
 
@@ -34,20 +42,20 @@
                 previewDocument.head.removeChild(previewCSS);
                 previewCSS = document.createElement("style");
                 previewCSS.setAttribute("type", "text/css");
-                previewCSS.innerHTML = txtCSS.value;
+                previewCSS.innerHTML = aceStyle.session.getValue();
                 previewDocument.head.appendChild(previewCSS);
             }
 
             function savePage() {
-            	sessionStorage.html = txtHTML.value;
-            	sessionStorage.code = txtCode.value;
-            	sessionStorage.css = txtCSS.value;
+            	localStorage.html = aceHTML.session.getValue();
+            	localStorage.script = aceScript.session.getValue();
+            	localStorage.style = aceStyle.session.getValue();
             }
 
             function loadPage() {
-            	txtHTML.value = sessionStorage.html || "";
-            	txtCode.value = sessionStorage.code || "";
-            	txtCSS.value = sessionStorage.css || "";
+            	aceScript.session.setValue(localStorage.script || "");
+            	aceHTML.session.setValue(localStorage.html || "");
+                aceStyle.session.setValue(localStorage.style || "");
             }
 
             function executeConsoleInput() {
@@ -65,9 +73,6 @@
             }
 
             document.addEventListener("DOMContentLoaded", function() {
-                txtHTML = document.getElementById("txtHTML");
-                txtCode = document.getElementById("txtCode");
-                txtCSS = document.getElementById("txtCSS");
                 txtConsoleInput = document.getElementById("txtConsoleInput");
                 preview = document.getElementById("preview");
                 divConsoleLog = document.getElementById("divConsoleLog");
@@ -96,22 +101,34 @@
                 	divConsoleLog.innerHTML += '<p class="warn">' + Array.prototype.slice.call(arguments).join(", ") + "</p>";
                 }
 
-                txtHTML.addEventListener("keyup", refreshPreview);
-                txtCode.addEventListener("keyup", refreshPreview);
-                txtCSS.addEventListener("keyup", refreshPreview);
+                aceScript = ace.edit("divCode");
+                var JavaScriptMode = ace.require("ace/mode/javascript").Mode;
+                aceScript.session.setMode(new JavaScriptMode());
+
+                aceHTML = ace.edit("divHTML");
+                var HTMLMode = ace.require("ace/mode/html").Mode;
+                aceHTML.session.setMode(new HTMLMode());
+
+                aceStyle = ace.edit("divStyle");
+                var CSSMode = ace.require("ace/mode/css").Mode;
+                aceStyle.session.setMode(new CSSMode());
+
+                loadPage();
+
+                aceHTML.session.on("change", refreshPreview);
+                aceStyle.session.on("change", refreshPreview);
+                aceScript.session.on("change", refreshPreview);
 
                 txtConsoleInput.addEventListener("keyup", function(e) {
                 	if (e.keyIdentifier == 'Enter') executeConsoleInput();
                 });
-
-                loadPage();
             });
 
         </script>
     </head>
     <body>
     	<div id="divLeft">
-        	<textarea id="txtCode" placeholder="JavaScript"></textarea>
+            <div id="divCode"></div>
         	<div id="divConsole">
         		<div id="divConsoleLog"></div>
         		<div id="divConsoleInput">
@@ -124,8 +141,8 @@
 	        	<iframe id="preview"></iframe>
         	</div>
         	<div id="divCorner">
-		        <textarea id="txtHTML" placeholder="HTML"></textarea>
-		        <textarea id="txtCSS" placeholder="CSS"></textarea>
+		        <div id="divHTML"></div>
+		        <div id="divStyle"></div>
 	    	</div>
     	</div>
     </body>
