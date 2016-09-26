@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Weblab</title>
+        <link rel="stylesheet" type="text/css" href="index.css">
+        <script type="text/javascript">
+        	
+        	var CDN_D3 = "http://d3js.org/d3.v3.min.js";
+        	var CDN_THREE = "http://threejs.org/build/three.js";
+
+            var txtHTML, txtCSS, txtCode, txtConsoleInput;
+            var preview, previewConsole, divConsoleLog;
+            var previewDocument, preveiwScriptLink, previewScript, previewCSS;
+
+            function refreshPreview() {
+                previewDocument.body.innerHTML = txtHTML.value;
+                divConsoleLog.innerHTML = "";
+
+                savePage();
+
+                refreshPreviewCSS();
+                refreshPreviewCode();
+            }
+
+            function refreshPreviewCode() {
+                previewDocument.head.removeChild(previewScript);
+                previewScript = document.createElement("script");
+                previewScript.innerHTML = txtCode.value;
+                previewDocument.head.appendChild(previewScript);
+            }
+
+            function refreshPreviewCSS() {
+                previewDocument.head.removeChild(previewCSS);
+                previewCSS = document.createElement("style");
+                previewCSS.setAttribute("type", "text/css");
+                previewCSS.innerHTML = txtCSS.value;
+                previewDocument.head.appendChild(previewCSS);
+            }
+
+            function savePage() {
+            	sessionStorage.html = txtHTML.value;
+            	sessionStorage.code = txtCode.value;
+            	sessionStorage.css = txtCSS.value;
+            }
+
+            function loadPage() {
+            	txtHTML.value = sessionStorage.html || "";
+            	txtCode.value = sessionStorage.code || "";
+            	txtCSS.value = sessionStorage.css || "";
+            }
+
+            function executeConsoleInput() {
+        		var inputValue, outputValue;
+
+        		inputValue = txtConsoleInput.value;
+        		try	{
+        			outputValue = preview.contentWindow.eval(inputValue);
+        			previewConsole.log('> ' + inputValue + '<br>< ' + outputValue);
+        		} catch (e) {
+        			previewConsole.log('> ' + inputValue);
+        			previewConsole.error('< ' + e.message);
+        		}
+        		txtConsoleInput.value = '';
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                txtHTML = document.getElementById("txtHTML");
+                txtCode = document.getElementById("txtCode");
+                txtCSS = document.getElementById("txtCSS");
+                txtConsoleInput = document.getElementById("txtConsoleInput");
+                preview = document.getElementById("preview");
+                divConsoleLog = document.getElementById("divConsoleLog");
+                previewDocument = preview.contentWindow.document;
+                previewConsole = preview.contentWindow.console;
+
+                previewScript = document.createElement("script");
+                previewDocument.head.appendChild(previewScript);
+                previewCSS = document.createElement("style");
+                previewDocument.head.appendChild(previewCSS);
+
+                previewScriptLink = document.createElement("script");
+                previewScriptLink.addEventListener("load", refreshPreview);
+                // previewScriptLink.setAttribute("src", CDN_THREE);
+                previewScriptLink.setAttribute("src", CDN_D3);
+                previewDocument.head.appendChild(previewScriptLink);
+
+
+                previewConsole.log = previewConsole.info = function() {
+                	divConsoleLog.innerHTML += "<p>" + Array.prototype.slice.call(arguments).join(", ") + "</p>";
+                }
+                previewConsole.error = function() {
+                	divConsoleLog.innerHTML += '<p class="error">' + Array.prototype.slice.call(arguments).join(", ") + "</p>";
+                }
+                previewConsole.warn = function() {
+                	divConsoleLog.innerHTML += '<p class="warn">' + Array.prototype.slice.call(arguments).join(", ") + "</p>";
+                }
+
+                txtHTML.addEventListener("keyup", refreshPreview);
+                txtCode.addEventListener("keyup", refreshPreview);
+                txtCSS.addEventListener("keyup", refreshPreview);
+
+                txtConsoleInput.addEventListener("keyup", function(e) {
+                	if (e.keyIdentifier == 'Enter') executeConsoleInput();
+                });
+
+                loadPage();
+            });
+
+        </script>
+    </head>
+    <body>
+    	<div id="divLeft">
+        	<textarea id="txtCode" placeholder="JavaScript"></textarea>
+        	<div id="divConsole">
+        		<div id="divConsoleLog"></div>
+        		<div id="divConsoleInput">
+        			<input type="text" id="txtConsoleInput">
+        		</div>
+        	</div>
+    	</div>
+    	<div id="divRight">
+        	<div id="divPreview">
+	        	<iframe id="preview"></iframe>
+        	</div>
+        	<div id="divCorner">
+		        <textarea id="txtHTML" placeholder="HTML"></textarea>
+		        <textarea id="txtCSS" placeholder="CSS"></textarea>
+	    	</div>
+    	</div>
+    </body>
+</html>

@@ -1,0 +1,122 @@
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            html, body {
+            	display: flex;
+            	width: 100%;
+            	height: 100%;
+            	/*overflow: hidden;*/
+            }
+
+            textarea {
+            	outline-width: 0;
+            	padding: 8px;
+            }
+
+			/* containers */
+
+            #divLeft, #divRight {
+            	display: inline-block;
+                width: 50%;
+                height: 100%;
+            }
+
+            #divLeft {
+                flex: 1;
+                min-width: 400px;
+                max-width: 600px;
+                border-right: solid 1px silver;
+            }
+
+            #divRight {
+                flex: 2;
+            }
+
+            #divConsole {
+                border: none;
+                border-top: solid 1px silver;
+                height: 200px;
+                overflow-y: scroll;
+                font-family: consolas, sans-serif;
+                font-size: 13px;
+                overflow: hidden;
+            }
+
+            #divCorner {
+            	display: flex;
+                border-top: solid 1px silver;
+                width: 100%;
+                height: 200px;
+            }
+
+            /* panels */
+
+            #txtHTML, #txtCSS {
+            	display: inline-block;
+            	border: none;
+            	flex: 1;
+                height: 100%;
+            }
+
+            #txtHTML {
+            	border-right: solid 1px silver;
+            }
+
+            #txtCode {
+            	display: block;
+                width: 100%;
+                height: calc(100% - 200px);
+                border: none;
+            }
+            
+            #divConsoleLog {
+                height: calc(100% - 20px);
+                overflow-x: hidden;
+                overflow-y: scroll;
+            }
+            
+            #divConsoleInput {
+                height: 20px;
+                width: 100%;
+            }
+
+            #txtConsoleInput {
+                padding: 2px;
+                width: 100%;
+                height: 20px;
+                border: none;
+                border-top: solid 1px silver;
+                outline: none;
+            }
+
+            #divPreview {
+            	display: block;
+                width: 100%;
+                height: calc(100% - 200px);
+            }
+
+            #divPreview > iframe {
+                width: 100%;
+                height: 100%;
+                /*overflow: hidden;*/
+            }
+
+            #divConsoleLog > p {
+            	padding: 0 4px;
+            	border-bottom: solid 1px #ddd;
+            	/*word-wrap: break-word;*/
+            }
+
+            #divConsoleLog > p.error {
+            	color: #F00;
+            	background-color: #FDD;
+            }
+
+            #divConsoleLog > p.warn {
+            	color: #000;
+            	background-color: #FFD;
+            }
