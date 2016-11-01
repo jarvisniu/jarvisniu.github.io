@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>JetUI demo</title>
+    <script src="js/vue-1.0.28.js"></script>
+    <script src="js/vue-importer.js"></script>
+    <link rel="stylesheet" href="components/jetui.css">
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            -webkit-user-drag: none;
+            -webkit-user-select: none;
+        }
+
+        html,
+        body,
+        #app {
+            height: 100%;
+        }
+
+        span {
+            vertical-align: top;
+        }
+
+        #app {
+            display: flex;
+            transition: background 0.3s;
+        }
+
+        #app.theme-dark {
+            background-color: #444;
+            color: #eee;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="app" :class="theme" style="visibility: hidden;">
+
+        <side-panel class="border">
+            <vertical-toolbar v-ref:v-toolbar class="border"></vertical-toolbar>
+        </side-panel>
+
+        <div>
+
+            <horizontal-togglebar :theme.sync="theme" v-ref:togglebar class="border margin8"></horizontal-togglebar>
+
+            <tab-bar v-ref:tabbar class="border margin8"></tab-bar>
+
+            <horizontal-toolbar v-ref:h-toolbar class="border margin8"></horizontal-toolbar>
+
+            <breadcrumb v-ref:breadcrumb class="border margin8"></breadcrumb>
+
+            <horizontal-splitter class="border margin8" style="width: 500px; height: 400px;">
+                <div slot="left">
+                    <strong>Content in left panel</strong>
+                </div>
+                <div slot="right">
+                    <strong>Content in right panel</strong>
+                </div>
+            </horizontal-splitter>
+
+        </div>
+
+    </div>
+    <script>
+        VueImporter.load([
+            'image-button',
+            'vertical-toolbar',
+            'tab-bar',
+            'tab-button',
+            'horizontal-togglebar',
+            'icon-label',
+            'horizontal-toolbar',
+            'horizontal-splitter',
+            'breadcrumb',
+            'side-panel'
+        ], function() {
+            window.appVm = new Vue({
+                el: '#app',
+                props: ['theme'],
+                ready: function() {
+                    this.theme = 'theme-light';
+                    this.$refs.vToolbar.items = toolbarVData;
+                    this.$refs.hToolbar.items = toolbarHData;
+                    this.$refs.breadcrumb.items = breadcrumbData;
+                    this.$refs.tabbar.tabs = tabBarData;
+                    this.$refs.togglebar.items = toggleBarData;
+
+                    this.$el.style.visibility = "visible";
+                }
+            })
+        });
+
+        var toolbarVData = [{
+            icon: './components/icons/applicationCache.png',
+            tip: "Application Cache",
+            key: 'applicationCache',
+            selected: true
+        }, {
+            icon: './components/icons/cookie.png',
+            tip: "Cookie",
+            key: 'cookie',
+            selected: false
+        }, {
+            icon: './components/icons/localStorage.png',
+            tip: "Local Storage",
+            key: 'localStorage',
+            selected: false
+        }];
+
+        var toolbarHData = [{
+            icon: './components/icons/applicationCache.png',
+            tip: "Application Cache",
+            key: 'applicationCache',
+            selected: false
+        }, {
+            icon: './components/icons/cookie.png',
+            tip: "Cookie",
+            key: 'cookie',
+            selected: true
+        }, {
+            icon: './components/icons/localStorage.png',
+            tip: "Local Storage",
+            key: 'localStorage',
+            selected: false
+        }];
+
+        var breadcrumbData = [{
+            icon: './components/icons/folder.png',
+            label: "JetUI"
+        }, {
+            icon: './components/icons/folder.png',
+            label: "src"
+        }, {
+            icon: './components/icons/file.png',
+            label: "index.html"
+        }];
+
+        var tabBarData = [{
+            icon: './components/icons/file.png',
+            label: "index.html",
+            selected: true
+        }, {
+            icon: './components/icons/js.png',
+            label: "index.js",
+            selected: false
+        }, {
+            icon: './components/icons/js.png',
+            label: "jQuery.js",
+            selected: false
+        }, {
+            icon: './components/icons/js.png',
+            label: "three.js",
+            selected: false
+        }];
+
+        var toggleBarData = [{
+            label: "(L)ight",
+            icon: "./components/icons/database.png",
+            key: 'light',
+            selected: true
+        }, {
+            label: "Da(r)k",
+            icon: "./components/icons/localStorage.png",
+            key: 'dark',
+            selected: false
+        }];
+    </script>
+</body>
+
+</html>

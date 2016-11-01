@@ -1,0 +1,81 @@
+.tab-button {
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  font-family: "Microsoft YaHei", Arial, sans-serif;
+  font-size: 13px;
+  cursor: default;
+  height: 24px;
+  padding-left: 2px;
+  border: solid #f00;
+  border-width: 0 1px 0 0;
+  transition: background 0.3s;
+}
+.tab-button.selected {
+  z-index: 1;
+  height: 25px;
+}
+.tab-button img {
+  margin: 4px;
+  width: 16px;
+  height: 16px;
+}
+.tab-button-label {
+  line-height: 24px;
+}
+.tab-button-close {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin: 5px;
+  box-sizing: border-box;
+  background-size: contain;
+  transition: background 0.3s;
+  background-image: url("icons/close-default.png");
+}
+.tab-button-close:hover {
+  background-image: url("icons/close-hover.png");
+}
+.tab-button-close:active {
+  background-image: url("icons/close-down.png");
+}
+.theme-light .tab-button {
+  color: #050505;
+  border-color: #a0a0a0;
+  background-color: #d4d4d4;
+}
+.theme-light .tab-button:hover {
+  background-color: #e8e8e8;
+}
+.theme-light .tab-button:active {
+  background-color: #cacaca;
+}
+.theme-light .tab-button.selected {
+  background-color: #fafafa;
+}
+.theme-light .tab-button.selected:hover {
+  background-color: #fafafa;
+}
+.theme-light .tab-button.selected:active {
+  background-color: #fafafa;
+}
+.theme-dark .tab-button {
+  color: #fafafa;
+  border-color: #a0a0a0;
+  background-color: #444;
+}
+.theme-dark .tab-button:hover {
+  background-color: #585858;
+}
+.theme-dark .tab-button:active {
+  background-color: #2c2c2c;
+}
+.theme-dark .tab-button.selected {
+  background-color: #808080;
+}
+.theme-dark .tab-button.selected:hover {
+  background-color: #808080;
+}
+.theme-dark .tab-button.selected:active {
+  background-color: #808080;
+}

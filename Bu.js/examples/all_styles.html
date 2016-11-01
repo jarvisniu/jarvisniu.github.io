@@ -5,15 +5,14 @@
     <title>Bu.js demo - shapes</title>
     <script src="../build/bu.js"></script>
     <style>
-      html, body, #container {
-        margin: 0;
-        width: 100%;
-        height: 100%;
+      #container {
+        display: inline-flex;
+        border: solid 1px gray;
       }
       
       #info {
         position: absolute;
-        width: 100%;
+        width: 90%;
         text-align: center;
         padding: 8px 0;
       }
@@ -32,7 +31,7 @@
         });
       
         // default circle
-        bu.shapes[0] = new Bu.Circle(0, 0, 30);
+        bu.shapes[0] = new Bu.Circle(30);
         bu.shapes[0].children.push(new Bu.PointText('circle', 55, 0));
         bu.shapes[0].children.push(new Bu.Line(90, -90 * 2, 90, 90 * 2));
       
@@ -74,7 +73,7 @@
         bu.shapes[6] = bu.shapes[0].clone();
       
         bu.shapes[6].children.push(bu.shapes[0].clone());
-        bu.shapes[6].children[0].translate.x = 100;
+        bu.shapes[6].children[0].position.x = 100;
       
         bu.shapes[6].children.push(new Bu.PointText('.dashStyle', -100, 0));
         bu.shapes[6].children.push(new Bu.PointText('=[10, 10]', 0, 40));
@@ -99,10 +98,10 @@
         bu.shapes[8].lineJoin = 'round';
       
         // arrange
-        bu.shapes[0].translate.set(50, 90 * 3);
-        bu.shapes[1].translate.set(50, 90 * 6.5);
+        bu.shapes[0].position.set(50, 90 * 3);
+        bu.shapes[1].position.set(50, 90 * 6.5);
         for (var i = 2; i < 9; i++) {
-          bu.shapes[i].translate.set(300, 90 * i - 90);
+          bu.shapes[i].position.set(300, 90 * i - 90);
         }
       
         bu.on('update', function (frameCount) {

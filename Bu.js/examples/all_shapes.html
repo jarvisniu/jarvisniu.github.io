@@ -29,12 +29,11 @@
         bu = new Bu({
           container: '#container',
           showKeyPoints: true,
-          fillParent: true,
-          border: false
+          fillParent: true
         });
       
         // row 1: circle, line, rectangle and triangle
-        bu.shapes[0] = new Bu.Circle(100, 100, 50);
+        bu.shapes[0] = new Bu.Circle(50, 100, 100);
         bu.shapes[1] = new Bu.Line(200, 50, 250, 150);
         bu.shapes[2] = new Bu.Rectangle(315, 60, 120, 80);
         bu.shapes[3] = new Bu.Triangle(600, 50, 500, 150, 650, 150);
@@ -70,7 +69,7 @@
         bu.shapes[10] = new Bu.Rectangle(365, 400, 120, 80, 16);
       
         // labels
-        bu.append([
+        bu.add([
           new Bu.PointText('Circle', 100, 170),
           new Bu.PointText('Line', 225, 170),
           new Bu.PointText('Rectangle', 375, 170, 20),

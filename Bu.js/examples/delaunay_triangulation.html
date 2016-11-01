@@ -49,7 +49,7 @@
           var y = Bu.rand(20, bu.height - 40);
           points[i] = new Bu.Point(x, y);
           points[i].label = i;
-          bu.append(points[i]);
+          bu.add(points[i]);
         }
       }
       
@@ -63,7 +63,7 @@
           var line = new Bu.Line(p1, p2);
           line.strokeStyle = "#f40";
           lines.push(line);
-          bu.append(line);
+          bu.add(line);
         }
       }
       
@@ -74,7 +74,7 @@
             var line = new Bu.Line(points[i], points[j]);
             line.strokeStyle = "rgba(0, 0, 0, 0.1)";
             lines.push(line);
-            bu.append(line);
+            bu.add(line);
           }
         }
       }
@@ -87,7 +87,7 @@
             line.strokeStyle = "#808";
             if (!isLineCrossWithAny(line, lines)) {
               lines.push(line);
-              bu.append(line);
+              bu.add(line);
               // console.log("Add: ", i, j);
             } else {
               // console.log("Not add: ", i, j);
@@ -110,7 +110,7 @@
         }
         for (i = 0; i < lines.length; i++) {
           lines[i].strokeStyle = "#088";
-          bu.append(lines[i]);
+          bu.add(lines[i]);
         }
       }
       

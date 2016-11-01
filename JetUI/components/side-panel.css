@@ -1,0 +1,12 @@
+.side-panel {
+  display: inline-block;
+  padding: 4px;
+  height: 100%;
+  transition: background 0.3s;
+}
+.theme-light .side-panel {
+  background-image: -webkit-linear-gradient(left, #555, #444);
+}
+.theme-dark .side-panel {
+  background-image: -webkit-linear-gradient(left, #333, #222);
+}

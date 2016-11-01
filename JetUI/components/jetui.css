@@ -1,0 +1,47 @@
+/* global JetUI style */
+.border {
+  border: solid 1px #f00;
+}
+.theme-light .border {
+  border-color: #a0a0a0;
+}
+.theme-dark .border {
+  border-color: #a0a0a0;
+}
+.border-only-top {
+  border-width: 1px 0 0 0;
+}
+.border-only-right {
+  border-width: 0 1px 0 0;
+}
+.border-only-bottom {
+  border-width: 0 0 1px 0;
+}
+.border-only-left {
+  border-width: 0 0 0 1px;
+}
+.border-no-top {
+  border-width: 0 1px 1px 1px;
+}
+.border-no-right {
+  border-width: 1px 0 1px 1px;
+}
+.border-no-bottom {
+  border-width: 1px 1px 0 1px;
+}
+.border-no-left {
+  border-width: 1px 1px 1px 0;
+}
+.fill {
+  width: 100%;
+  height: 100%;
+}
+.fill-height {
+  height: 100%;
+}
+.fill-width {
+  width: 100%;
+}
+.margin8 {
+  margin: 8px;
+}

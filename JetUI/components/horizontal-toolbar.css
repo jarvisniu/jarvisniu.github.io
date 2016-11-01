@@ -1,0 +1,16 @@
+.horizontal-toolbar {
+  display: inline-flex;
+  padding: 0 1px;
+  box-sizing: border-box;
+  height: 32px;
+  transition: background 0.3s;
+}
+.horizontal-toolbar .image-button {
+  margin: 2px 1px;
+}
+.theme-light .horizontal-toolbar {
+  background-color: #e8e8e8;
+}
+.theme-dark .horizontal-toolbar {
+  background-color: #444;
+}
