@@ -1,120 +1,183 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
+html, body {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    /*overflow: hidden;*/
+}
 
-            html, body {
-            	display: flex;
-            	width: 100%;
-            	height: 100%;
-            	/*overflow: hidden;*/
-            }
+textarea {
+    outline-width: 0;
+    padding: 8px;
+}
 
-            textarea {
-            	outline-width: 0;
-            	padding: 8px;
-            }
 
-			/* containers */
+/* containers */
 
-            #divLeft, #divRight {
-            	display: inline-block;
-                width: 50%;
-                height: 100%;
-            }
+#divLeft, #divRight {
+    display: inline-block;
+    width: 50%;
+    height: 100%;
+}
 
-            #divLeft {
-                flex: 1;
-                min-width: 400px;
-                max-width: 600px;
-                border-right: solid 1px silver;
-            }
+#divLeft {
+    flex: 1;
+    min-width: 400px;
+    max-width: 600px;
+    border-right: solid 1px silver;
+}
 
-            #divRight {
-                flex: 2;
-            }
+#divRight {
+    flex: 2;
+}
 
-            #divConsole {
-                border: none;
-                border-top: solid 1px silver;
-                height: 200px;
-                overflow-y: scroll;
-                font-family: consolas, sans-serif;
-                font-size: 13px;
-                overflow: hidden;
-            }
+#divConsole {
+    border: none;
+    border-top: solid 1px silver;
+    height: 200px;
+    overflow-y: scroll;
+    font-family: consolas, sans-serif;
+    font-size: 13px;
+    overflow: hidden;
+}
 
-            #divCorner {
-            	display: flex;
-                border-top: solid 1px silver;
-                width: 100%;
-                height: 200px;
-            }
+#divCorner {
+    display: flex;
+    border-top: solid 1px silver;
+    width: 100%;
+    height: 200px;
+}
 
-            /* panels */
 
-            #divHTML, #divStyle {
-            	display: inline-block;
-            	border: none;
-            	flex: 1;
-                height: 100%;
-            }
+/* panels */
 
-            #txtHTML {
-            	border-right: solid 1px silver;
-            }
+#divHTML, #divStyle {
+    display: inline-block;
+    border: none;
+    flex: 1;
+    height: 100%;
+}
 
-            #divCode {
-                width: 100%;
-                height: calc(100% - 200px);
-            }
+#divStyle {
+    border-left: solid 1px silver;
+}
 
-            #divConsoleLog {
-                height: calc(100% - 20px);
-                overflow-x: hidden;
-                overflow-y: scroll;
-            }
+#txtHTML {
+    border-right: solid 1px silver;
+}
 
-            #divConsoleInput {
-                height: 20px;
-                width: 100%;
-            }
+#divCode {
+    width: 100%;
+    height: calc(100% - 200px);
+}
 
-            #txtConsoleInput {
-                padding: 2px;
-                width: 100%;
-                height: 20px;
-                border: none;
-                border-top: solid 1px silver;
-                outline: none;
-            }
+#divCode, #divConsole, #divHTML, #divStyle {
+    position: relative;
+}
 
-            #divPreview {
-            	display: block;
-                width: 100%;
-                height: calc(100% - 200px);
-            }
+#divCodeEditor {
+    width: 100%;
+    height: 100%;
+}
 
-            #divPreview > iframe {
-                width: 100%;
-                height: 100%;
-                /*overflow: hidden;*/
-            }
+#divConsoleLog {
+    height: calc(100% - 20px);
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
 
-            #divConsoleLog > p {
-            	padding: 0 4px;
-            	border-bottom: solid 1px #ddd;
-            	/*word-wrap: break-word;*/
-            }
+#divConsoleInput {
+    height: 20px;
+    width: 100%;
+}
 
-            #divConsoleLog > p.error {
-            	color: #F00;
-            	background-color: #FDD;
-            }
+#txtConsoleInput {
+    padding: 2px;
+    width: 100%;
+    height: 20px;
+    border: none;
+    border-top: solid 1px silver;
+    outline: none;
+}
 
-            #divConsoleLog > p.warn {
-            	color: #000;
-            	background-color: #FFD;
-            }
+#divPreview {
+    display: block;
+    width: 100%;
+    height: calc(100% - 200px);
+}
+
+#divPreview>iframe {
+    width: 100%;
+    height: 100%;
+    /*overflow: hidden;*/
+}
+
+#divConsoleLog>p {
+    padding: 0 4px;
+    border-bottom: solid 1px #ddd;
+    /*word-wrap: break-word;*/
+}
+
+#divConsoleLog>p.error {
+    color: #F00;
+    background-color: #FDD;
+}
+
+#divConsoleLog>p.warn {
+    color: #000;
+    background-color: #FFD;
+}
+
+
+/* button group */
+
+.button-group {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 10;
+    display: flex;
+    font-size: 13px;
+    font-family: sans-serif;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.button-group .button {
+    display: inline-block;
+    cursor: default;
+    background-color: #EEE;
+    border: solid 1px silver;
+    border-left-width: 0;
+    padding: 6px 10px;
+}
+
+.button-group .button:first-child {
+    border-radius: 8px 0 0 8px;
+    border-left-width: 1px;
+    padding-left: 12px;
+}
+
+.button-group .button:last-child {
+    border-radius: 0 8px 8px 0;
+    padding-right: 12px;
+}
+
+.button-group .button:hover {
+    background-color: white;
+}
+
+.button-group .button:active {
+    background-color: #CCC;
+}
+
+.button-group .button.disable {
+    background-color: #DDD;
+}

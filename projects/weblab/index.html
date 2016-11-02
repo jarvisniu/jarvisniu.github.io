@@ -74,6 +74,8 @@
 
             document.addEventListener("DOMContentLoaded", function() {
                 txtConsoleInput = document.getElementById("txtConsoleInput");
+                buttonConsoleClear = document.getElementById("buttonConsoleClear");
+                buttonCodeImport = document.getElementById("buttonCodeImport");
                 preview = document.getElementById("preview");
                 divConsoleLog = document.getElementById("divConsoleLog");
                 previewDocument = preview.contentWindow.document;
@@ -101,7 +103,7 @@
                 	divConsoleLog.innerHTML += '<p class="warn">' + Array.prototype.slice.call(arguments).join(", ") + "</p>";
                 }
 
-                aceScript = ace.edit("divCode");
+                aceScript = ace.edit("divCodeEditor");
                 var JavaScriptMode = ace.require("ace/mode/javascript").Mode;
                 aceScript.session.setMode(new JavaScriptMode());
 
@@ -122,18 +124,36 @@
                 txtConsoleInput.addEventListener("keyup", function(e) {
                 	if (e.keyIdentifier == 'Enter') executeConsoleInput();
                 });
+
+                buttonConsoleClear.addEventListener('click', function(e) {
+                    divConsoleLog.innerHTML = "";
+                });
+
+                buttonCodeImport.addEventListener('click', function(e) {
+                    alert("Sorry, the script import function is in developing...");
+                });
             });
 
         </script>
     </head>
     <body>
     	<div id="divLeft">
-            <div id="divCode"></div>
+            <div id="divCode">
+                <div id="divCodeEditor"></div>
+                <div class="button-group">
+                    <div class="button disable">JavaScript</div>
+                    <div class="button" id="buttonCodeImport">0</div>
+                </div>
+            </div>
         	<div id="divConsole">
         		<div id="divConsoleLog"></div>
         		<div id="divConsoleInput">
         			<input type="text" id="txtConsoleInput">
         		</div>
+                <div class="button-group">
+                    <div class="button disable">Console</div>
+                    <div class="button" id="buttonConsoleClear">Clear</div>
+                </div>
         	</div>
     	</div>
     	<div id="divRight">
