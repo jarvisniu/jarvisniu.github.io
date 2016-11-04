@@ -285,10 +285,10 @@
 
         function onSwitchLang() {
             if (i18n.lang == "en") {
-                document.getElementById("imgLang").src = "img/flags/flag-cn.png";
+                document.getElementById("imgLang").src = "assets/images/flags/flag-cn.png";
                 document.documentElement.setAttribute("lang", "en");
             } else {
-                document.getElementById("imgLang").src = "img/flags/flag-us.png";
+                document.getElementById("imgLang").src = "assets/images/flags/flag-us.png";
                 document.documentElement.setAttribute("lang", "zh");
             }
             onHashChanged();
@@ -316,12 +316,12 @@
             <a id="nav_about" href="#!/about">{{ about }}</a>
             <span id="socialPanel">
     <a class="social" target="_blank" href="http://weibo.com/jarvisniu">
-      <img class="icon" src="img/icons/weibo-32.png">
+      <img class="icon" src="assets/images/icons/weibo-32.png">
     </a>
     <a class="social" target="_blank" href="http://github.com/jarvisniu">
-      <img class="icon" src="img/icons/github-32.png">
+      <img class="icon" src="assets/images/icons/github-32.png">
     </a>
-    <img class="social" id="imgLang" src="img/flags/flag-us.png" onclick="switchLang(this);">
+    <img class="social" id="imgLang" src="assets/images/flags/flag-us.png" onclick="switchLang(this);">
   </span>
         </nav>
 
@@ -338,43 +338,43 @@
         <article id="body_projects">
             <div class="work-frame">
                 <a href="niv/" target="_blank">
-                    <img src="img/projects/niv.png">
+                    <img src="assets/images/projects/niv.png">
                     <p>{{ project_niv }}</p>
                 </a>
             </div>
             <div class="work-frame">
                 <a href="Bu.js/examples/" target="_blank">
-                    <img src="img/projects/bu.js.png">
+                    <img src="assets/images/projects/bu.js.png">
                     <p>{{ project_bu_js }}</p>
                 </a>
             </div>
             <div class="work-frame">
                 <a href="JetUI/ide.html" target="_blank">
-                    <img src="assert/images/JetUI.png">
+                    <img src="assets/images/projects/JetUI.png">
                     <p>{{ project_jetui }}</p>
                 </a>
             </div>
             <div class="work-frame">
                 <a href="projects/weblab" target="_blank">
-                    <img src="img/projects/weblab.png">
+                    <img src="assets/images/projects/weblab.png">
                     <p>{{ project_weblab }}</p>
                 </a>
             </div>
             <div class="work-frame">
                 <a href="projects/webgis/" target="_blank">
-                    <img src="img/projects/webgis.jpg">
+                    <img src="assets/images/projects/webgis.jpg">
                     <p>{{ project_3d_map }}</p>
                 </a>
             </div>
             <div class="work-frame">
                 <a href="projects/2d_map/" target="_blank">
-                    <img src="img/projects/2dmap.jpg">
+                    <img src="assets/images/projects/2dmap.jpg">
                     <p>{{ project_2d_map }}</p>
                 </a>
             </div>
             <div class="work-frame">
                 <a href="projects/line_chart/" target="_blank">
-                    <img src="img/projects/chart.png">
+                    <img src="assets/images/projects/chart.png">
                     <p>{{ project_scalable_chart }}</p>
                 </a>
             </div>
