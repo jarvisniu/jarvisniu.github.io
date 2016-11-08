@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Bu.js demo - shapes</title>
+    <title>Bitmap font</title>
     <script src="../build/bu.js"></script>
     <style>
       html, body {
@@ -40,8 +40,8 @@
       		document.querySelector("#text").value = this.text;
       		this.updateText(this.text);
       
-      		this.$canvas.add(this.$objects.pivot);
-      		this.$canvas.add(this.$objects.pointText);
+      		this.$renderer.scene.addChild(this.$objects.pivot);
+      		this.$renderer.scene.addChild(this.$objects.pointText);
       	},
       	methods: {
       		updateText: function (text) {

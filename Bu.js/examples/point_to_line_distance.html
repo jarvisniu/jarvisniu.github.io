@@ -22,29 +22,29 @@
     </style>
     <script type="text/javascript">
       var bu = new Bu.App({
-      	canvas: {
+      	renderer: {
       		showKeyPoints: true,
       		cursor: 'crosshair',
       	},
       	data: {
       		mousePos: new Bu.Point(),
-      		generator: null,
+      		randomizer: new Bu.ShapeRandomizer(),
       	},
       	objects: function() {
-      		this.generator = new Bu.RandomShapeGenerator(this.$canvas);
+      		var line = this.randomizer.generateLine();
       		var lineVertical = new Bu.Line().dash();
       		lineVertical.points[1].label = "T";
-      		return {
-      			line: this.generator.generateLine(),
-      			lineVertical: lineVertical,
-      		}
+      		return { line, lineVertical, };
       	},
       	hierarchy: {
       		line: {},
       		lineVertical: {},
       	},
+      	init: function() {
+      		this.randomizer.setRange(this.$renderer.width, this.$renderer.height);
+      	},
       	events: {
-      		'mousemove': function (e) {
+      		mousemove: function (e) {
       			var o = this.$objects;
       			this.mousePos.x = e.offsetX;
       			this.mousePos.y = e.offsetY;
@@ -54,8 +54,8 @@
       			o.line.footPointFrom(this.mousePos, o.lineVertical.points[1]);
       			o.lineVertical.points[0].label = "Distance: " + Math.round(dist);
       		},
-      		'mouseup': function (e) {
-      			this.$objects.line = this.$canvas.shapes[0] = this.generator.generateLine();
+      		mouseup: function (e) {
+      			this.randomizer.randomize(this.$objects.line);
       		},
       	},
       });

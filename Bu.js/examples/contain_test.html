@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Contains Point</title>
+    <title>Contains test</title>
     <script src="../build/bu.js"></script>
     <style>
       html, body {
@@ -19,55 +19,65 @@
       	padding: 8px 0;
       }
       
+      #control {
+      	float: right;
+      	text-align: left;
+      	border: solid 1px silver;
+      	background-color: white;
+      	margin-right: 8px;
+      	padding: 4px;
+      }
+      
     </style>
     <script type="text/javascript">
       var bu = new Bu.App({
-      	canvas: {
+      	renderer: {
       		cursor: 'crosshair',
       		showKeyPoints: true,
+      		showBounds: true,
       	},
       	data: {
       		mousePos: new Bu.Point(),
       	},
       	objects: function () {
-      		this.generator = new Bu.RandomShapeGenerator(this.$canvas);
+      		var r = this.randomizer = new Bu.ShapeRandomizer();
       
       		// circle,
       		return {
-      			circle: this.generator.generateCircle(),
-      			triangle: this.generator.generateTriangle(),
-      			rectangle: this.generator.generateRectangle(),
-      			fan: this.generator.generateFan(),
-      			bow: this.generator.generateBow(),
-      			polygon: this.generator.generatePolygon(),
+      			circle: r.generateCircle().createBounds(),
+      			triangle: r.generateTriangle().createBounds(),
+      			rectangle: r.generateRectangle(),
+      			fan: r.generateFan().createBounds(),
+      			bow: r.generateBow().createBounds(),
+      			polygon: r.generatePolygon().createBounds(),
       		};
       	},
       	hierarchy: {
       		circle: {},
       		triangle: {},
+      		rectangle: {},
       		fan: {},
       		bow: {},
       		polygon:{},
       	},
       	init: function () {
-      		// `Bound` are used to accelerate the hit testing
-      		for (var i in this.$canvas.shapes) {
-      			if (!this.$canvas.shapes.hasOwnProperty(i)) continue;
-      			this.$canvas.shapes[i].bounds = new Bu.Bounds(this.$canvas.shapes[i]);
-      		}
+      		this.randomizer.setRange(this.$renderer.width, this.$renderer.height);
       	},
       	methods: {
       		regenerateShapes: function () {
-      			console.log("TODO: implement Bu.RandomShapeGenerator.randomize(shape);");
+      			var o = this.$objects;
+      			this.randomizer.randomize([o.circle, o.triangle, o.rectangle, o.fan, o.bow, o.polygon]);
       		},
       	},
       	events: {
       		mousemove: function (e) {
+      			var o = this.$objects;
       			this.mousePos.x = e.offsetX;
       			this.mousePos.y = e.offsetY;
-      			for (var i in this.$canvas.shapes) {
-      				if (!this.$canvas.shapes.hasOwnProperty(i)) continue;
-      				var shape = this.$canvas.shapes[i];
+      			
+      			for (var i in o) {
+      				if (!o.hasOwnProperty(i)) continue;
+      				var shape = o[i];
       				if (shape.containsPoint(this.mousePos))
       					shape.fill(Bu.DEFAULT_FILL_STYLE_HOVER);
       				else
@@ -83,7 +93,12 @@
     </script>
   </head>
   <body>
-    <div id="info">Move cursor to test.</div>
-    <!-- Click to regenerate shapes.-->
+    <div id="info"><span>Move cursor to test. Click to regenerate shapes.</span>
+      <div id="control">
+        <label>
+          <input type="checkbox" onclick="bu.$renderer.showBounds = this.checked;" checked>Show Bounds
+        </label>
+      </div>
+    </div>
   </body>
 </html>

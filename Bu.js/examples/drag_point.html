@@ -24,7 +24,7 @@
     </style>
     <script type="text/javascript">
       var bu = new Bu.App({
-      	canvas: {
+      	renderer: {
       		cursor: 'default',
       	},
       	data: {
@@ -32,14 +32,14 @@
       		points: [],
       	},
       	init: function () {
-      		this.movePointReactor = new Bu.MovePointReactor(this.$canvas);
+      		this.movePointReactor = new Bu.MovePointReactor(this.$renderer);
       		this.movePointReactor.enable();
       
       		for (var i = 0; i < this.POINT_COUNT; i++) {
-      			this.points[i] = new Bu.Point(Bu.rand(this.$canvas.width), Bu.rand(this.$canvas.height));
+      			this.points[i] = new Bu.Point(Bu.rand(this.$renderer.width), Bu.rand(this.$renderer.height));
       			this.points[i].label = "P" + i;
       		}
-      		this.$canvas.add(this.points);
+      		this.$renderer.scene.addChild(this.points);
       	},
       });
       

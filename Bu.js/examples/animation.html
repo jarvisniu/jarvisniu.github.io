@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Bu.js demo - shapes</title>
+    <title>Animation</title>
     <script src="../build/bu.js"></script>
     <style>
       html, body {
@@ -20,13 +20,13 @@
       	padding: 8px 0;
       }
       
-      #inputMove {
+      input {
       	width: 50px;
       }
       
     </style>
     <script type="text/javascript">
-      var bu, bunny;
+      var bu, bunny, circle;
       var animSpin, animHelical;
       var imageUrl = "./assets/textures/bunny.png";
       
@@ -40,7 +40,10 @@
       	bunny.position.x = bu.width / 2;
       	bunny.position.y = bu.height / 2;
       
-      	bu.add(bunny);
+      	bu.scene.addChild(bunny);
+      	
+      	circle = new Bu.Circle(50, 100, 100).fill("white");
+      	bu.scene.addChild(circle);
       
       	// custom animation
       	animHelical = new Bu.Animation({
@@ -50,11 +53,11 @@
       			anim.data.oy = this.position.y;
       			anim.data.or = this.rotation;
       		},
-      		update: function (t, data) {
-      			var theta = Math.PI * 8 * t;
-      			var radius = 300 * t;
-      			this.position.x = radius * Math.cos(theta) + data.ox;
-      			this.position.y = radius * Math.sin(theta) + data.oy;
+      		update: function (anim) {
+      			var theta = Math.PI * 8 * anim.t;
+      			var radius = 300 * anim.t;
+      			this.position.x = radius * Math.cos(theta) + anim.data.ox;
+      			this.position.y = radius * Math.sin(theta) + anim.data.oy;
       			this.rotation = theta;
       		},
       		finish: function (anim) {
@@ -66,7 +69,10 @@
       
       
       	$('#prefab button').attr('onclick', 'prefabAnim(this.innerText);');
-      	$('#withArgs button').attr('onclick', 'bunny.animate(this.innerText, $("#inputMove").val());');
+      	$('#moveBy').attr('onclick', 'bunny.animate("moveBy", $("#inputMove").val());');
+      	$('#moveTo').attr('onclick', 'bunny.animate("moveTo", $("#inputMove").val());');
+      	$('#blink').attr('onclick', 'circle.animate("blink");');
+      	$('#discolor').attr('onclick', 'circle.animate("discolor", $("#inputDiscolor").val());');
       	$('#spinIn').attr('onclick', 'bunny.animate("spinIn", 2);');
       	$('#helical').on('click', applyHelical);
       	$('#multiple').on('click', applyMultiple);
@@ -99,10 +105,15 @@
         <button>clip</button>
         <button>flipX</button>
       </div>
-      <div id="withArgs">With arguments:
+      <div>With arguments:
         <button id="moveBy">moveBy</button>
         <button id="moveTo">moveTo</button>
         <input type="text" id="inputMove" name="move" value="160">
+      </div>
+      <div>Background Color:
+        <button id="blink">blink</button>
+        <button id="discolor">discolor</button>
+        <input type="text" id="inputDiscolor" name="move" value="red">
       </div>
       <div>Multiple(Mix):
         <button id="multiple">move + spin</button>

@@ -22,29 +22,33 @@
     </style>
     <script type="text/javascript">
       var bu = new Bu.App({
-      	canvas: {
+      	renderer: {
       		showKeyPoints: true,
       		cursor: 'crosshair',
       	},
       	data: {
-      		generator: null,
       		mousePos: new Bu.Point(),
+      		randomizer: new Bu.ShapeRandomizer(),
+      	},
+      	objects: function() {
+      		var line = this.randomizer.generateLine();
+      		var polyline= this.randomizer.generatePolyline();
+      		return { line, polyline, };
+      	},
+      	hierarchy: {
+      		line: {},
+      		polyline: {},
       	},
       	init: function () {
-      		this.generator = new Bu.RandomShapeGenerator(this.$canvas);
-      		this.generateLines();
-      	},
-      	methods: {
-      		generateLines: function () {
-      			this.$objects.line = this.$canvas.shapes[0] = this.generator.generateLine();
-      			this.$objects.polyline = this.$canvas.shapes[1] = this.generator.generatePolyline();
-      		},
+      		this.randomizer.setRange(this.$renderer.width, this.$renderer.height);
       	},
       	events: {
-      		'mouseup': function (e) {
-      			this.generateLines();
+      		mouseup: function (e) {
+      			var o = this.$objects;
+      			// Randomize the lines
+      			this.randomizer.randomize([o.line, o.polyline]);
       		},
-      		'mousemove': function (e) {
+      		mousemove: function (e) {
       			var o = this.$objects;
       
       			this.mousePos.x = e.offsetX;
