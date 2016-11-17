@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Camera Control</title>
+	<script src="../build/bu.js"></script>
+	<link rel="stylesheet" href="css/example.css">
+	<script type="text/javascript">
+		var bu = new Bu.App({
+			renderer: {
+				originAtCenter: true,
+			},
+            objects: {
+                circle: new Bu.Circle(200).fill('#496').setLineWidth(10),
+                square: new Bu.Rectangle(-50, -50, 100, 100).fill('white').setLineWidth(10),
+            },
+            hierarchy: {
+                circle: {},
+                square: {},
+            },
+			init: function() {
+				var control = new Bu.MouseControl(
+					this.$renderer.camera,
+					this.$renderer.dom
+				);
+
+				$("#earthquake").on('click', function (e) {
+					bu.$renderer.camera.animate('shake');
+				});
+				$("#smoothZoom").on('click', function (e) {
+					control.smoothZooming = this.checked;
+				});
+			},
+		});
+	</script>
+</head>
+<body>
+	<div id="info">Drag to pan, scroll to zoom, with your mouse.</div>
+    <div id="control">
+        <div>Camera effects:</div>
+        <button id="earthquake">Earthquake</button>
+        <hr>
+        <input id="smoothZoom" type="checkbox" checked="checked">
+        <label for="smoothZoom">Smooth Zoom</label>
+    </div>
+</body>
+</html>
