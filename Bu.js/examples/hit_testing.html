@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>Contains test</title>
+	<title>Hit Testing</title>
 	<script src="../build/bu.js"></script>
 	<link rel="stylesheet" href="css/example.css">
 	<script type="text/javascript">
@@ -12,13 +12,19 @@
 				cursor: 'crosshair',
 				showKeyPoints: true,
 				showBounds: true,
+				originAtCenter: true,
 			},
 			data: {
 				mousePos: new Bu.Vector(),
 				randomizer: new Bu.ShapeRandomizer(),
 			},
 			objects: function () {
-				var r = this.randomizer;
+				var r = this.randomizer.setRange(
+					-this.$renderer.width / 2,
+					-this.$renderer.height / 2,
+					this.$renderer.width,
+					this.$renderer.height
+				);
 				return {
 					circle: r.generateCircle().createBounds(),
 					ellipse: r.generateEllipse().createBounds(),
@@ -39,13 +45,19 @@
 				polygon: {},
 			},
 			init: function () {
-				this.randomizer.setRange(this.$renderer.width, this.$renderer.height);
 				$("#btnShowBounds").on('click', function () {
 					bu.$renderer.showBounds = this.checked;
 				});
 
+				$("#randomize").on('click', function () {
+					bu.regenerateShapes();
+				});
+
 				// Hit-testing still works fine after transformations
 				this.$objects.circle.translate(100, 100).rotate(Bu.d2r(30));
+				this.$objects.triangle.translate(200, 100).rotate(Bu.d2r(40));
+
+				new Bu.MouseControl(this.$renderer.camera, this.$renderer.dom);
 			},
 			methods: {
 				regenerateShapes: function () {
@@ -61,14 +73,13 @@
 						if (!o.hasOwnProperty(i)) continue;
 						var shape = o[i];
 
-						if (shape.hitTest(this.mousePos.set(e.offsetX, e.offsetY)))
+						this.mousePos.set(e.offsetX, e.offsetY);
+
+						if (shape.hitTest(this.mousePos))
 							shape.style('hover');
 						else
 							shape.style();
 					}
-				},
-				mouseup: function () {
-					this.regenerateShapes();
 				},
 			},
 		});
@@ -78,9 +89,11 @@
 
 <body>
 <div id="info">
-	<span>Move cursor to test. Click to regenerate shapes.</span>
+	<span>Move the cursor to perform hit-testing.</span>
 </div>
 <div id="control">
+	<button id="randomize">Randomize</button>
+	<br>
 	<input id="btnShowBounds" type="checkbox" checked>
 	<label for="btnShowBounds">Show Bounds</label>
 </div>
