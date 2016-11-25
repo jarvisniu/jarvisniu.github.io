@@ -1,0 +1,14 @@
+.rotated-panel {
+  display: inline-block;
+  height: 100%;
+  transition: background 0.3s;
+}
+.rotated-panel > * {
+  transform-origin: top left;
+}
+.theme-light .rotated-panel {
+  background-color: #e8e8e8;
+}
+.theme-dark .rotated-panel {
+  background-image: #444;
+}

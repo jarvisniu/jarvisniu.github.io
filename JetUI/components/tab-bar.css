@@ -1,6 +1,5 @@
 .tab-bar {
   box-sizing: border-box;
-  height: 30px;
   width: 500px;
   transition: background 0.3s;
   user-select: none;
@@ -10,12 +9,14 @@
 }
 .tab-bar-container {
   display: inline-flex;
-  height: 24px;
+  height: 26px;
   width: 100%;
+  margin-bottom: 3px;
   border-bottom: solid 1px #f00;
   transition: background 0.3s;
 }
 .tab-bar-container .tabbar-filler {
+  min-width: 16px;
   flex: 1;
 }
 .theme-light .tab-bar {

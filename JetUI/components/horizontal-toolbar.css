@@ -1,8 +1,8 @@
 .horizontal-toolbar {
   display: inline-flex;
   padding: 0 1px;
-  box-sizing: border-box;
-  height: 32px;
+  box-sizing: content-box;
+  height: 30px;
   transition: background 0.3s;
 }
 .horizontal-toolbar .image-button {

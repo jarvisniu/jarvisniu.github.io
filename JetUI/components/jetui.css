@@ -42,6 +42,18 @@
 .fill-width {
   width: 100%;
 }
+.flex1 {
+  flex: 1;
+}
 .margin8 {
   margin: 8px;
+}
+.align-to-right {
+  flex-direction: row-reverse;
+}
+.align-to-top {
+  flex-direction: column;
+}
+.align-to-bottom {
+  flex-direction: column-reverse;
 }

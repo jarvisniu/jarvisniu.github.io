@@ -20,6 +20,7 @@
 export default {
     data: function() {
         return {
+            pixelRatio: window.devicePixelRatio || 1,
             downOnSplitter: false,
             domHandle: null,
             domLeftPanel: null,
@@ -34,7 +35,7 @@ export default {
             }
         },
         onMouseMove: function(ev) {
-            if (this.downOnSplitter) this.moveSplitter(ev.movementX);
+            if (this.downOnSplitter) this.moveSplitter(ev.movementX / this.pixelRatio);
         },
         onMouseUp: function(ev) {
             this.downOnSplitter = false;

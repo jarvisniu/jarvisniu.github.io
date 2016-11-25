@@ -24,14 +24,14 @@ export default {
     },
     props: ['theme'],
     events: {
-        "childClick": function(child) {
+        childClick: function(child) {
             var buttons = this.$children;
             for (var i in buttons) {
                 if (!buttons.hasOwnProperty(i)) continue;
                 if (buttons[i] !== child) {
-                    buttons[i].model.selected = false
+                    buttons[i].model.selected = false;
                 } else {
-                    buttons[i].model.selected = true;
+                    buttons[i].model.selected = !buttons[i].model.selected;
                     this.$dispatch("toggleChanged", buttons[i].model.key);
                 }
             }

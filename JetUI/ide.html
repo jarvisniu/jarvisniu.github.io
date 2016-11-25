@@ -44,17 +44,23 @@
 
         <breadcrumb v-ref:breadcrumb class="border border-only-bottom" style="width: 100%;"></breadcrumb>
 
-        <horizontal-splitter v-ref:h-splitter style="height: calc(100% - 55px);">
-            <div slot="left" style="display: flex;">
-                <side-panel class="border border-only-right">
-                    <vertical-toolbar v-ref:v-toolbar class="border"></vertical-toolbar>
-                </side-panel>
-                <horizontal-toolbar v-ref:h-toolbar class="border border-only-bottom fill-width"></horizontal-toolbar>
-            </div>
-            <div slot="right">
-                <tab-bar v-ref:tabbar class="border border-no-top" style="width: 100%;"></tab-bar>
-            </div>
-        </horizontal-splitter>
+        <div style="display: flex; height: calc(100% - 55px);">
+            <rotated-panel class="border border-only-right">
+                <div style="display: flex;">
+                    <horizontal-togglebar v-ref:togglebar-side-bottom></horizontal-togglebar>
+                    <horizontal-togglebar v-ref:togglebar-side-top class="flex1 align-to-right"></horizontal-togglebar>
+                </div>
+            </rotated-panel>
+            <horizontal-splitter v-ref:h-splitter style="flex: 1;">
+                <div slot="left" style="display: flex;">
+                    <horizontal-toolbar v-ref:h-toolbar class="border border-only-bottom fill-width"></horizontal-toolbar>
+                </div>
+                <div slot="right">
+                    <tab-bar v-ref:tabbar class="border border-only-bottom" style="width: 100%;"></tab-bar>
+                </div>
+            </horizontal-splitter>
+        </div>
+
         <horizontal-togglebar :theme.sync="theme" v-ref:togglebar class="border border-only-top"></horizontal-togglebar>
 
     </div>
@@ -68,19 +74,20 @@
             'icon-label',
             'horizontal-toolbar',
             'horizontal-splitter',
-            'breadcrumb',
-            'side-panel'
+            'rotated-panel',
+            'breadcrumb'
         ], function() {
             new Vue({
                 el: '#app',
                 props: ['theme'],
                 ready: function() {
                     this.theme = 'theme-light';
-                    this.$refs.vToolbar.items = toolbarVData;
                     this.$refs.hToolbar.items = toolbarHData;
                     this.$refs.breadcrumb.items = breadcrumbData;
                     this.$refs.tabbar.tabs = tabBarData;
                     this.$refs.togglebar.items = toggleBarData;
+                    this.$refs.togglebarSideTop.items = toggleBarSideTopData;
+                    this.$refs.togglebarSideBottom.items = toggleBarSideBottomData;
 
                     this.$el.style.visibility = "visible";
 
@@ -88,23 +95,6 @@
                 }
             })
         });
-
-        var toolbarVData = [{
-            icon: './components/icons/applicationCache.png',
-            tip: "Application Cache",
-            key: 'applicationCache',
-            selected: true
-        }, {
-            icon: './components/icons/cookie.png',
-            tip: "Cookie",
-            key: 'cookie',
-            selected: false
-        }, {
-            icon: './components/icons/localStorage.png',
-            tip: "Local Storage",
-            key: 'localStorage',
-            selected: false
-        }];
 
         var toolbarHData = [{
             icon: './components/icons/applicationCache.png',
@@ -161,6 +151,30 @@
             label: "Da(r)k",
             icon: "./components/icons/localStorage.png",
             key: 'dark',
+            selected: false
+        }];
+
+        var toggleBarSideTopData = [{
+            label: "(1):Project",
+            icon: "./components/icons/ws.png",
+            key: 'project',
+            selected: true
+        }, {
+            label: "(7):Structure",
+            icon: "./components/icons/structure.png",
+            key: 'structure',
+            selected: false
+        }];
+
+        var toggleBarSideBottomData = [{
+            label: "(2):Favorite",
+            icon: "./components/icons/star.png",
+            key: 'favorite',
+            selected: false
+        }, {
+            label: "Gulp",
+            icon: "./components/icons/gulp.png",
+            key: 'gulp',
             selected: false
         }];
     </script>

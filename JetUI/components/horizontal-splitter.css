@@ -20,10 +20,11 @@
 .splitter-handle {
   position: relative;
   left: 0;
-  width: 8px;
+  width: 9px;
   height: 100%;
   margin: 0 -4px;
   cursor: w-resize;
+  z-index: 10;
 }
 .splitter-line {
   height: 100%;
