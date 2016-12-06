@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<meta charset="utf-8">
 	<title>Bitmap font</title>
@@ -26,9 +25,6 @@
 
 				document.querySelector("#text").value = this.text;
 				this.updateText(this.text);
-
-				this.$renderer.scene.addChild(this.$objects.pivot);
-				this.$renderer.scene.addChild(this.$objects.pointText);
 			},
 			methods: {
 				updateText: function (text) {
@@ -38,7 +34,6 @@
 		});
 	</script>
 </head>
-
 <body>
 <div id="info">
 	<div>Bitmap font implemented by sprite sheets.</div>
@@ -76,5 +71,4 @@
 	</div>
 </div>
 </body>
-
 </html>

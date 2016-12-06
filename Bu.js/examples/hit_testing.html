@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 	<meta charset="utf-8">
 	<title>Hit Testing</title>
@@ -34,15 +33,6 @@
 					bow: r.generateBow().createBounds(),
 					polygon: r.generatePolygon().createBounds(),
 				};
-			},
-			hierarchy: {
-				circle: {},
-				ellipse: {},
-				triangle: {},
-				rectangle: {},
-				fan: {},
-				bow: {},
-				polygon: {},
 			},
 			init: function () {
 				$("#btnShowBounds").on('click', function () {
@@ -83,7 +73,6 @@
 
 	</script>
 </head>
-
 <body>
 <div id="info">
 	<span>Move the cursor to perform hit-testing.</span>
@@ -95,5 +84,4 @@
 	<label for="btnShowBounds">Show Bounds</label>
 </div>
 </body>
-
 </html>

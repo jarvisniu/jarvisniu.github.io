@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<meta charset="utf-8">
 	<title>All shapes</title>
@@ -57,33 +56,6 @@
 				roundedRectLabel: new Bu.PointText('Rectangle (Round)', 425, 525),
 				ellipseLabel: new Bu.PointText('Ellipse', 580, 525),
 			},
-			hierarchy: {
-				circle: {},
-				line: {},
-				rectangle: {},
-				triangle: {},
-				fan: {},
-				bow: {},
-				polygon: {},
-				polygon2: {},
-				polyline: {},
-				spline: {},
-				roundedRect: {},
-				ellipse: {},
-
-				circleLabel: {},
-				lineLabel: {},
-				rectangleLabel: {},
-				triangleLabel: {},
-				fanLabel: {},
-				bowLabel: {},
-				polygonLabel: {},
-				polygon2Label: {},
-				polylineLabel: {},
-				splineLabel: {},
-				roundedRectLabel: {},
-				ellipseLabel: {},
-			},
 			methods: {
 				setDashStroke: function (on) {
 					this.$renderer.scene.children.each(function (shape) {
@@ -102,7 +74,6 @@
 		});
 	</script>
 </head>
-
 <body>
 <div id="info">
 	<span>All supported shapes.</span>
@@ -115,5 +86,4 @@
 	<label for="btnDashStroke">Dashed stroke</label>
 </div>
 </body>
-
 </html>
