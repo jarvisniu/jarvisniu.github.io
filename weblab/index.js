@@ -1,10 +1,11 @@
+var CDN_VUE = "http://cdn.bootcss.com/vue/2.2.2/vue.min.js";
 var CDN_D3 = "http://d3js.org/d3.v3.min.js";
 var CDN_THREE = "http://threejs.org/build/three.js";
-var CDN_BU = "https://cdn.rawgit.com/jarvisniu/Bu.js/v0.4.0/build/bu.min.js";
+var CDN_BU = "https://cdn.rawgit.com/jarvisniu/Bu.js/v0.3.5/build/bu.min.js";
 
 var txtConsoleInput;
 var preview, previewConsole, divConsoleLog;
-var previewDocument, preveiwScriptLink, previewScript, previewCSS;
+var previewDocument, preveiwScriptLinkNew, previewScript, previewCSS;
 
 var aceScript, aceStyle, aceHTML;
 
@@ -73,10 +74,12 @@ document.addEventListener("DOMContentLoaded", function() {
     previewCSS = document.createElement("style");
     previewDocument.head.appendChild(previewCSS);
 
-    previewScriptLink = document.createElement("script");
-    previewScriptLink.addEventListener("load", refreshPreview);
-    previewScriptLink.setAttribute("src", CDN_BU);
-    previewDocument.head.appendChild(previewScriptLink);
+    previewScriptLinkNew = document.createElement("script");
+    previewScriptLinkNew.addEventListener("load", function() {
+        refreshPreview();
+        $('#modal').hide();
+    });
+    previewDocument.head.appendChild(previewScriptLinkNew);
 
 
     previewConsole.log = previewConsole.info = function() {
@@ -107,15 +110,37 @@ document.addEventListener("DOMContentLoaded", function() {
     aceStyle.session.on("change", refreshPreview);
     aceScript.session.on("change", refreshPreview);
 
-    txtConsoleInput.addEventListener("keyup", function(e) {
-        if (e.keyIdentifier == 'Enter') executeConsoleInput();
+    $(txtConsoleInput).on("keyup", function(e) {
+        console.log(e);
+        if (e.key == 'Enter') executeConsoleInput();
     });
 
-    buttonConsoleClear.addEventListener('click', function(e) {
+    $(buttonConsoleClear).click(function(e) {
         divConsoleLog.innerHTML = "";
     });
 
-    buttonCodeImport.addEventListener('click', function(e) {
-        alert("Sorry, the script import function is in developing...");
+    $(buttonCodeImport).click(function(e) {
+        $('#modal').show();
+    });
+
+    $('#btnCloseModal').click(function(e) {
+        $('#modal').hide();
+    });
+
+    $('#radioVue').click(function(e) {
+        previewScriptLinkNew.setAttribute("src", CDN_VUE);
+    });
+
+    $('#radioBu').click(function(e) {
+        previewScriptLinkNew.setAttribute("src", CDN_BU);
+    });
+
+    $('#radioD3').click(function(e) {
+        previewScriptLinkNew.setAttribute("src", CDN_D3);
+    });
+
+    $('#radioThree').click(function(e) {
+        console.log('three', previewScriptLinkNew);
+        previewScriptLinkNew.setAttribute("src", CDN_THREE);
     });
 });
