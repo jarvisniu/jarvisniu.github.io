@@ -146,7 +146,7 @@ nav>a.selected {
 
 #blog_title {
     text-align: center;
-    font-size: 2em;
+    font-size: 1.75em;
     margin: 32px 8px 24px 8px;
 }
 
@@ -209,6 +209,13 @@ iframe {
     white-space: nowrap;
 }
 
+#blog_text {
+    font-family: Helvetica, arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 24px 32px 32px 32px;
+}
+
 
 /* 适应小屏 */
 
@@ -217,14 +224,13 @@ iframe {
         width: calc(100% - 8px);
         height: 100%;
     }
+
+    #blog_text {
+    	padding: 20px;
+    }
 }
 
-#blog_text {
-    font-family: Helvetica, arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.6;
-    padding: 24px 32px 32px 32px;
-}
+/* 博客元素 */
 
 #blog_text>*:first-child {
     margin-top: 0 !important;
@@ -296,9 +302,9 @@ iframe {
 
 #blog_text hr {
     /*background: transparent url("../../images/modules/pulls/dirty-shade.png") repeat-x 0 0;*/
-    border: 0 none;
+    border: solid 1px #eee;
     background-color: #ccc;
-    height: 4px;
+    height: 2px;
     padding: 0;
 }
 
@@ -530,13 +536,13 @@ h1 p, h2 p, h3 p, h4 p, h5 p, h6 p {
     background-color: #e8e8e8;
     border-radius: 3px;
     word-break: break-word;
-    white-space: pre;
+    white-space: pre-wrap;
 }
 
 #blog_text pre code {
     margin: 0;
     padding: 0;
-    white-space: pre;
+    white-space: pre-wrap;
     border: none;
     background: transparent;
 }
