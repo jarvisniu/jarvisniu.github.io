@@ -1,7 +1,7 @@
 var CDN_VUE = "http://cdn.bootcss.com/vue/2.2.2/vue.min.js";
 var CDN_D3 = "http://d3js.org/d3.v3.min.js";
 var CDN_THREE = "http://threejs.org/build/three.js";
-var CDN_BU = "https://cdn.rawgit.com/jarvisniu/Bu.js/v0.3.5/build/bu.min.js";
+var CDN_BU = "https://cdn.rawgit.com/jarvisniu/Bu.js/v0.4.0/build/bu.min.js";
 
 var txtConsoleInput;
 var preview, previewConsole, divConsoleLog;
