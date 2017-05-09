@@ -1,76 +1,16 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
     <title>Weblab</title>
-    <link rel="stylesheet" type="text/css" href="index.css">
-
     <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/ace/1.2.6/ace.js"></script>
     <script src="http://cdn.bootcss.com/ace/1.2.6/mode-javascript.js"></script>
     <script src="http://cdn.bootcss.com/ace/1.2.6/mode-html.js"></script>
     <script src="http://cdn.bootcss.com/ace/1.2.6/mode-css.js"></script>
-
-    <script src="index.js"></script>
 </head>
-
 <body>
-    <div id="divLeft">
-        <div id="divCode">
-            <div id="divCodeEditor"></div>
-            <div class="button-group">
-                <div class="button disable">JavaScript</div>
-                <div class="button" id="buttonCodeImport">0</div>
-            </div>
-        </div>
-        <div id="divConsole">
-            <div id="divConsoleLog"></div>
-            <div id="divConsoleInput">
-                <input type="text" id="txtConsoleInput">
-            </div>
-            <div class="button-group">
-                <div class="button disable">Console</div>
-                <div class="button" id="buttonConsoleClear">Clear</div>
-            </div>
-        </div>
-    </div>
-    <div id="divRight">
-        <div id="divPreview">
-            <iframe id="preview"></iframe>
-        </div>
-        <div id="divCorner">
-            <div id="divHTML"></div>
-            <div id="divStyle"></div>
-        </div>
-    </div>
-    <div id="modal" style="display: none;">
-        <div id="modalScript">
-            <div>
-                <input type="radio" name="script" id="radioVue">
-                <label for="radioVue">Vue 2</label>
-            </div>
-
-            <div>
-                <input type="radio" name="script" id="radioBu">
-                <label for="radioBu">Bu.js</label>
-            </div>
-
-            <div>
-                <input type="radio" name="script" id="radioD3">
-                <label for="radioD3">D3.js</label>
-            </div>
-
-            <div>
-                <input type="radio" name="script" id="radioThree">
-                <label for="radioThree">Three.js</label>
-            </div>
-
-            <div>
-                <button id="btnCloseModal">Close Modal</button>
-            </div>
-        </div>
-    </div>
+    <div id="app"></div>
+    <script src="dist/build.js"></script>
 </body>
-
 </html>
