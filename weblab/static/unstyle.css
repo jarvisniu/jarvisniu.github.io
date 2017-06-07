@@ -17,29 +17,56 @@
 .b-hidden {
   border-style: hidden;
 }
+.b-0 {
+  border-width: 0px;
+}
 .border-radius-0 {
   border-radius: 0px;
+}
+.b-1 {
+  border-width: 1px;
 }
 .border-radius-1 {
   border-radius: 1px;
 }
+.b-2 {
+  border-width: 2px;
+}
 .border-radius-2 {
   border-radius: 2px;
+}
+.b-3 {
+  border-width: 3px;
 }
 .border-radius-3 {
   border-radius: 3px;
 }
+.b-4 {
+  border-width: 4px;
+}
 .border-radius-4 {
   border-radius: 4px;
+}
+.b-5 {
+  border-width: 5px;
 }
 .border-radius-5 {
   border-radius: 5px;
 }
+.b-6 {
+  border-width: 6px;
+}
 .border-radius-6 {
   border-radius: 6px;
 }
+.b-8 {
+  border-width: 8px;
+}
 .border-radius-8 {
   border-radius: 8px;
+}
+.b-10 {
+  border-width: 10px;
 }
 .border-radius-10 {
   border-radius: 10px;
@@ -82,12 +109,24 @@
 .inline-block {
   display: inline-block;
 }
+.absolute {
+  position: absolute;
+}
+.relative {
+  position: relative;
+}
+.fixed {
+  position: fixed;
+}
+.sticky {
+  position: sticky;
+}
 .bold {
   font-weight: bold;
 }
 .text-ellipsis {
-  overflow: hidden;
   white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 .full-height {
@@ -114,6 +153,9 @@
 }
 .text-right {
   text-align: right;
+}
+.text-justify {
+  text-align: justify;
 }
 .flex {
   display: flex;
@@ -1588,6 +1630,9 @@
 .h-10 {
   height: 10px;
 }
+.h-m-10 {
+  height: calc(100% - 10px);
+}
 .min-w-10 {
   min-width: 10px;
 }
@@ -1605,6 +1650,9 @@
 }
 .h-12 {
   height: 12px;
+}
+.h-m-12 {
+  height: calc(100% - 12px);
 }
 .min-w-12 {
   min-width: 12px;
@@ -1624,6 +1672,9 @@
 .h-15 {
   height: 15px;
 }
+.h-m-15 {
+  height: calc(100% - 15px);
+}
 .min-w-15 {
   min-width: 15px;
 }
@@ -1641,6 +1692,9 @@
 }
 .h-20 {
   height: 20px;
+}
+.h-m-20 {
+  height: calc(100% - 20px);
 }
 .min-w-20 {
   min-width: 20px;
@@ -1660,6 +1714,9 @@
 .h-25 {
   height: 25px;
 }
+.h-m-25 {
+  height: calc(100% - 25px);
+}
 .min-w-25 {
   min-width: 25px;
 }
@@ -1677,6 +1734,9 @@
 }
 .h-30 {
   height: 30px;
+}
+.h-m-30 {
+  height: calc(100% - 30px);
 }
 .min-w-30 {
   min-width: 30px;
@@ -1696,6 +1756,9 @@
 .h-40 {
   height: 40px;
 }
+.h-m-40 {
+  height: calc(100% - 40px);
+}
 .min-w-40 {
   min-width: 40px;
 }
@@ -1713,6 +1776,9 @@
 }
 .h-50 {
   height: 50px;
+}
+.h-m-50 {
+  height: calc(100% - 50px);
 }
 .min-w-50 {
   min-width: 50px;
@@ -1732,6 +1798,9 @@
 .h-60 {
   height: 60px;
 }
+.h-m-60 {
+  height: calc(100% - 60px);
+}
 .min-w-60 {
   min-width: 60px;
 }
@@ -1749,6 +1818,9 @@
 }
 .h-80 {
   height: 80px;
+}
+.h-m-80 {
+  height: calc(100% - 80px);
 }
 .min-w-80 {
   min-width: 80px;
@@ -1768,6 +1840,9 @@
 .h-100 {
   height: 100px;
 }
+.h-m-100 {
+  height: calc(100% - 100px);
+}
 .min-w-100 {
   min-width: 100px;
 }
@@ -1785,6 +1860,9 @@
 }
 .h-120 {
   height: 120px;
+}
+.h-m-120 {
+  height: calc(100% - 120px);
 }
 .min-w-120 {
   min-width: 120px;
@@ -1804,6 +1882,9 @@
 .h-150 {
   height: 150px;
 }
+.h-m-150 {
+  height: calc(100% - 150px);
+}
 .min-w-150 {
   min-width: 150px;
 }
@@ -1821,6 +1902,9 @@
 }
 .h-200 {
   height: 200px;
+}
+.h-m-200 {
+  height: calc(100% - 200px);
 }
 .min-w-200 {
   min-width: 200px;
@@ -1840,6 +1924,9 @@
 .h-250 {
   height: 250px;
 }
+.h-m-250 {
+  height: calc(100% - 250px);
+}
 .min-w-250 {
   min-width: 250px;
 }
@@ -1857,6 +1944,9 @@
 }
 .h-300 {
   height: 300px;
+}
+.h-m-300 {
+  height: calc(100% - 300px);
 }
 .min-w-300 {
   min-width: 300px;
@@ -1876,6 +1966,9 @@
 .h-400 {
   height: 400px;
 }
+.h-m-400 {
+  height: calc(100% - 400px);
+}
 .min-w-400 {
   min-width: 400px;
 }
@@ -1893,6 +1986,9 @@
 }
 .h-500 {
   height: 500px;
+}
+.h-m-500 {
+  height: calc(100% - 500px);
 }
 .min-w-500 {
   min-width: 500px;
@@ -1912,6 +2008,9 @@
 .h-600 {
   height: 600px;
 }
+.h-m-600 {
+  height: calc(100% - 600px);
+}
 .min-w-600 {
   min-width: 600px;
 }
@@ -1930,6 +2029,9 @@
 .h-800 {
   height: 800px;
 }
+.h-m-800 {
+  height: calc(100% - 800px);
+}
 .min-w-800 {
   min-width: 800px;
 }
@@ -1947,6 +2049,9 @@
 }
 .h-1000 {
   height: 1000px;
+}
+.h-m-1000 {
+  height: calc(100% - 1000px);
 }
 .min-w-1000 {
   min-width: 1000px;
