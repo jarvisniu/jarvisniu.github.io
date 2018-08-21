@@ -1,50 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>Distance from Point to Line</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="../build/bu.min.js"></script>
-	<link rel="stylesheet" href="css/example.css">
-	<script type="text/javascript">
-		var bu = new Bu.App({
-			renderer: {
-				showKeyPoints: true,
-				cursor: 'crosshair',
-			},
-			data: {
-				mousePos: new Bu.Point(),
-				randomizer: new Bu.ShapeRandomizer(),
-			},
-			objects: function () {
-				var line = this.randomizer.generateLine();
-				var lineVertical = new Bu.Line().dash();
-				lineVertical.points[1].label = "T";
-				return {
-					line,
-					lineVertical,
-				};
-			},
-			init: function () {
-				this.randomizer.setRange(this.$renderer.width, this.$renderer.height);
-			},
-			events: {
-				mousemove: function (e) {
-					var o = this.$objects;
-					this.mousePos.x = e.offsetX;
-					this.mousePos.y = e.offsetY;
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="../build/bu.min.js"></script>
+  <link rel="stylesheet" href="css/example.css">
+  <script type="text/javascript">
+    Bu.config.cursor = 'crosshair'
+    Bu.config.showKeyPoints = true
+    let bu = new Bu({
+      data: {
+        mousePos: new Bu.Point(),
+        randomizer: new Bu.ShapeRandomizer(),
+      },
+      objects: function () {
+        let line = this.randomizer.generateLine()
+        let lineVertical = new Bu.Line().dash()
+        lineVertical.points[1].label = 'T'
+        return {
+          line,
+          lineVertical,
+        }
+      },
+      init: function () {
+        this.randomizer.setRange(
+          -this.$renderer.width / 2,
+          -this.$renderer.height / 2,
+          this.$renderer.width,
+          this.$renderer.height,
+        )
+        this.randomizer.randomize(this.line)
+      },
+      events: {
+        mousemove: function (ev) {
+          [this.mousePos.x, this.mousePos.y] = this.$renderer.projectToWorld(ev.offsetX, ev.offsetY)
 
-					var dist = o.line.distanceTo(this.mousePos);
-					o.lineVertical.points[0].copy(this.mousePos);
-					o.line.footPointFrom(this.mousePos, o.lineVertical.points[1]);
-					o.lineVertical.points[0].label = "Distance: " + Math.round(dist);
-				},
-				mouseup: function (e) {
-					this.randomizer.randomize(this.$objects.line);
-				},
-			},
-		});
-	</script>
+          let dist = this.line.distanceTo(this.mousePos)
+          this.lineVertical.points[0].copy(this.mousePos)
+          this.line.footPointFrom(this.mousePos, this.lineVertical.points[1])
+          this.lineVertical.points[0].label = 'Distance: ' + Math.round(dist)
+        },
+        mouseup: function (ev) {
+          this.randomizer.randomize(this.line)
+        },
+      },
+    })
+  </script>
 </head>
 <body>
 <div id="info">Move cursor to measure the distance. Click to change another line.</div>
