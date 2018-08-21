@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="../build/bu.min.js"></script>
+  <link rel="stylesheet" href="css/example.css">
+  <script type="text/javascript">
+    let bu = new Bu({
+      objects: function () {
+        let circle = new Bu.Circle(25)
+        let polyline = new Bu.Polyline(0, -20, -30, 20, 30, 20)
+        polyline.lineWidth = 10
+
+        let circles = [
+          circle.clone(),
+          circle.clone(),
+          circle.clone(),
+          circle.clone(),
+          circle.clone(),
+          circle.clone(),
+        ]
+        let polylines = [
+          polyline.clone(),
+          polyline.clone(),
+        ]
+        for (let i in circles) {
+          circles[i].translate(-150, 90 * (i - 2.5))
+        }
+        for (let i in polylines) {
+          polylines[i].translate(0, 90 * (i - 0.5))
+        }
+
+        return {
+          circleLineWidth: circles[0],
+          circleLineWidthLabel: new Bu.PointText('.lineWidth=5', 0, 40),
+          circleStrokeStyle: circles[1],
+          circleStrokeStyleLabel: new Bu.PointText('.strokeStyle="red"', 0, 40),
+          circleFillStyle: circles[2],
+          circleFillStyleLabel: new Bu.PointText('.fillStyle="pink"', 0, 40),
+          circleOpacity: circles[3],
+          circleOpacityLabel: new Bu.PointText('.opacity=0.5', 0, 40),
+          circleDashStyle: circles[4],
+          circleDashStyleLabel: new Bu.PointText('.dashStyle=[10, 10]', 0, 40),
+          circleDashFlow: circles[5],
+          circleDashFlowLabel: new Bu.PointText('.dashFlow(true)', 0, 40),
+          polylineLineCap: polylines[0],
+          polylineLineCapLabel: new Bu.PointText('.lineCap="round"', 0, 40),
+          polylineLineJoin: polylines[1],
+          polylineLineJoinLabel: new Bu.PointText('.lineJoin="round"', 0, 40),
+        }
+      },
+      scene: {
+        circleLineWidth: {
+          circleLineWidthLabel: {},
+        },
+        circleStrokeStyle: {
+          circleStrokeStyleLabel: {},
+        },
+        circleFillStyle: {
+          circleFillStyleLabel: {},
+        },
+        circleOpacity: {
+          circleOpacityLabel: {},
+        },
+        circleDashStyle: {
+          circleDashStyleLabel: {},
+        },
+        circleDashFlow: {
+          circleDashFlowLabel: {},
+        },
+        polylineLineCap: {
+          polylineLineCapLabel: {},
+        },
+        polylineLineJoin: {
+          polylineLineJoinLabel: {},
+        },
+      },
+      init: function () {
+        // lineWidth
+        this.circleLineWidth.lineWidth = 5
+        // strokeStyle
+        this.circleStrokeStyle.strokeStyle = 'red'
+        // fillStyle
+        this.circleFillStyle.fillStyle = 'pink'
+        // opacity
+        this.circleOpacity.opacity = 0.5
+        // dashStyle
+        this.circleDashStyle.dashStyle = this.circleDashFlow.dashStyle = [10, 10]
+        // dashFlow
+        this.circleDashFlow.dashFlow(true)
+        // lineCap
+        this.polylineLineCap.lineCap = 'round'
+        // lineJoin
+        this.polylineLineJoin.lineJoin = 'round'
+
+        let index = -2.5
+        for (let style in Bu.styles) {
+          let circle = new Bu.Circle(25).translate(150, index * 90).style(style)
+          let label = new Bu.PointText('.style(\'' + style + '\')', 150, index * 90 + 40)
+          this.$renderer.scene.addChild([circle, label])
+          index += 1
+        }
+      },
+    })
+  </script>
+</head>
+<body>
+<div id="info">
+  <span>All supported styles.</span>
+</div>
+</body>
+</html>
