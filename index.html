@@ -1,432 +1,159 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
+<html lang="zh">
+  <head>
     <title>牛俊为</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="./favicon.png">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700italic,700,400italic|Inconsolata' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="main.css">
-    <script src="js/Za-core.min.js"></script>
-</head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="main.css" />
+  </head>
 
-<body>
+  <body>
     <script type="text/javascript">
-        var hashPath;
+      var hashPath
 
-        // dom
-        var header;
-        var nav_blog, nav_projects, nav_about;
-        var body_blog_list, body_blog_text, body_projects, body_about;
+      // dom
+      var nav_projects, nav_about
+      var body_projects, body_about
 
-        var LOADING = "Loading...";
-        var ERROR404 = "<h1>Error 404</h1>Sorry, this article: <strong>{title}</strong> does not exist, or has been deleted!";
+      var LOADING = 'Loading...'
+      var ERROR404 =
+        '<h1>Error 404</h1>Sorry, this article: <strong>{title}</strong> does not exist, or has been deleted!'
 
-        // i18n
-        var langData = {
-            "title": {
-                "zh": "牛俊为",
-                "en": "Jarvis Niu",
-            },
-            "blog": {
-                "zh": "博客",
-                "en": "Blog",
-            },
-            "projects": {
-                "zh": "项目",
-                "en": "Projects",
-            },
-            "tools": {
-                "zh": "工具",
-                "en": "Tools",
-            },
-            "about": {
-                "zh": "关于",
-                "en": "About",
-            },
-            "project_niv": {
-                "zh": "小牛看图：快速优雅的图片浏览器",
-                "en": "Niv: A fast image viewer",
-            },
-            "project_bu_js": {
-                "zh": "bu.js：一个Canvas图形库",
-                "en": "bu.js: A Canvas 2D Graphics Library",
-            },
-            "project_jetui": {
-                "zh": "JetUI：一套JetBrains风格的控件库",
-                "en": "JetUI: A JetBrains-style UI widget set",
-            },
-            "project_weblab": {
-                "zh": "weblab：在线代码编辑器",
-                "en": "weblab: An online code editor",
-            },
-            "project_3d_map": {
-                "zh": "WebGL三维地图",
-                "en": "A WebGL 3D Map",
-            },
-            "project_2d_map": {
-                "zh": "Canvas二维地图",
-                "en": "A Canvas 2D Map",
-            },
-            "project_scalable_chart": {
-                "zh": "可缩放折线图",
-                "en": "Scalable Line Chart",
-            },
-            "tool_jsotg": {
-                "zh": "JS手机编程",
-                "en": "JS OTG",
-            },
-            "tool_mde": {
-                "zh": "Markdown编辑器",
-                "en": "Markdown Editor",
-            },
-            "tool_currencies": {
-                "zh": "世界货币",
-                "en": "Currencies Of The World",
-            },
-            "tool_css_formatting": {
-                "zh": "在线CSS格式化",
-                "en": "CSS Formatting Online",
-            },
-            "tool_html_2_jade": {
-                "zh": "HTML到Jade转换器",
-                "en": "HTML to Jade",
-            },
-            "tool_url_docoder": {
-                "zh": "URL解析",
-                "en": "URL decoder",
-            },
-            "tool_query_string_decoder": {
-                "zh": "查询字符串解析",
-                "en": "Query String Decoder",
-            },
-            "tool_bach_address_gen": {
-                "zh": "批量地址生成",
-                "en": "Batch Address Genarator",
-            },
-            "tool_zh_trans": {
-                "zh": "简繁转换",
-                "en": "Simplified/Traditional Chinese Translator",
-            },
-            "intro1": {
-                "zh": "我叫牛俊为，我的梦想是当一名好的程序员。<br><br>我从高中开始自学编程至今，喜欢尝试各种不同的编程平台。从桌面平台的VB6到.NET，到移动平台的Java和Android，再到开源硬件的Arduino，最后到Web平台的JS和PHP。就这样，我在好奇心引领下，乐此不疲地学习了一项又一项的新技术。虽然看似学了不少东西，但真正深入研究了的其实并不多。<br><br>我目前的工作是Web开发。<br><br>我的业余爱好是打乒乓球和玩游戏，最喜欢的游戏是我的世界。",
-                "en": "I am Jarvis Niu. I am a program developer in Beijing. ",
-            },
-        };
-        var i18n = new Za.i18n(langData);
+      // 初始化页面
+      function init() {
+        initNav()
+        window.addEventListener('hashchange', onHashChanged)
+        document.querySelector('.mainbody').style.visibility = ''
+      }
 
-        // blog
-        var pendingTitle; // 挂起的博文标题
-        var markdownItReady = false;
-        var blogList = {
-            "cmd-abort-in-advance": {
-                title: "解决CMD命令不能连续执行的问题",
-                date: "2016-01-24"
-            },
-            "d3.js-data-enter-exit": {
-                title: "d3.js中data(), enter() 和 exit()的作用",
-                date: "2015-08-17"
-            },
-            "install-windows-tutorial": {
-                title: "牛哥教你如何用U盘装系统",
-                date: "2016-03-01"
-            },
-        };
+      document.addEventListener('DOMContentLoaded', init)
 
-        function initBlogList() {
-            var str = '';
-            for (var url in blogList) {
-                if (!blogList.hasOwnProperty(url)) continue;
+      function initNav() {
+        nav_projects = document.getElementById('nav_projects')
+        nav_about = document.getElementById('nav_about')
 
-                var article = blogList[url];
-                str += '<a href="' + '#!/blog/' + url + '">';
-                str += article.title + " - " + article.date;
-                str += '</a>';
-            }
-            body_blog_list.innerHTML = str;
+        body_projects = document.getElementById('body_projects')
+        body_about = document.getElementById('body_about')
+
+        hashPath = getHashPath()
+
+        onHashChanged()
+      }
+
+      // 路由
+      function onHashChanged() {
+        if (hashPath == 'projects') {
+          nav_projects.classList.remove('selected')
+          body_projects.classList.remove('show')
+        } else if (hashPath == 'about') {
+          nav_about.classList.remove('selected')
+          body_about.classList.remove('show')
         }
 
-        // 初始化页面
-        function init() {
-            header = document.getElementsByTagName("h1")[0];
-            initNav();
-            initBlogList();
-            onSwitchLang();
-            loadArticle('');
-            window.addEventListener("hashchange", onHashChanged);
-            document.querySelector(".mainbody").style.visibility = "";
+        hashPath = getHashPath()
+
+        if (hashPath == 'projects') {
+          nav_projects.classList.add('selected')
+          body_projects.classList.add('show')
+        } else if (hashPath == 'about') {
+          nav_about.classList.add('selected')
+          body_about.classList.add('show')
+        } else {
+          alert('Error 404 \n 不存在此页面: ' + hashPath)
         }
+      }
 
-        document.addEventListener("DOMContentLoaded", init);
-
-        function initNav() {
-            nav_blog = document.getElementById("nav_blog");
-            nav_projects = document.getElementById("nav_projects");
-            nav_about = document.getElementById("nav_about");
-
-            body_blog_list = document.getElementById("body_blog_list");
-            body_blog_text = document.getElementById("body_blog_text");
-            body_projects = document.getElementById("body_projects");
-            body_about = document.getElementById("body_about");
-
-            hashPath = getHashPath();
-
-            onHashChanged();
-        }
-
-        // 路由
-        function onHashChanged() {
-            if (hashPath == "blog") {
-                nav_blog.classList.remove("selected");
-                body_blog_list.classList.remove("show");
-            } else if (hashPath == "projects") {
-                nav_projects.classList.remove("selected");
-                body_projects.classList.remove("show");
-            } else if (hashPath == "tools") {
-                nav_tools.classList.remove("selected");
-                body_tools.classList.remove("show");
-            } else if (hashPath == "about") {
-                nav_about.classList.remove("selected");
-                body_about.classList.remove("show");
-            } else if (hashPath.indexOf("blog/") == 0) {
-                body_blog_text.classList.remove("show");
-                loadArticle("");
-            }
-
-            hashPath = getHashPath();
-
-            if (hashPath == "blog") {
-                nav_blog.classList.add("selected");
-                body_blog_list.classList.add("show");
-                document.title = _("title");
-            } else if (hashPath == "projects") {
-                nav_projects.classList.add("selected");
-                body_projects.classList.add("show");
-                document.title = _("title");
-            } else if (hashPath == "tools") {
-                nav_tools.classList.add("selected");
-                body_tools.classList.add("show");
-                document.title = _("title");
-            } else if (hashPath == "about") {
-                nav_about.classList.add("selected");
-                body_about.classList.add("show");
-                document.title = _("title");
-            } else if (hashPath.indexOf("blog/") == 0) {
-                var articleTitle = hashPath.substring(5);
-                loadArticle(articleTitle);
-                body_blog_text.classList.add("show");
-                if (articleTitle in blogList)
-                    document.title = blogList[articleTitle].title + " - " + _("title");
-            } else {
-                alert("Error 404 \n 不存在此页面: " + hashPath);
-            }
-        }
-
-        function _(key) {
-            return langData[key][i18n.lang];
-        }
-
-
-        function getHashPath() {
-            var path = location.hash.replace("#!/", "");
-            if (path == "") path = "projects";
-            return path;
-        }
-
-        function loadArticle(article) {
-            if (article == '') {
-                showHtml(LOADING);
-            } else if (markdownItReady) {
-                var xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        showMd(xhr.responseText);
-                    } else if (xhr.status == 404) {
-                        showHtml(ERROR404.replace("{title}", title));
-                    }
-                };
-                var url = "blog/" + article + ".md";
-                xhr.open("GET", url);
-                xhr.send();
-                setBlogTitle(article);
-            } else {
-                pendingTitle = article;
-            }
-        }
-
-        function onLoadMarkdownIt() {
-            mdit = new markdownit();
-            markdownItReady = true;
-            if (pendingTitle != null) {
-                loadArticle(pendingTitle);
-            }
-        }
-
-        function showMd(md) {
-            document.querySelector("#blog_text").innerHTML = mdit.render(md);
-        }
-
-        function showHtml(html) {
-            document.querySelector("#blog_text").innerHTML = html;
-        }
-
-        function setBlogTitle(id) {
-            if (id in blogList) {
-                document.querySelector("#blog_title").innerHTML = blogList[id].title;
-                document.querySelector("#blog_date").innerHTML = blogList[id].date;
-            }
-        }
-
-        function switchLang() {
-            i18n.switchLang();
-            onSwitchLang()
-        }
-
-        function onSwitchLang() {
-            if (i18n.lang == "en") {
-                document.getElementById("imgLang").src = "assets/images/flags/flag-cn.png";
-                document.documentElement.setAttribute("lang", "en");
-            } else {
-                document.getElementById("imgLang").src = "assets/images/flags/flag-us.png";
-                document.documentElement.setAttribute("lang", "zh");
-            }
-            onHashChanged();
-        }
-
-        function setHashUrl(url) {
-            if (url === undefined || url == "") {
-                location.hash = "";
-            } else {
-                if (url.indexOf("/") != 0) url = "/" + url;
-                location.hash = "#!" + url;
-            }
-        }
+      function getHashPath() {
+        var path = location.hash.replace('#/', '')
+        if (path == '') path = 'projects'
+        return path
+      }
     </script>
-    <div class="mainbody" style="visibility: hidden;">
+    <div class="mainbody" style="visibility: hidden">
+      <header>
+        <h1 class="title">牛俊为</h1>
+      </header>
 
-        <header>
-            <h1 class="title">{{ title }}</h1>
-        </header>
+      <nav>
+        <a id="nav_projects" href="#/projects">项目</a>
+        <a id="nav_about" href="#/about">关于</a>
+        <span id="socialPanel">
+          <a class="social" target="_blank" href="http://weibo.com/jarvisniu">
+            <img class="icon" src="assets/images/icons/weibo-32.png" />
+          </a>
+          <a class="social" target="_blank" href="http://github.com/jarvisniu">
+            <img class="icon" src="assets/images/icons/github-32.png" />
+          </a>
+        </span>
+      </nav>
 
-        <nav>
-            <a id="nav_projects" href="#!/projects">{{ projects }}</a>
-            <a id="nav_blog" href="#!/blog">{{ blog }}</a>
-            <a id="nav_tools" href="#!/tools">{{ tools }}</a>
-            <a id="nav_about" href="#!/about">{{ about }}</a>
-            <span id="socialPanel">
-    <a class="social" target="_blank" href="http://weibo.com/jarvisniu">
-      <img class="icon" src="assets/images/icons/weibo-32.png">
-    </a>
-    <a class="social" target="_blank" href="http://github.com/jarvisniu">
-      <img class="icon" src="assets/images/icons/github-32.png">
-    </a>
-    <img class="social" id="imgLang" src="assets/images/flags/flag-us.png" onclick="switchLang(this);">
-  </span>
-        </nav>
+      <article id="body_projects">
+        <div class="work-frame">
+          <a href="niv/" target="_blank">
+            <img src="assets/images/projects/niv.png" />
+            <p>小牛看图：快速优雅的图片浏览器</p>
+          </a>
+        </div>
+        <div class="work-frame">
+          <a href="bu.js/" target="_blank">
+            <img src="assets/images/projects/bu.js.png" />
+            <p>bu.js：一个Canvas图形库</p>
+          </a>
+        </div>
+        <div class="work-frame">
+          <a
+            href="http://cdn.niujunwei.com/house-layout-editor/index.html"
+            target="_blank"
+          >
+            <img src="assets/images/projects/house-layout-editor.jpg" />
+            <p>基于Pixi的房屋户型编辑器</p>
+          </a>
+        </div>
+        <div class="work-frame">
+          <a href="JetUI/ide.html" target="_blank">
+            <img src="assets/images/projects/jet-ui.png" />
+            <p>jet-ui：一套JetBrains风格的控件库</p>
+          </a>
+        </div>
+        <div class="work-frame">
+          <a href="weblab" target="_blank">
+            <img src="assets/images/projects/Weblab.png" />
+            <p>Weblab：在线代码编辑器</p>
+          </a>
+        </div>
+        <div class="work-frame">
+          <a href="projects/webgis/" target="_blank">
+            <img src="assets/images/projects/webgis.jpg" />
+            <p>WebGL三维地图</p>
+          </a>
+        </div>
+        <div class="work-frame">
+          <a href="projects/2d_map/" target="_blank">
+            <img src="assets/images/projects/2dmap.jpg" />
+            <p>Canvas二维地图</p>
+          </a>
+        </div>
+        <div class="work-frame">
+          <a href="projects/line_chart/" target="_blank">
+            <img src="assets/images/projects/chart.png" />
+            <p>可缩放折线图</p>
+          </a>
+        </div>
+      </article>
 
-        <article id="body_blog_list">
-        </article>
-
-        <article id="body_blog_text">
-            <h1 id="blog_title"></h1>
-
-            <div id="blog_date"></div>
-            <div id="blog_text"></div>
-        </article>
-
-        <article id="body_projects">
-            <div class="work-frame">
-                <a href="niv/" target="_blank">
-                    <img src="assets/images/projects/niv.png">
-                    <p>{{ project_niv }}</p>
-                </a>
-            </div>
-            <div class="work-frame">
-                <a href="bu.js/" target="_blank">
-                    <img src="assets/images/projects/bu.js.png">
-                    <p>{{ project_bu_js }}</p>
-                </a>
-            </div>
-            <div class="work-frame">
-                <a href="JetUI/ide.html" target="_blank">
-                    <img src="assets/images/projects/JetUI.png">
-                    <p>{{ project_jetui }}</p>
-                </a>
-            </div>
-            <div class="work-frame">
-                <a href="weblab" target="_blank">
-                    <img src="assets/images/projects/Weblab.png">
-                    <p>{{ project_weblab }}</p>
-                </a>
-            </div>
-            <div class="work-frame">
-                <a href="projects/webgis/" target="_blank">
-                    <img src="assets/images/projects/webgis.jpg">
-                    <p>{{ project_3d_map }}</p>
-                </a>
-            </div>
-            <div class="work-frame">
-                <a href="projects/2d_map/" target="_blank">
-                    <img src="assets/images/projects/2dmap.jpg">
-                    <p>{{ project_2d_map }}</p>
-                </a>
-            </div>
-            <div class="work-frame">
-                <a href="projects/line_chart/" target="_blank">
-                    <img src="assets/images/projects/chart.png">
-                    <p>{{ project_scalable_chart }}</p>
-                </a>
-            </div>
-        </article>
-
-        <article id="body_tools">
-            <p><a target="_blank" href="tools/js_otg/index.html">{{ tool_jsotg }}</a></p>
-
-            <p><a target="_blank" href="tools/mde/index.html">{{ tool_mde }}</a></p>
-
-            <p><a target="_blank" href="tools/currencies.html">{{ tool_currencies }}</a></p>
-
-            <p><a target="_blank" href="http://html2jade.vida.io/">{{ tool_html_2_jade }}</a></p>
-
-            <p><a target="_blank" href="http://tool.oschina.net/codeformat/css">{{ tool_css_formatting }}</a></p>
-
-            <p><a target="_blank" href="tools/url-decoder.html">{{ tool_url_docoder }}</a></p>
-
-            <p><a target="_blank" href="tools/url-query-string-docoder.html">{{ tool_query_string_decoder }}</a></p>
-
-            <p><a target="_blank" href="tools/zh-trans.html">{{ tool_zh_trans }}</a></p>
-
-            <p><a target="_blank" href="tools/batch-address-gen.html">{{ tool_bach_address_gen }}</a></p>
-        </article>
-
-        <article id="body_about">
-            <p>{{ intro1 }}</p>
-        </article>
-
+      <article id="body_about">
+        <p>
+          我叫牛俊为，我的梦想是当一名好的程序员。<br /><br />我从高中开始自学编程至今，喜欢尝试各种不同的编程平台。从桌面平台的VB6到.NET，到移动平台的Java和Android，再到开源硬件的Arduino，最后到Web平台的JS和PHP。就这样，我在好奇心引领下，乐此不疲地学习了一项又一项的新技术。虽然看似学了不少东西，但真正深入研究了的其实并不多。<br /><br />我目前的工作是Web开发。<br /><br />我的业余爱好是打乒乓球和玩游戏，最喜欢的游戏是我的世界。
+        </p>
+      </article>
     </div>
 
     <footer>
-        © 2016 - 2017 Jarvis Niu
+      <span>© 2016 - 2020 牛俊为 - </span>
+      <a target="blank" href="http://www.beian.miit.gov.cn/"
+        >京ICP备19022908号</a
+      >
     </footer>
-
-    <script>
-        (function(i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function() {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-        ga('create', 'UA-72558673-1', 'auto');
-        ga('send', 'pageview');
-    </script>
-    <script src="js/lib/markdown-it.min.js" async onload="onLoadMarkdownIt();"></script>
-</body>
-
+  </body>
 </html>
