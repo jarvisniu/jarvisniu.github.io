@@ -30,13 +30,27 @@ a:hover {
   /*border: solid 1px gray;*/
 }
 
+header {
+  padding: 24px 16px;
+  background-color: #088;
+  font-family: 'Open Sans', sans-serif;
+  display: flex;
+  justify-items: center;
+  align-items: end;
+  flex-wrap: wrap;
+}
 .title {
   font-size: 2.6em;
-  padding: 0.6em;
-  background-color: #088;
   color: #eee;
-  font-family: 'Open Sans', sans-serif;
   font-weight: normal;
+  line-height: 1;
+  margin-right: 24px;
+}
+.subtitle {
+  color: #eee;
+  font-size: 18px;
+  vertical-align: middle;
+  margin-top: 8px;
 }
 
 pre {

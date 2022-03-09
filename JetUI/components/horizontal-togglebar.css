@@ -1,9 +1,0 @@
-.horizontal-togglebar {
-  display: inline-flex;
-  box-sizing: border-box;
-  height: 26px;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-}

@@ -69,19 +69,25 @@
         if (path == '') path = 'projects'
         return path
       }
+
+      // hide icp info in the global domain
+      if (location.hostname.includes('jarvisniu.com')) {
+        document.querySelector('#icp').style.display = 'none'
+      }
     </script>
     <div class="mainbody" style="visibility: hidden">
       <header>
-        <h1 class="title">牛俊为</h1>
+        <h1 class="title">牛俊为 (Jarvis Niu)</h1>
+        <div class="subtitle">的个人网站</div>
       </header>
 
       <nav>
         <a id="nav_projects" href="#/projects">项目</a>
         <a id="nav_about" href="#/about">关于</a>
         <span id="socialPanel">
-          <a class="social" target="_blank" href="http://weibo.com/jarvisniu">
+          <!-- <a class="social" target="_blank" href="http://weibo.com/jarvisniu">
             <img class="icon" src="assets/images/icons/weibo-32.png" />
-          </a>
+          </a> -->
           <a class="social" target="_blank" href="http://github.com/jarvisniu">
             <img class="icon" src="assets/images/icons/github-32.png" />
           </a>
@@ -89,6 +95,18 @@
       </nav>
 
       <article id="body_projects">
+        <div class="work-frame">
+          <a href="https://gongju.world/" target="_blank">
+            <img src="assets/images/projects/gongju-world.png" />
+            <p>工具世界：一个在线工具集合网站</p>
+          </a>
+        </div>
+        <div class="work-frame">
+          <a href="https://www.npmjs.com/package/vue-zoomer" target="_blank">
+            <img src="assets/images/projects/vue-zoomer.png" />
+            <p>vue-zoomer：Vue图片缩放组件</p>
+          </a>
+        </div>
         <div class="work-frame">
           <a href="niv/" target="_blank">
             <img src="assets/images/projects/niv.png" />
@@ -111,15 +129,9 @@
           </a>
         </div>
         <div class="work-frame">
-          <a href="JetUI/ide.html" target="_blank">
+          <a href="https://niujunwei.com/jet-ui/" target="_blank">
             <img src="assets/images/projects/jet-ui.png" />
             <p>jet-ui：一套JetBrains风格的控件库</p>
-          </a>
-        </div>
-        <div class="work-frame">
-          <a href="weblab" target="_blank">
-            <img src="assets/images/projects/Weblab.png" />
-            <p>Weblab：在线代码编辑器</p>
           </a>
         </div>
         <div class="work-frame">
@@ -150,10 +162,13 @@
     </div>
 
     <footer>
-      <span>© 2016 - 2020 牛俊为 - </span>
-      <a target="blank" href="http://www.beian.miit.gov.cn/"
-        >京ICP备19022908号</a
-      >
+      <span>牛俊为 © 2016 - 2022</span>
+      <span id="icp">
+        <span> - </span>
+        <a target="blank" href="http://www.beian.miit.gov.cn/"
+          >京ICP备19022908号</a
+        >
+      </span>
     </footer>
   </body>
 </html>
