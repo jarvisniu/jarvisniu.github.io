@@ -70,10 +70,12 @@
         return path
       }
 
-      // hide icp info in the global domain
-      if (location.hostname.includes('jarvisniu.com')) {
-        document.querySelector('#icp').style.display = 'none'
-      }
+      document.addEventListener('DOMContentLoaded', function () {
+        // hide icp info in the global domain
+        if (location.hostname.includes('jarvisniu.com')) {
+          document.querySelector('#icp').style.display = 'none'
+        }
+      })
     </script>
     <div class="mainbody" style="visibility: hidden">
       <header>
